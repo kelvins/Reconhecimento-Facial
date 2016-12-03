@@ -1,30 +1,39 @@
 
+###################################################################################################################
 #
 # This script is used to perform face recognition using the SURF algorithm provided by the OpenCV library.
 #
+###################################################################################################################
 
 # Import all libraries
-import os
-import cv2
+import cv2, os
 import numpy as np
+import FaceRecognitionAssistant as assist
+
+#######################################################################################
+#
+#   Parameters selection section
+#
+#######################################################################################
+
+# Defines the path to the training folder
+trainPath = "/home/kelvin/Desktop/FaceRecognition/TestesCurvaROC/BASE1/"
+
+# Defines the path to the test folder
+testPath  = "/home/kelvin/Desktop/FaceRecognition/TestesCurvaROC/TESTE1/"
+
+# Defines a default size for all images (e.g. 100x100)
+defaultSize = 100
+
+#######################################################################################
+#
+#######################################################################################
 
 # Creates the SURF object passing a threshold variable by parameter
 surf = cv2.xfeatures2d.SURF_create(400)
 
 # Creates the BFMatcher object - The crossCheck is not supported by BFMatcher
 bf = cv2.BFMatcher(cv2.NORM_L1, crossCheck=False)
-
-# Defines the path to the training folder
-trainPath = "/home/kelvin/Desktop/FaceRecognition/TestesCurvaROC/Base1/"
-
-# Defines the path to the test folder
-testPath  = "/home/kelvin/Desktop/FaceRecognition/TestesCurvaROC/Teste1/"
-
-# Defines the path to generate the output images
-outputPath = "/home/kelvin/Desktop/RESULTS_SURF/"
-
-# Defines a default size for all images (e.g. 100x100)
-defaultSize = 200
 
 # Vector used to store the training images
 trainingImages = []
@@ -40,16 +49,9 @@ def include_face(path):
 
     # Get the subject id (should be a number)
     subjectID = path.split("_")[1]
-    #subjectID = path.split("_")[1]
 
-    # Loads the image into the image variable
-    image = cv2.imread(path)
-
-    # Convert the image to grayscale
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
-    # Resize the image to a default size
-    image = cv2.resize(image, (defaultSize, defaultSize), interpolation = cv2.INTER_CUBIC)
+    # Load Image, Convert to Grayscale, Resize
+    image = assist.PreprocessImage( path, defaultSize, defaultSize )
     
     # Detects and computes the keypoints and descriptors using the SURF algorithm
     keypoints, descriptors = surf.detectAndCompute(image, None)
@@ -64,7 +66,7 @@ def include_face(path):
     trainingImages.append( image )
 
     # Store the subjectID to check if the face recognition is correct
-    labels.append( subjectID )
+    labels.append( int(subjectID) )
 
 # In the trainingPath folder search for all files in all directories
 for dirname, dirnames, filenames in os.walk(trainPath):
@@ -80,26 +82,22 @@ for dirname, dirnames, filenames in os.walk(trainPath):
 bf.train()
 
 # Count is used just to set a unique name for the output image file
-count = 0
+facesRecognized  = 0
+faceUnrecognized = 0
+nonFaces = 0
 
 # Function that tries to recognize each face (path passed by parameter)
 def recognize_face(path):
 
     # Use these global variables
-    global surf, bf, labels, trainingImages, count
+    global surf, bf, labels, trainingImages, facesRecognized, faceUnrecognized, nonFaces
 
     # Get the subject id (should be a number)
     subjectID = path.split("_")[1]
-    subjectID = subjectID.split(".")[0]
+    subjectID = int(subjectID.split(".")[0])
 
-    # Loads the image into the image variable
-    image = cv2.imread(path)
-
-    # Convert the image to grayscale
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
-    # Resize the image to a default size
-    image = cv2.resize(image, (defaultSize, defaultSize), interpolation = cv2.INTER_CUBIC)
+    # Load Image, Convert to Grayscale, Resize
+    image = assist.PreprocessImage( path, defaultSize, defaultSize )
     
     # Detects and computes the keypoints and descriptors using the SURF algorithm
     keypoints, descriptors = surf.detectAndCompute(image, None)
@@ -117,17 +115,15 @@ def recognize_face(path):
     # Index receives the position of the maximum value in the results vector (it means that this is the most similar image)
     index = results.index(max(results))
 
-    # Check if the labels[index] (most similar image) is equal to the expected subject (subjectID).
-    # It means the face image was correctly recognized
-    if labels[index] == subjectID:
-        # Concatenate the two images (from the index position in the training set and the current test image) to generate the output image
-        tempImage = np.concatenate((trainingImages[index], image), axis=1)
-
-        # Save the concatenated image to the output path
-        cv2.imwrite(outputPath + str(count) + ".png", tempImage)
-        print outputPath + str(count) + ".png"
-
-        count += 1
+    if subjectID >= 0:
+        # Check if the labels[index] (most similar image) is equal to the expected subject (subjectID).
+        # It means the face image was correctly recognized
+        if labels[index] == subjectID:
+            facesRecognized += 1
+        else:
+            faceUnrecognized += 1
+    else:
+        nonFaces += 1
 
 # In the trainingPath folder search for all files in all directories
 for dirname, dirnames, filenames in os.walk(testPath):
@@ -139,4 +135,6 @@ for dirname, dirnames, filenames in os.walk(testPath):
         # Try to recognize the current face image
         recognize_face(filePath)
 
-print str(count) + " faces recognized."
+print str(facesRecognized) + " faces recognized."
+print str(faceUnrecognized) + " faces unrecognized."
+print str(nonFaces) + " non faces."
