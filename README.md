@@ -10,6 +10,8 @@ Basicamente foram utilizados os algoritmos:
  * **Eigenfaces**
  * **Fisherfaces**
  * **Local Binary Patterns Histogram**
+ * **Speeded Up Robust Features (SURF)**
+ * **Scale-Invariant Feature Transform (SIFT)**
  * **Transformada Wavelet discreta (Matlab)**
 
 Trabalho desenvolvido por **Kelvin Salton do Prado** sob orientação do **Dr. Norton Trevisan Roman**.
