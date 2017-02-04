@@ -6,6 +6,9 @@ import numpy as np
 class Algorithms:
 	EIGENFACE, FISHERFACE, LBPH, SIFT, SURF = range(5)
 
+class Interpolation:
+	INTER_CUBIC, INTER_NEAREST, INTER_LINEAR, INTER_AREA, INTER_LANCZOS4 = range(5)
+
 # Class that encapsulates all 5 face recognition algorithms
 class FaceRecognition(object):
 
@@ -13,6 +16,8 @@ class FaceRecognition(object):
 		self.sizeX = 100
 		self.sizeY = 100
 		self.algorithm = algorithm
+		self.interpolation = Interpolation.INTER_CUBIC
+		self.interpolationTitle = "INTER_CUBIC"
 
 		# Vector used to store the training images
 		self.trainingImages = []
@@ -25,26 +30,26 @@ class FaceRecognition(object):
 		# Creates the face recognition object based on the selected algorithm
 		if algorithm == Algorithms.EIGENFACE:
 			self.faceRec = cv2.face.createEigenFaceRecognizer()
-			self.suffix = "EIGENFACE"
+			self.algorithmTitle = "EIGENFACE"
 		elif algorithm == Algorithms.FISHERFACE:
 			self.faceRec = cv2.face.createFisherFaceRecognizer()
-			self.suffix = "FISHERFACE"
+			self.algorithmTitle = "FISHERFACE"
 		elif algorithm == Algorithms.LBPH:
 			self.faceRec = cv2.face.createLBPHFaceRecognizer()
-			self.suffix = "LBPH"
+			self.algorithmTitle = "LBPH"
 		elif algorithm == Algorithms.SIFT:
 			self.faceRec = cv2.xfeatures2d.SIFT_create()
 			self.bf = cv2.BFMatcher(cv2.NORM_L1, crossCheck=False)
-			self.suffix = "SIFT"
+			self.algorithmTitle = "SIFT"
 		elif algorithm == Algorithms.SURF:
 			self.faceRec = cv2.xfeatures2d.SURF_create() # 400
 			self.bf = cv2.BFMatcher(cv2.NORM_L1, crossCheck=False)
-			self.suffix = "SURF"
+			self.algorithmTitle = "SURF"
 		else:
 			print "Invalid algorithm selected."
 			sys.exit()
 
-		self.content += "Algorithm : " + self.suffix + "\n"
+		self.content += "Algorithm : " + self.algorithmTitle + "\n"
 
 		self.recognizedFaces   = 0
 		self.unrecognizedFaces = 0
@@ -66,6 +71,12 @@ class FaceRecognition(object):
 	def getContent(self):
 		return self.content
 
+	def getAlgorithmTitle(self):
+		return self.algorithmTitle
+
+	def getInterpolationTitle(self):
+		return self.interpolationTitle
+
 	def getRecognizedFaces(self):
 		return self.recognizedFaces
 
@@ -74,6 +85,12 @@ class FaceRecognition(object):
 
 	def getNonFaces(self):
 		return self.nonFaces
+
+	def getInterpolation(self):
+		return self.interpolation
+
+	def setInterpolation(self, interpolation):
+		self.interpolation = interpolation
 
 	def setDefaultSize(self, sizeX, sizeY):
 		self.sizeX = sizeX
@@ -91,8 +108,27 @@ class FaceRecognition(object):
 		image = cv2.imread(path)
 		# Convert the image to grayscale
 		image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
 		# Resize the image to a default size
-		image = cv2.resize(image, (self.sizeX, self.sizeY), interpolation = cv2.INTER_CUBIC)
+		if self.interpolation == Interpolation.INTER_CUBIC:
+			image = cv2.resize(image, (self.sizeX, self.sizeY), interpolation = cv2.INTER_CUBIC)
+			self.interpolationTitle = "INTER_CUBIC"
+		elif self.interpolation == Interpolation.INTER_AREA:
+			image = cv2.resize(image, (self.sizeX, self.sizeY), interpolation = cv2.INTER_AREA)
+			self.interpolationTitle = "INTER_AREA"
+		elif self.interpolation == Interpolation.INTER_LANCZOS4:
+			image = cv2.resize(image, (self.sizeX, self.sizeY), interpolation = cv2.INTER_LANCZOS4)
+			self.interpolationTitle = "INTER_LANCZOS4"
+		elif self.interpolation == Interpolation.INTER_LINEAR:
+			image = cv2.resize(image, (self.sizeX, self.sizeY), interpolation = cv2.INTER_LINEAR)
+			self.interpolationTitle = "INTER_LINEAR"
+		elif self.interpolation == Interpolation.INTER_NEAREST:
+			image = cv2.resize(image, (self.sizeX, self.sizeY), interpolation = cv2.INTER_NEAREST)
+			self.interpolationTitle = "INTER_NEAREST"
+		else:
+			print "Error trying to resize the image."
+			sys.exit()
+
 		return image
 
 	# Function that receives the path of each face image as parameter and include it in the training set (bf object)
@@ -210,23 +246,38 @@ class FaceRecognition(object):
 		self.content += "TestPath  : " + testPath + "\n"
 		self.content += "SizeX : " + str(self.sizeX) + "\n"
 		self.content += "SizeY : " + str(self.sizeY) + "\n"
+		self.content += "Interpolation : " + self.interpolationTitle + "\n"
 
 		# In the trainingPath folder search for all files in all directories
 		for dirname, dirnames, filenames in os.walk(testPath):
 			# For each file found
 			for filename in filenames:
-				# Creates the filePath joining the directory name with the file name
-				filePath = os.path.join(dirname, filename)
+				# Ignore the text file
+				if filename.split(".")[1] != "txt":
+					# Creates the filePath joining the directory name with the file name
+					filePath = os.path.join(dirname, filename)
 
-				# Include the image file in the training set
-				self.recognizeFace(filePath)
+					# Include the image file in the training set
+					self.recognizeFace(filePath)
 
 		self.content += "RecognizedFaces   : " + str(self.recognizedFaces) + "\n"
 		self.content += "UnrecognizedFaces : " + str(self.unrecognizedFaces) + "\n"
 		self.content += "NonFaces          : " + str(self.nonFaces) + "\n"
 
-	def save(self):
-		folderName = time.strftime("%Y_%m_%d_%H_%M_%S") + "_" + self.suffix
+	def showResults(self):
+		print "==========================================================\n"
+		print self.content
+		print "=========================================================="
+
+	def save(self, path=""):
+		folderName = time.strftime("%Y_%m_%d_%H_%M_%S") + "_" + self.algorithmTitle
+
+		if path != "":
+			folderName = path + folderName
+		
+		# Make sure that none folder will have the same name
+		time.sleep(1)
+
 		os.makedirs( folderName )
 
 		# Salva o arquivo de texto
