@@ -4,7 +4,7 @@ import cv2, os, sys, time
 import numpy as np
 
 class Algorithms:
-	EIGENFACE, FISHERFACE, LBPH, SIFT, SURF = range(5)
+	EIGENFACES, FISHERFACES, LBPH, SIFT, SURF = range(5)
 
 class Interpolation:
 	INTER_CUBIC, INTER_NEAREST, INTER_LINEAR, INTER_AREA, INTER_LANCZOS4 = range(5)
@@ -12,13 +12,25 @@ class Interpolation:
 # Class that encapsulates all 5 face recognition algorithms
 class FaceRecognition(object):
 
-	def __init__(self, algorithm):
+	def __init__(self):
 		self.sizeX = 100
 		self.sizeY = 100
-		self.algorithm = algorithm
+		self.algorithm = Algorithms.EIGENFACES
 		self.interpolation = Interpolation.INTER_CUBIC
 		self.interpolationTitle = "INTER_CUBIC"
+		self.eigenfacesParameter = 0
+		self.fisherfacesParameter = 0
 
+		# LBPH Parameters
+		self.radius = 1
+		self.neighbors = 8
+		self.gridX = 8
+		self.gridY = 8
+
+	def newFaceRecAlgorithm(self):
+
+		self.parameters = ""
+		
 		# Vector used to store the training images
 		self.trainingImages = []
 
@@ -28,28 +40,49 @@ class FaceRecognition(object):
 		self.content = "Date/Time : " + time.strftime("%d/%m/%Y %H:%M:%S") + "\n"
 
 		# Creates the face recognition object based on the selected algorithm
-		if algorithm == Algorithms.EIGENFACE:
-			self.faceRec = cv2.face.createEigenFaceRecognizer()
-			self.algorithmTitle = "EIGENFACE"
-		elif algorithm == Algorithms.FISHERFACE:
-			self.faceRec = cv2.face.createFisherFaceRecognizer()
-			self.algorithmTitle = "FISHERFACE"
-		elif algorithm == Algorithms.LBPH:
-			self.faceRec = cv2.face.createLBPHFaceRecognizer()
+		if self.algorithm == Algorithms.EIGENFACES:
+
+			if self.eigenfacesParameter == 0:
+				self.faceRec = cv2.face.createEigenFaceRecognizer()
+			else:
+				self.faceRec = cv2.face.createEigenFaceRecognizer( self.eigenfacesParameter )
+
+			self.algorithmTitle = "EIGENFACES"
+			self.parameters = str(self.eigenfacesParameter)
+
+		elif self.algorithm == Algorithms.FISHERFACES:
+
+			if self.fisherfacesParameter == 0:
+				self.faceRec = cv2.face.createFisherFaceRecognizer()
+			else:
+				self.faceRec = cv2.face.createFisherFaceRecognizer( self.fisherfacesParameter )
+
+			self.algorithmTitle = "FISHERFACES"
+			self.parameters = str(self.fisherfacesParameter)
+
+		elif self.algorithm == Algorithms.LBPH:
+
+			self.faceRec = cv2.face.createLBPHFaceRecognizer(radius=self.radius, neighbors=self.neighbors, grid_x=self.gridX, grid_y=self.gridY)
 			self.algorithmTitle = "LBPH"
-		elif algorithm == Algorithms.SIFT:
+
+		elif self.algorithm == Algorithms.SIFT:
+
 			self.faceRec = cv2.xfeatures2d.SIFT_create()
 			self.bf = cv2.BFMatcher(cv2.NORM_L1, crossCheck=False)
 			self.algorithmTitle = "SIFT"
-		elif algorithm == Algorithms.SURF:
+
+		elif self.algorithm == Algorithms.SURF:
+
 			self.faceRec = cv2.xfeatures2d.SURF_create() # 400
 			self.bf = cv2.BFMatcher(cv2.NORM_L1, crossCheck=False)
 			self.algorithmTitle = "SURF"
+
 		else:
 			print "Invalid algorithm selected."
 			sys.exit()
 
 		self.content += "Algorithm : " + self.algorithmTitle + "\n"
+		self.content += "Parameters : " + self.parameters + "\n"
 
 		self.recognizedFaces   = 0
 		self.unrecognizedFaces = 0
@@ -58,6 +91,30 @@ class FaceRecognition(object):
 		self.recognizedFacesImages   = []
 		self.unrecognizedFacesImages = []
 		self.nonFacesImages = []
+
+	def setAlgorithm(self, algorithm):
+		self.algorithm = algorithm
+
+	def setEigenfacesParameter(self, parameter):
+		self.eigenfacesParameter = parameter
+
+	def getEigenfacesParameter(self):
+		return self.eigenfacesParameter
+
+	def setFisherfacesParameter(self, parameter):
+		self.fisherfacesParameter = parameter
+
+	def getFisherfacesParameter(self):
+		return self.fisherfacesParameter
+
+	def setLBPHParameters(self, radius, neighbors, gridX, gridY):
+		self.radius = radius
+		self.neighbors = neighbors
+		self.gridX = gridX
+		self.gridY = gridY
+
+	def getLBPHParameters(self):
+		return self.radius, self.neighbors, self.gridX, self.gridY
 
 	def getRecognizedFacesImages(self):
 		return self.recognizedFacesImages
@@ -151,6 +208,9 @@ class FaceRecognition(object):
 		return image, subjectID
 
 	def train(self, trainPath):
+
+		# Creates a new face recognition object and clear the variables
+		self.newFaceRecAlgorithm()
 
 		if trainPath == "":
 			print "Empty train path."
@@ -270,13 +330,23 @@ class FaceRecognition(object):
 		print "=========================================================="
 
 	def save(self, path=""):
-		folderName = time.strftime("%Y_%m_%d_%H_%M_%S") + "_" + self.algorithmTitle
+
+		# Make sure that none folder will have the same name
+		time.sleep(1)
+
+		# Format the parameters using underline
+		tempParameters = self.parameters.replace(", ", "_")
+		tempParameters = self.parameters.replace(",", "_")
+		tempParameters = self.parameters.replace(" ", "_")
+
+		# If the parameters were set include it in the folder name
+		if tempParameters != "":
+			folderName = time.strftime("%Y_%m_%d_%H_%M_%S") + "_" + self.algorithmTitle + "_" + tempParameters
+		else:
+			folderName = time.strftime("%Y_%m_%d_%H_%M_%S") + "_" + self.algorithmTitle
 
 		if path != "":
 			folderName = path + folderName
-		
-		# Make sure that none folder will have the same name
-		time.sleep(1)
 
 		os.makedirs( folderName )
 
