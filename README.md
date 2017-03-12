@@ -9,7 +9,7 @@ Basicamente foram utilizados os algoritmos:
  * **[Viola-Jones](http://docs.opencv.org/trunk/d7/d8b/tutorial_py_face_detection.html)**
  * **[Eigenfaces](http://docs.opencv.org/2.4/modules/contrib/doc/facerec/facerec_tutorial.html#eigenfaces)**
  * **[Fisherfaces](http://docs.opencv.org/2.4/modules/contrib/doc/facerec/facerec_tutorial.html#fisherfaces)**
- * **[Local Binary Patterns Histogram](http://docs.opencv.org/2.4/modules/contrib/doc/facerec/facerec_tutorial.html#local-binary-patterns-histograms)**
+ * **[Local Binary Patterns Histogram (LBPH)](http://docs.opencv.org/2.4/modules/contrib/doc/facerec/facerec_tutorial.html#local-binary-patterns-histograms)**
  * **[Scale-Invariant Feature Transform (SIFT)](http://docs.opencv.org/3.1.0/da/df5/tutorial_py_sift_intro.html)**
  * **[Speeded Up Robust Features (SURF)](http://docs.opencv.org/3.0-beta/doc/py_tutorials/py_feature2d/py_surf_intro/py_surf_intro.html)**
  * **[Transformada Wavelet discreta](https://www.mathworks.com/help/wavelet/ref/dwt2.html)**
@@ -20,7 +20,7 @@ Trabalho desenvolvido por **Kelvin Salton do Prado** sob orientação do **Dr. N
 
 ----------------------
 
-### OpenCV - Open Source Computer Vision Library
+### Open Source Computer Vision Library (OpenCV)
 
 A **[OpenCV](http://opencv.org)** (Open Source Computer Vision Library) é uma biblioteca de visão computacional de código aberto e multiplataforma, originalmente desenvolvida pela Intel por volta do ano 2000, e livre tanto para uso acadêmico como para uso comercial. A **OpenCV** disponibiliza diversos algoritmos de visão computacional, como por exemplo filtros de imagem, reconhecimento de objetos e reconhecimento facial, e possui ainda suporte a várias linguagens, como Python, C++, Ruby, Matlab, entre outras.
 
