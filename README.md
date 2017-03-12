@@ -6,13 +6,13 @@ O trabalho desenvolvido faz parte da linha de pesquisa de "**Monitoramento de Pr
 
 Basicamente foram utilizados os algoritmos:
 
- * **Viola-Jones**
- * **Eigenfaces**
- * **Fisherfaces**
- * **Local Binary Patterns Histogram**
- * **Speeded Up Robust Features (SURF)**
- * **Scale-Invariant Feature Transform (SIFT)**
- * **Transformada Wavelet discreta (Matlab)**
+ * **[Viola-Jones](http://docs.opencv.org/trunk/d7/d8b/tutorial_py_face_detection.html)**
+ * **[Eigenfaces](http://docs.opencv.org/2.4/modules/contrib/doc/facerec/facerec_tutorial.html#eigenfaces)**
+ * **[Fisherfaces](http://docs.opencv.org/2.4/modules/contrib/doc/facerec/facerec_tutorial.html#fisherfaces)**
+ * **[Local Binary Patterns Histogram](http://docs.opencv.org/2.4/modules/contrib/doc/facerec/facerec_tutorial.html#local-binary-patterns-histograms)**
+ * **[Scale-Invariant Feature Transform (SIFT)](http://docs.opencv.org/3.1.0/da/df5/tutorial_py_sift_intro.html)**
+ * **[Speeded Up Robust Features (SURF)](http://docs.opencv.org/3.0-beta/doc/py_tutorials/py_feature2d/py_surf_intro/py_surf_intro.html)**
+ * **[Transformada Wavelet discreta](https://www.mathworks.com/help/wavelet/ref/dwt2.html)**
 
 Trabalho desenvolvido por **Kelvin Salton do Prado** sob orientação do **Dr. Norton Trevisan Roman**.
 
