@@ -97,13 +97,13 @@ class FaceRecognition(object):
         elif self.algorithm == Algorithms.SIFT:
 
             self.faceRec = cv2.xfeatures2d.SIFT_create()
-            self.bf = cv2.BFMatcher(cv2.NORM_L1, crossCheck=False)
+            self.bf = cv2.BFMatcher(cv2.NORM_L2, crossCheck=False)
             self.algorithmTitle = "SIFT"
 
         elif self.algorithm == Algorithms.SURF:
 
             self.faceRec = cv2.xfeatures2d.SURF_create()  # 400
-            self.bf = cv2.BFMatcher(cv2.NORM_L1, crossCheck=False)
+            self.bf = cv2.BFMatcher(cv2.NORM_L2, crossCheck=False)
             self.algorithmTitle = "SURF"
 
         else:
