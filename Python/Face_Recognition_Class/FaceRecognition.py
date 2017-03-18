@@ -7,21 +7,38 @@ import time
 import numpy as np
 
 class Algorithms:
+    """
+    Algorithms is used to define the face recognition algorithm.
+    """
     EIGENFACES, FISHERFACES, LBPH, SIFT, SURF = range(5)
 
+
 class Interpolation:
+    """
+    Interpolation is used to define the interpolation method used to resize the images.
+    """
     INTER_CUBIC, INTER_NEAREST, INTER_LINEAR, INTER_AREA, INTER_LANCZOS4 = range(5)
 
 # Class that encapsulates all 5 face recognition algorithms
 class FaceRecognition(object):
 
     def __init__(self):
+    	"""
+    	Set the default values
+    	Size: 100x100
+    	Algorithm: Eigenfaces
+    	Interpolation: INTER_CUBIC (bicubic interpolation)
+    	"""
         self.sizeX = 100
         self.sizeY = 100
         self.algorithm = Algorithms.EIGENFACES
         self.interpolation = Interpolation.INTER_CUBIC
         self.interpolationTitle = "INTER_CUBIC"
+
+        # Eigenfaces paramters
         self.eigenfacesParameter = 0
+
+        # Fisherfaces parameters
         self.fisherfacesParameter = 0
 
         # LBPH Parameters
@@ -31,6 +48,11 @@ class FaceRecognition(object):
         self.gridY = 8
 
     def newFaceRecAlgorithm(self):
+    	"""
+    	Creates the face recognition object based on the selected algorithm.
+    	Set some values to the report.
+    	Reset the results.
+    	"""
 
         self.parameters = ""
 
@@ -75,13 +97,13 @@ class FaceRecognition(object):
         elif self.algorithm == Algorithms.SIFT:
 
             self.faceRec = cv2.xfeatures2d.SIFT_create()
-            self.bf = cv2.BFMatcher(cv2.NORM_L1, crossCheck=False)
+            self.bf = cv2.BFMatcher(cv2.NORM_L2, crossCheck=False)
             self.algorithmTitle = "SIFT"
 
         elif self.algorithm == Algorithms.SURF:
 
             self.faceRec = cv2.xfeatures2d.SURF_create()  # 400
-            self.bf = cv2.BFMatcher(cv2.NORM_L1, crossCheck=False)
+            self.bf = cv2.BFMatcher(cv2.NORM_L2, crossCheck=False)
             self.algorithmTitle = "SURF"
 
         else:
@@ -100,12 +122,27 @@ class FaceRecognition(object):
         self.nonFacesImages = []
 
     def setAlgorithm(self, algorithm):
+        """
+        Set the selected algorithm.
+
+        :param algorithm: The selected algorithm (e.g. Algorithms.EIGENFACES)
+        """
         self.algorithm = algorithm
 
     def setEigenfacesParameter(self, parameter):
+        """
+        Set the eigenfaces parameters.
+
+        :param algorithm: The parameter for the eigenfaces method.
+        """
         self.eigenfacesParameter = parameter
 
     def getEigenfacesParameter(self):
+        """
+        Get the eigenfaces parameters.
+
+        :return: the selected parameter for the eigenfaces method.
+        """
         return self.eigenfacesParameter
 
     def setFisherfacesParameter(self, parameter):
@@ -166,9 +203,10 @@ class FaceRecognition(object):
     def setSizeY(self, sizeY):
         self.sizeY = sizeY
 
-    # Function responsible for load the image, convert to grayscale and resize
-    # to a default size
     def preprocessImage(self, path):
+        """
+        Function responsible for load the image, convert to grayscale and resize to a default size.
+        """
         # Loads the image into the image variable
         image = cv2.imread(path)
         # Convert the image to grayscale
@@ -201,9 +239,11 @@ class FaceRecognition(object):
 
         return image
 
-    # Function that receives the path of each face image as parameter and
-    # include it in the training set (bf object)
     def includeFace(self, path):
+        """
+        Function that receives the path of each face image as parameter and include it in the training set (bf object).
+        """
+
         # Get the subject id (should be a number)
         subjectID = int(path.split("_")[1])
         # Load Image, Convert to Grayscale, Resize
@@ -223,6 +263,9 @@ class FaceRecognition(object):
         return image, subjectID
 
     def train(self, trainPath):
+        """
+        Function responsible for train the face recognition algorithm based on the image files from the trainPath.
+        """
 
         # Creates a new face recognition object and clear the variables
         self.newFaceRecAlgorithm()
@@ -257,8 +300,10 @@ class FaceRecognition(object):
             # Train the face recognition algorithm
             self.faceRec.train(self.trainingImages, np.array(self.labels))
 
-    # Function that tries to recognize each face (path passed by parameter)
     def recognizeFace(self, path):
+        """
+        Function that tries to recognize each face (path passed by parameter).
+        """
 
         # Get the subject id (should be a number)
         subjectID = path.split("_")[1]
@@ -319,8 +364,10 @@ class FaceRecognition(object):
 
             self.nonFaces += 1
 
-    # Function that tries to recognize each face (path passed by parameter)
     def predict(self, testPath):
+        """
+        Function that tries to recognize each face (path passed by parameter)
+        """
 
         if testPath == "":
             print "Empty test path."
@@ -351,11 +398,18 @@ class FaceRecognition(object):
         self.content += "NonFaces          : " + str(self.nonFaces) + "\n"
 
     def showResults(self):
+        """
+        Function used to show the results in the screen.
+        """
+
         print "==========================================================\n"
         print self.content
         print "=========================================================="
 
     def save(self, path=""):
+        """
+        Function used to automatically save the results in a defined folder.
+        """
 
         # Make sure that none folder will have the same name
         time.sleep(1)
