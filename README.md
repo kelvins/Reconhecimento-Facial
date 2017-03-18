@@ -7,6 +7,8 @@ O trabalho desenvolvido faz parte da linha de pesquisa de "**Monitoramento de Pr
 Basicamente foram utilizados os algoritmos:
 
  * **[Viola-Jones](http://docs.opencv.org/trunk/d7/d8b/tutorial_py_face_detection.html)**
+ * * Viola, Paul, and Michael Jones. "Rapid object detection using a boosted cascade of simple features." Computer Vision and Pattern Recognition, 2001. CVPR 2001. Proceedings of the 2001 IEEE Computer Society Conference on. Vol. 1. IEEE, 2001.
+ * * Viola, Paul, and Michael J. Jones. "Robust real-time face detection." International journal of computer vision 57.2 (2004): 137-154.
  * **[Eigenfaces](http://docs.opencv.org/2.4/modules/contrib/doc/facerec/facerec_tutorial.html#eigenfaces)**
  * **[Fisherfaces](http://docs.opencv.org/2.4/modules/contrib/doc/facerec/facerec_tutorial.html#fisherfaces)**
  * **[Local Binary Patterns Histogram (LBPH)](http://docs.opencv.org/2.4/modules/contrib/doc/facerec/facerec_tutorial.html#local-binary-patterns-histograms)**
