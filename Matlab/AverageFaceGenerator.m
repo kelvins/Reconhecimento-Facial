@@ -1,11 +1,11 @@
 
 % Clear all variables and close all windows
-clearvars
-close all
+clearvars;
+close all;
 
 % Default image size
-width  = 100
-height = 100
+width  = 100;
+height = 100;
 
 % File path
 filePath  = 'C:\Users\x\Desktop\base1\';
