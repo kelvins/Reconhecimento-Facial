@@ -365,9 +365,6 @@ class FaceRecognition:
             print "Empty file path."
         else:
             self.content += "FilePath  : " + filePath + "\n"
-            self.content += "SizeX : " + str(self.sizeX) + "\n"
-            self.content += "SizeY : " + str(self.sizeY) + "\n"
-            self.content += "Interpolation : " + self.interpolationTitle + "\n"
 
             # Check if it is a valid image file
             if filePath.split(".")[1] in supported_files:
@@ -387,8 +384,6 @@ class FaceRecognition:
         Function used to show the results in the screen.
         """
 
-        self.content += "NonFaces : " + str(self.nonFaces) + "\n"
-
         print "==========================================================\n"
         print self.content
         print "=========================================================="
@@ -399,6 +394,9 @@ class FaceRecognition:
         """
 
         self.content += "NonFaces : " + str(self.nonFaces) + "\n"
+        self.content += "SizeX : " + str(self.sizeX) + "\n"
+        self.content += "SizeY : " + str(self.sizeY) + "\n"
+        self.content += "Interpolation : " + self.interpolationTitle + "\n"
 
         # Make sure that none folder will have the same name
         time.sleep(1)
