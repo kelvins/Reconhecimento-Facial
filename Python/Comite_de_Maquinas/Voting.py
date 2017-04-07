@@ -4,7 +4,7 @@ class Voting:
     Class the provides voting methods for the committee machine.
     """
 
-    def majorityVoting(subjects):
+    def majorityVoting(self, subjects):
         """
         Majority voting.
         """
@@ -18,17 +18,17 @@ class Voting:
 
         # Count votes
         for i in range(0, len(subjects)):
-            index = subjectVoted.find(subjects[i])
-            if index >= 0:
+            if subjects[i] in subjectVoted:
+                index = subjectVoted.index(subjects[i])
                 numberOfVotes[index] = numberOfVotes[index] + 1
             else:
                 subjectVoted.append(subjects[i])
                 numberOfVotes.append(1)
 
-        indexMaxVoted = numberOfVotes.find(max(numberOfVotes))
+        indexMaxVoted = numberOfVotes.index(max(numberOfVotes))
         return subjectVoted[indexMaxVoted]
 
-    def weightedVoting(subjects, weights):
+    def weightedVoting(self, subjects, weights):
         """
         Weighted voting.
         """
@@ -46,12 +46,12 @@ class Voting:
 
         # Count votes
         for i in range(0, len(subjects)):
-            index = subjectVoted.find(subjects[i])
-            if index >= 0:
+            if subjects[i] in subjectVoted:
+                index = subjectVoted.index(subjects[i])
                 valueOfVotes[index] = valueOfVotes[index] + weights[i]
             else:
                 subjectVoted.append(subjects[i])
                 valueOfVotes.append(weights[i])
 
-        indexMaxVoted = valueOfVotes.find(max(valueOfVotes))
+        indexMaxVoted = valueOfVotes.index(max(valueOfVotes))
         return subjectVoted[indexMaxVoted]
