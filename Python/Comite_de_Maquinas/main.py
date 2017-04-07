@@ -1,39 +1,43 @@
 
-import Algorithms
-import Interpolation
-import FaceRecognition as fr
+import os
 
-# Define o caminho para a pasta de treinamento
+import FaceRecognition as fr
+from Algorithms import Algorithms
+from Interpolation import Interpolation
+
+# Define the path to the training files/folder
 trainPath = "/Users/kelvinsp/Desktop/Treinamento6/"
 
-# Define o caminho para a pasta de teste
+# Define the path to the test folder
 testPath = "/Users/kelvinsp/Desktop/Teste6/"
 
 faceRec = fr.FaceRecognition()
 
-# Define qual algoritmo sera utilizado (padrao: EIGENFACES)
-# [Algorithms.EIGENFACES, Algorithms.FISHERFACES, Algorithms.LBPH, Algorithms.SIFT, Algorithms.SURF]
-faceRec.setAlgorithm(Algorithms.EIGENFACES)
-
-# Define qual metodo de interpolacao sera utilizado (padrao: INTER_CUBIC)
-# [Interpolation.INTER_CUBIC, Interpolation.INTER_NEAREST, Interpolation.INTER_LINEAR, Interpolation.INTER_AREA, Interpolation.INTER_LANCZOS4]
+# Set the interpolation method (default: INTER_CUBIC)
 faceRec.setInterpolation(Interpolation.INTER_CUBIC)
 
-# Define o tamanho padrao para as imagens (padrao 100x100)
-# Neste caso 100x100 (larguraXaltura)
+# Set a fixed size for the images (default 100x100)
 faceRec.setDefaultSize(100, 100)
 
-# Define o caminho da pasta de treinamento
+# Train the algorithms
 faceRec.train(trainPath)
 
-# Define o caminho da pasta de teste
-faceRec.predict(testPath)
+# In the testPath folder search for all files in all directories
+for dirname, dirnames, filenames in os.walk(testPath):
+    # For each file found
+    for filename in filenames:
+            # Creates the filePath joining the directory name with the file name
+            filePath = os.path.join(dirname, filename)
 
-# Mostra os resultados na tela
-faceRec.showResults()
+            # Try to predict for the current file
+            subjects = faceRec.predict(filePath)
 
-# Salva os resultados em uma pasta
-# O caminho da pasta pode ser passado como parametro (ex.: faceRec.save('/home/Desktop/FaceRecognition/Results'))
-# Se o parametro estiver vazio a funcao ira criar uma pasta seguindo o
-# padrao: ano_mes_dia_hora_minuto_segundo_algoritmo_parametros
+            # If subjects is not None, print the results
+            if subjects is not None:
+                print filePath
+                print subjects
+            else:
+                print "Subjects none"
+
+# Save the result in a text file
 faceRec.save()

@@ -6,6 +6,9 @@ import sys
 import time
 import numpy as np
 
+from Algorithms import Algorithms
+from Interpolation import Interpolation
+
 # Declare all supported files
 supported_files = ["png", "jpg", "jpeg"]
 
@@ -23,9 +26,10 @@ class FaceRecognition:
     	"""
         self.sizeX = 100
         self.sizeY = 100
-        self.algorithm = Algorithms.EIGENFACES
         self.interpolation = Interpolation.INTER_CUBIC
         self.interpolationTitle = "INTER_CUBIC"
+
+        self.nonFaces = 0
 
         # Eigenfaces paramters
         self.eigenfacesParameter = 0
@@ -42,8 +46,7 @@ class FaceRecognition:
     def newFaceRecAlgorithm(self):
     	"""
     	Creates the face recognition object based on the selected algorithm.
-    	Set some values to the report.
-    	Reset the results.
+    	Set some values to the report. Reset the results.
     	"""
 
         self.parameters = ""
@@ -57,142 +60,127 @@ class FaceRecognition:
         self.content = "Date/Time : " + \
             time.strftime("%d/%m/%Y %H:%M:%S") + "\n"
 
-        # Creates the face recognition object based on the selected algorithm
-        if self.algorithm == Algorithms.EIGENFACES:
+        self.faceRecMethods = []
+        self.bf = []
 
-            if self.eigenfacesParameter == 0:
-                self.faceRec = cv2.face.createEigenFaceRecognizer()
-            else:
-                self.faceRec = cv2.face.createEigenFaceRecognizer(
-                    self.eigenfacesParameter)
+        self.faceRecMethods.append(cv2.face.createEigenFaceRecognizer(self.eigenfacesParameter))
+        self.faceRecMethods.append(cv2.face.createFisherFaceRecognizer(self.fisherfacesParameter))
+        self.faceRecMethods.append(cv2.face.createLBPHFaceRecognizer(
+            radius=self.radius, neighbors=self.neighbors, grid_x=self.gridX, grid_y=self.gridY))
 
-            self.algorithmTitle = "EIGENFACES"
-            self.parameters = str(self.eigenfacesParameter)
+        self.faceRecMethods.append(cv2.xfeatures2d.SIFT_create())
+        self.bf.append(cv2.BFMatcher(cv2.NORM_L2, crossCheck=False))
 
-        elif self.algorithm == Algorithms.FISHERFACES:
+        self.faceRecMethods.append(cv2.xfeatures2d.SURF_create())  # 400
+        self.bf.append(cv2.BFMatcher(cv2.NORM_L2, crossCheck=False))
 
-            if self.fisherfacesParameter == 0:
-                self.faceRec = cv2.face.createFisherFaceRecognizer()
-            else:
-                self.faceRec = cv2.face.createFisherFaceRecognizer(
-                    self.fisherfacesParameter)
+        self.algorithmTitle = "EIGENFACES-FISHERFACES-LBPH-SIFT-SURF"
+        self.parameters = "Eigenfaces Parameters:" + str(self.eigenfacesParameter) + "\n"
+        self.parameters += "Fisherfaces Parameters:" + str(self.fisherfacesParameter)
 
-            self.algorithmTitle = "FISHERFACES"
-            self.parameters = str(self.fisherfacesParameter)
-
-        elif self.algorithm == Algorithms.LBPH:
-
-            self.faceRec = cv2.face.createLBPHFaceRecognizer(
-                radius=self.radius, neighbors=self.neighbors, grid_x=self.gridX, grid_y=self.gridY)
-            self.algorithmTitle = "LBPH"
-
-        elif self.algorithm == Algorithms.SIFT:
-
-            self.faceRec = cv2.xfeatures2d.SIFT_create()
-            self.bf = cv2.BFMatcher(cv2.NORM_L2, crossCheck=False)
-            self.algorithmTitle = "SIFT"
-
-        elif self.algorithm == Algorithms.SURF:
-
-            self.faceRec = cv2.xfeatures2d.SURF_create()  # 400
-            self.bf = cv2.BFMatcher(cv2.NORM_L2, crossCheck=False)
-            self.algorithmTitle = "SURF"
-
-        else:
-            print "Invalid algorithm selected."
-            sys.exit()
-
-        self.content += "Algorithm : " + self.algorithmTitle + "\n"
-        self.content += "Parameters : " + self.parameters + "\n"
-
-        self.recognizedFaces = 0
-        self.unrecognizedFaces = 0
-        self.nonFaces = 0
-
-        self.recognizedFacesImages = []
-        self.unrecognizedFacesImages = []
-        self.nonFacesImages = []
-
-    def setAlgorithm(self, algorithm):
-        """
-        Set the selected algorithm.
-
-        :param algorithm: The selected algorithm (e.g. Algorithms.EIGENFACES)
-        """
-        self.algorithm = algorithm
+        self.content += "Algorithms : " + self.algorithmTitle + "\n"
+        self.content += "Parameters : " + "\n" + self.parameters + "\n"
 
     def setEigenfacesParameter(self, parameter):
         """
         Set the eigenfaces parameters.
-
-        :param algorithm: The parameter for the eigenfaces method.
+        :param parameter: The parameter for the eigenfaces method.
         """
         self.eigenfacesParameter = parameter
 
     def getEigenfacesParameter(self):
         """
         Get the eigenfaces parameters.
-
         :return: the selected parameter for the eigenfaces method.
         """
         return self.eigenfacesParameter
 
     def setFisherfacesParameter(self, parameter):
+        """
+        Set the fisherfaces parameters.
+        :param parameter: The parameter for the fisherfaces method.
+        """
         self.fisherfacesParameter = parameter
 
     def getFisherfacesParameter(self):
+        """
+        Get the fisherfaces parameters.
+        :return: the selected parameter for the fisherfaces method.
+        """
         return self.fisherfacesParameter
 
     def setLBPHParameters(self, radius, neighbors, gridX, gridY):
+        """
+        Set the fisherfaces parameters.
+        :param radius: Radius
+        :param neighbors: Neighbors.
+        :param gridX: Grid X.
+        :param gridY: Grid Y.
+        """
         self.radius = radius
         self.neighbors = neighbors
         self.gridX = gridX
         self.gridY = gridY
 
     def getLBPHParameters(self):
+        """
+        Get the LBPH parameters.
+        :return: the selected parameter for the LBPH method.
+        """
         return self.radius, self.neighbors, self.gridX, self.gridY
 
-    def getRecognizedFacesImages(self):
-        return self.recognizedFacesImages
-
-    def getUnrecognizedFacesImages(self):
-        return self.unrecognizedFacesImages
-
-    def getNonFacesImages(self):
-        return self.nonFacesImages
-
     def getContent(self):
+        """
+        Get the report content.
+        :return: the report content.
+        """
         return self.content
 
-    def getAlgorithmTitle(self):
-        return self.algorithmTitle
-
     def getInterpolationTitle(self):
+        """
+        Get the selected interpolation method title.
+        :return: the selected interpolation method title.
+        """
         return self.interpolationTitle
 
-    def getRecognizedFaces(self):
-        return self.recognizedFaces
-
-    def getUnrecognizedFaces(self):
-        return self.unrecognizedFaces
-
     def getNonFaces(self):
+        """
+        Get the number of non faces.
+        """
         return self.nonFaces
 
     def getInterpolation(self):
+        """
+        Get the selected interpolation method.
+        :return: the selected interpolation method.
+        """
         return self.interpolation
 
     def setInterpolation(self, interpolation):
+        """
+        Set the interpolation method based on the Interpolation class.
+        :param interpolation: The selected interpolation method.
+        """
         self.interpolation = interpolation
 
+        if self.interpolation == Interpolation.INTER_CUBIC:
+            self.interpolationTitle = "INTER_CUBIC"
+        elif self.interpolation == Interpolation.INTER_AREA:
+            self.interpolationTitle = "INTER_AREA"
+        elif self.interpolation == Interpolation.INTER_LANCZOS4:
+            self.interpolationTitle = "INTER_LANCZOS4"
+        elif self.interpolation == Interpolation.INTER_LINEAR:
+            self.interpolationTitle = "INTER_LINEAR"
+        elif self.interpolation == Interpolation.INTER_NEAREST:
+            self.interpolationTitle = "INTER_NEAREST"
+
     def setDefaultSize(self, sizeX, sizeY):
+        """
+        Set the default size for the imagens (default is 100x100).
+        :param sizeX: The selected X size.
+        :param sizeY: The selected Y size.
+        """
         self.sizeX = sizeX
-        self.sizeY = sizeY
-
-    def setSizeX(self, sizeX):
-        self.sizeX = sizeX
-
-    def setSizeY(self, sizeY):
         self.sizeY = sizeY
 
     def preprocessImage(self, path):
@@ -208,23 +196,18 @@ class FaceRecognition:
         if self.interpolation == Interpolation.INTER_CUBIC:
             image = cv2.resize(image, (self.sizeX, self.sizeY),
                                interpolation=cv2.INTER_CUBIC)
-            self.interpolationTitle = "INTER_CUBIC"
         elif self.interpolation == Interpolation.INTER_AREA:
             image = cv2.resize(image, (self.sizeX, self.sizeY),
                                interpolation=cv2.INTER_AREA)
-            self.interpolationTitle = "INTER_AREA"
         elif self.interpolation == Interpolation.INTER_LANCZOS4:
             image = cv2.resize(image, (self.sizeX, self.sizeY),
                                interpolation=cv2.INTER_LANCZOS4)
-            self.interpolationTitle = "INTER_LANCZOS4"
         elif self.interpolation == Interpolation.INTER_LINEAR:
             image = cv2.resize(image, (self.sizeX, self.sizeY),
                                interpolation=cv2.INTER_LINEAR)
-            self.interpolationTitle = "INTER_LINEAR"
         elif self.interpolation == Interpolation.INTER_NEAREST:
             image = cv2.resize(image, (self.sizeX, self.sizeY),
                                interpolation=cv2.INTER_NEAREST)
-            self.interpolationTitle = "INTER_NEAREST"
         else:
             print "Error trying to resize the image."
             sys.exit()
@@ -235,26 +218,34 @@ class FaceRecognition:
         """
         Function that receives the path of each face image as parameter and include it in the training set (bf object).
         """
+
+        # Check if it is a valid image file
         if path.split(".")[1] in supported_files:
-            # Get the subject id (should be a number)
-            subjectID = int(path.split("_")[1].split(".")[0])
+
+            # Get the subject id (should be a number) based on the format: subjectID_imageNumber.png
+            pathSplit = path.split("/")
+            fileName  = pathSplit[len(pathSplit)-1]
+            subjectID = int(fileName.split("_")[0])
 
             # Load Image, Convert to Grayscale, Resize
             image = self.preprocessImage(path)
 
-            if self.algorithm == Algorithms.SIFT or self.algorithm == Algorithms.SURF:
-                # Detects and computes the keypoints and descriptors using the SURF
-                # algorithm
-                keypoints, descriptors = self.faceRec.detectAndCompute(image, None)
+            # Detects and computes the keypoints and descriptors using the SIFT and SURF algorithms
+            keypoints1, descriptors1 = self.faceRecMethods[3].detectAndCompute(image, None)
+            keypoints2, descriptors2 = self.faceRecMethods[4].detectAndCompute(image, None)
 
-                # Creates an numpy array
-                clusters = np.array([descriptors])
+            # Creates an numpy array
+            clusters1 = np.array([descriptors1])
+            clusters2 = np.array([descriptors2])
 
-                # Add the array to the BFMatcher
-                self.bf.add(clusters)
+            # Add the array to the BFMatcher (for SIFT and SURF)
+            self.bf[0].add(clusters1)
+            self.bf[1].add(clusters2)
 
             return image, subjectID
-        return None, 0
+        else:
+            # If it is not a valid image file
+            return None, 0
 
     def train(self, trainPath):
         """
@@ -280,39 +271,65 @@ class FaceRecognition:
                 # Include the image file in the training set
                 image, subjectID = self.includeFace(filePath)
 
+                # If is is a valid image and it was correct included
                 if image is not None:
                     # Store the image to generate an output image
                     self.trainingImages.append(image)
 
-                    # Store the subjectID to check if the face recognition is
-                    # correct
+                    # Store the subjectID to check if the face recognition is correct
                     self.labels.append(subjectID)
 
-        if self.algorithm == Algorithms.SIFT or self.algorithm == Algorithms.SURF:
-            self.bf.train()
-        else:
-            # Train the face recognition algorithm
-            self.faceRec.train(self.trainingImages, np.array(self.labels))
+        # Train the all face recognition algorithms
+        self.faceRecMethods[0].train(self.trainingImages, np.array(self.labels)) # Eigenfaces
+        self.faceRecMethods[1].train(self.trainingImages, np.array(self.labels)) # Fisherfaces
+        self.faceRecMethods[2].train(self.trainingImages, np.array(self.labels)) # LBPH
+        self.bf[0].train() # SIFT
+        self.bf[1].train() # SURF
 
     def recognizeFace(self, path):
         """
         Function that tries to recognize each face (path passed by parameter).
         """
 
+        # Check if it is an image file
         if path.split(".")[1] in supported_files:
+
             # Get the subject id (should be a number)
+            # IMPORTANT: it follows the patter: imageNumber_subjectID.png
+            # It is different from the pattern on the training set
             subjectID = path.split("_")[1]
             subjectID = int(subjectID.split(".")[0])
+
+            # If it is not a facial image
+            if subjectID < 0:
+                self.nonFaces += 1
 
             # Load Image, Convert to Grayscale, Resize
             image = self.preprocessImage(path)
 
-            if self.algorithm == Algorithms.SIFT or self.algorithm == Algorithms.SURF:
-                # Detects and computes the keypoints and descriptors using the SURF
-                # algorithm
-                keypoints, descriptors = self.faceRec.detectAndCompute(image, None)
+            # Stores the subject recognized for each algorithm
+            subjects = []
 
-                matches = self.bf.match(descriptors)
+            # 0 - Eigenfaces
+            # 1 - Fisherfaces
+            # 2 - LBPH
+            for index in range(0, 3):
+                # Perform the face recognition
+                subject, confidence = self.faceRecMethods[index].predict(image)
+
+                # Append the subject recognized by the algorithm
+                subjects.append(subject)
+
+            # 3 - faceRecMethods: SIFT
+            # 4 - faceRecMethods: SURF
+            # 0 - bf: SIFT
+            # 1 - bf: SURF
+            for index in range(0, 2):
+
+                # Detects and computes the keypoints and descriptors using the SIFT and SURF algorithm
+                keypoints, descriptors = self.faceRecMethods[index+3].detectAndCompute(image, None)
+
+                matches = self.bf[index].match(descriptors)
                 matches = sorted(matches, key=lambda x: x.distance)
 
                 # Creates a results vector to store the number of similar points
@@ -329,73 +346,48 @@ class FaceRecognition:
                 # vector (it means that this is the most similar image)
                 index = results.index(max(results))
 
-                subject = self.labels[index]
-            else:
-                # Perform the face recognition
-                subject, confidence = self.faceRec.predict(image)
+                # Append the subject recognized by the algorithm
+                subjects.append(self.labels[index])
 
-                index = self.labels.index(subject)
-
-        # Concatenate the two images (from the index position in the training
-        # set and the current test image) to generate the output image
-        tempImage = np.concatenate((self.trainingImages[index], image), axis=1)
-
-        if subjectID >= 0:
-            # Check if the subject is equal to the expected subject (subjectID).
-            # It means the face image was correctly recognized
-            if subject == subjectID:
-                # Save the concatenated image to the vector
-                self.recognizedFacesImages.append(tempImage)
-
-                self.recognizedFaces += 1
-            else:
-                # Save the concatenated image to the vector
-                self.unrecognizedFacesImages.append(tempImage)
-
-                self.unrecognizedFaces += 1
+            # Return the subjects recognized for each algorithm
+            return subjects
         else:
-            # Save the concatenated image to the vector
-            self.nonFacesImages.append(tempImage)
+            return None
 
-            self.nonFaces += 1
-
-    def predict(self, testPath):
+    def predict(self, filePath):
         """
-        Function that tries to recognize each face (path passed by parameter)
+        Function that tries to recognize the face (path passed by parameter)
         """
 
-        if testPath == "":
-            print "Empty test path."
-            sys.exit()
+        subjects = None
 
-        self.content += "TestPath  : " + testPath + "\n"
-        self.content += "SizeX : " + str(self.sizeX) + "\n"
-        self.content += "SizeY : " + str(self.sizeY) + "\n"
-        self.content += "Interpolation : " + self.interpolationTitle + "\n"
+        if filePath == "":
+            print "Empty file path."
+        else:
+            self.content += "FilePath  : " + filePath + "\n"
+            self.content += "SizeX : " + str(self.sizeX) + "\n"
+            self.content += "SizeY : " + str(self.sizeY) + "\n"
+            self.content += "Interpolation : " + self.interpolationTitle + "\n"
 
-        # In the trainingPath folder search for all files in all directories
-        for dirname, dirnames, filenames in os.walk(testPath):
-            # For each file found
-            for filename in filenames:
-                # Ignore the text file
-                if filename.split(".")[1] in supported_files:
-                    # Creates the filePath joining the directory name with the
-                    # file name
-                    filePath = os.path.join(dirname, filename)
+            # Check if it is a valid image file
+            if filePath.split(".")[1] in supported_files:
+                # Include the image file in the training set
+                subjects = self.recognizeFace(filePath)
 
-                    # Include the image file in the training set
-                    self.recognizeFace(filePath)
-
-        self.content += "RecognizedFaces   : " + \
-            str(self.recognizedFaces) + "\n"
-        self.content += "UnrecognizedFaces : " + \
-            str(self.unrecognizedFaces) + "\n"
-        self.content += "NonFaces          : " + str(self.nonFaces) + "\n"
+        # Return the subjects predict for each algorithm:
+        # subjects[0] = Eigenfaces
+        # subjects[1] = Fisherfaces
+        # subjects[2] = LBPH
+        # subjects[3] = SIFT
+        # subjects[4] = SURF
+        return subjects
 
     def showResults(self):
         """
         Function used to show the results in the screen.
         """
+
+        self.content += "NonFaces : " + str(self.nonFaces) + "\n"
 
         print "==========================================================\n"
         print self.content
@@ -406,6 +398,8 @@ class FaceRecognition:
         Function used to automatically save the results in a defined folder.
         """
 
+        self.content += "NonFaces : " + str(self.nonFaces) + "\n"
+
         # Make sure that none folder will have the same name
         time.sleep(1)
 
@@ -415,42 +409,12 @@ class FaceRecognition:
         tempParameters = self.parameters.replace(" ", "_")
 
         # If the parameters were set include it in the folder name
-        if tempParameters != "":
-            folderName = time.strftime(
-                "%Y_%m_%d_%H_%M_%S") + "_" + self.algorithmTitle + "_" + tempParameters
-        else:
-            folderName = time.strftime(
-                "%Y_%m_%d_%H_%M_%S") + "_" + self.algorithmTitle
+        fileName = time.strftime("%Y_%m_%d_%H_%M_%S") + ".txt"
 
         if path != "":
-            folderName = path + folderName
-
-        os.makedirs(folderName)
+            fileName = path + "/" + fileName
 
         # Salva o arquivo de texto
-        textFile = open(folderName + "/Report.txt", "w")
+        textFile = open(fileName, "w")
         textFile.write(self.content)
         textFile.close()
-
-        count = 1
-        os.makedirs(folderName + "/RecognizedFaces")
-        for image in self.recognizedFacesImages:
-            # Save the concatenated image to the output path
-            cv2.imwrite(folderName + "/RecognizedFaces/" +
-                        str(count) + ".png", image)
-            count += 1
-
-        count = 1
-        os.makedirs(folderName + "/UnrecognizedFaces")
-        for image in self.unrecognizedFacesImages:
-            # Save the concatenated image to the output path
-            cv2.imwrite(folderName + "/UnrecognizedFaces/" +
-                        str(count) + ".png", image)
-            count += 1
-
-        count = 1
-        os.makedirs(folderName + "/NonFaces")
-        for image in self.nonFacesImages:
-            # Save the concatenated image to the output path
-            cv2.imwrite(folderName + "/NonFaces/" + str(count) + ".png", image)
-            count += 1
