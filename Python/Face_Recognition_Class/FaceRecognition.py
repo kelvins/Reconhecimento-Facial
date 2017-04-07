@@ -247,7 +247,7 @@ class FaceRecognition:
         """
         if path.split(".")[1] in supported_files:
             # Get the subject id (should be a number)
-            subjectID = int(path.split("_")[1].split(".")[0])
+            subjectID = int(path.split("_")[0])
 
             # Load Image, Convert to Grayscale, Resize
             image = self.preprocessImage(path)
