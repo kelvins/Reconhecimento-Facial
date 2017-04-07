@@ -33,7 +33,7 @@ class Voting:
         Weighted voting.
         """
 
-        if len(subjects) == 0 || len(weights) == 0:
+        if len(subjects) == 0 or len(weights) == 0:
             print "The list is empty."
             return -1
 
