@@ -6,21 +6,13 @@ import sys
 import time
 import numpy as np
 
-class Algorithms:
-    """
-    Algorithms is used to define the face recognition algorithm.
-    """
-    EIGENFACES, FISHERFACES, LBPH, SIFT, SURF = range(5)
+# Declare all supported files
+supported_files = ["png", "jpg", "jpeg"]
 
-
-class Interpolation:
+class FaceRecognition:
     """
-    Interpolation is used to define the interpolation method used to resize the images.
+    Class that encapsulates all 5 face recognition algorithms
     """
-    INTER_CUBIC, INTER_NEAREST, INTER_LINEAR, INTER_AREA, INTER_LANCZOS4 = range(5)
-
-# Class that encapsulates all 5 face recognition algorithms
-class FaceRecognition(object):
 
     def __init__(self):
     	"""
@@ -243,24 +235,26 @@ class FaceRecognition(object):
         """
         Function that receives the path of each face image as parameter and include it in the training set (bf object).
         """
+        if path.split(".")[1] in supported_files:
+            # Get the subject id (should be a number)
+            subjectID = int(path.split("_")[1].split(".")[0])
 
-        # Get the subject id (should be a number)
-        subjectID = int(path.split("_")[1])
-        # Load Image, Convert to Grayscale, Resize
-        image = self.preprocessImage(path)
+            # Load Image, Convert to Grayscale, Resize
+            image = self.preprocessImage(path)
 
-        if self.algorithm == Algorithms.SIFT or self.algorithm == Algorithms.SURF:
-            # Detects and computes the keypoints and descriptors using the SURF
-            # algorithm
-            keypoints, descriptors = self.faceRec.detectAndCompute(image, None)
+            if self.algorithm == Algorithms.SIFT or self.algorithm == Algorithms.SURF:
+                # Detects and computes the keypoints and descriptors using the SURF
+                # algorithm
+                keypoints, descriptors = self.faceRec.detectAndCompute(image, None)
 
-            # Creates an numpy array
-            clusters = np.array([descriptors])
+                # Creates an numpy array
+                clusters = np.array([descriptors])
 
-            # Add the array to the BFMatcher
-            self.bf.add(clusters)
+                # Add the array to the BFMatcher
+                self.bf.add(clusters)
 
-        return image, subjectID
+            return image, subjectID
+        return None, 0
 
     def train(self, trainPath):
         """
@@ -280,19 +274,19 @@ class FaceRecognition(object):
         for dirname, dirnames, filenames in os.walk(trainPath):
             # For each file found
             for filename in filenames:
-                # Creates the filePath joining the directory name with the file
-                # name
+                # Creates the filePath joining the directory name and the file name
                 filePath = os.path.join(dirname, filename)
 
                 # Include the image file in the training set
                 image, subjectID = self.includeFace(filePath)
 
-                # Store the image to generate an output image
-                self.trainingImages.append(image)
+                if image is not None:
+                    # Store the image to generate an output image
+                    self.trainingImages.append(image)
 
-                # Store the subjectID to check if the face recognition is
-                # correct
-                self.labels.append(subjectID)
+                    # Store the subjectID to check if the face recognition is
+                    # correct
+                    self.labels.append(subjectID)
 
         if self.algorithm == Algorithms.SIFT or self.algorithm == Algorithms.SURF:
             self.bf.train()
@@ -305,41 +299,42 @@ class FaceRecognition(object):
         Function that tries to recognize each face (path passed by parameter).
         """
 
-        # Get the subject id (should be a number)
-        subjectID = path.split("_")[1]
-        subjectID = int(subjectID.split(".")[0])
+        if path.split(".")[1] in supported_files:
+            # Get the subject id (should be a number)
+            subjectID = path.split("_")[1]
+            subjectID = int(subjectID.split(".")[0])
 
-        # Load Image, Convert to Grayscale, Resize
-        image = self.preprocessImage(path)
+            # Load Image, Convert to Grayscale, Resize
+            image = self.preprocessImage(path)
 
-        if self.algorithm == Algorithms.SIFT or self.algorithm == Algorithms.SURF:
-            # Detects and computes the keypoints and descriptors using the SURF
-            # algorithm
-            keypoints, descriptors = self.faceRec.detectAndCompute(image, None)
+            if self.algorithm == Algorithms.SIFT or self.algorithm == Algorithms.SURF:
+                # Detects and computes the keypoints and descriptors using the SURF
+                # algorithm
+                keypoints, descriptors = self.faceRec.detectAndCompute(image, None)
 
-            matches = self.bf.match(descriptors)
-            matches = sorted(matches, key=lambda x: x.distance)
+                matches = self.bf.match(descriptors)
+                matches = sorted(matches, key=lambda x: x.distance)
 
-            # Creates a results vector to store the number of similar points
-            # for each image on the training set
-            results = [0] * len(self.labels)
+                # Creates a results vector to store the number of similar points
+                # for each image on the training set
+                results = [0] * len(self.labels)
 
-            # Based on the matches vector we create the results vector that
-            # represents how many points this test image are similar to each
-            # image in the training set
-            for i in range(len(matches)):
-                results[matches[i].imgIdx] += 1
+                # Based on the matches vector we create the results vector that
+                # represents how many points this test image are similar to each
+                # image in the training set
+                for i in range(len(matches)):
+                    results[matches[i].imgIdx] += 1
 
-            # Index receives the position of the maximum value in the results
-            # vector (it means that this is the most similar image)
-            index = results.index(max(results))
+                # Index receives the position of the maximum value in the results
+                # vector (it means that this is the most similar image)
+                index = results.index(max(results))
 
-            subject = self.labels[index]
-        else:
-            # Perform the face recognition
-            subject, confidence = self.faceRec.predict(image)
+                subject = self.labels[index]
+            else:
+                # Perform the face recognition
+                subject, confidence = self.faceRec.predict(image)
 
-            index = self.labels.index(subject)
+                index = self.labels.index(subject)
 
         # Concatenate the two images (from the index position in the training
         # set and the current test image) to generate the output image
@@ -383,7 +378,7 @@ class FaceRecognition(object):
             # For each file found
             for filename in filenames:
                 # Ignore the text file
-                if filename.split(".")[1] != "txt":
+                if filename.split(".")[1] in supported_files:
                     # Creates the filePath joining the directory name with the
                     # file name
                     filePath = os.path.join(dirname, filename)

@@ -1,16 +1,19 @@
 
+import Algorithms
+import Interpolation
 import FaceRecognition as fr
-from FaceRecognition import Algorithms, Interpolation
 
 # Define o caminho para a pasta de treinamento
-trainPath = "/home/Desktop/FaceRecognition/BASE1/"
+trainPath = "/Users/kelvinsp/Desktop/Treinamento6/"
 
 # Define o caminho para a pasta de teste
-testPath = "/home/Desktop/FaceRecognition/TESTE1/"
+testPath = "/Users/kelvinsp/Desktop/Teste6/"
+
+faceRec = fr.FaceRecognition()
 
 # Define qual algoritmo sera utilizado (padrao: EIGENFACES)
 # [Algorithms.EIGENFACES, Algorithms.FISHERFACES, Algorithms.LBPH, Algorithms.SIFT, Algorithms.SURF]
-faceRec = fr.FaceRecognition(Algorithms.EIGENFACE)
+faceRec.setAlgorithm(Algorithms.EIGENFACES)
 
 # Define qual metodo de interpolacao sera utilizado (padrao: INTER_CUBIC)
 # [Interpolation.INTER_CUBIC, Interpolation.INTER_NEAREST, Interpolation.INTER_LINEAR, Interpolation.INTER_AREA, Interpolation.INTER_LANCZOS4]
