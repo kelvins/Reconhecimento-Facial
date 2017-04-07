@@ -8,9 +8,11 @@ trainPath = "/home/Desktop/FaceRecognition/BASE1/"
 # Define o caminho para a pasta de teste
 testPath = "/home/Desktop/FaceRecognition/TESTE1/"
 
+faceRec = fr.FaceRecognition()
+
 # Define qual algoritmo sera utilizado (padrao: EIGENFACES)
 # [Algorithms.EIGENFACES, Algorithms.FISHERFACES, Algorithms.LBPH, Algorithms.SIFT, Algorithms.SURF]
-faceRec = fr.FaceRecognition(Algorithms.EIGENFACE)
+faceRec.setAlgorithm(Algorithms.EIGENFACES)
 
 # Define qual metodo de interpolacao sera utilizado (padrao: INTER_CUBIC)
 # [Interpolation.INTER_CUBIC, Interpolation.INTER_NEAREST, Interpolation.INTER_LINEAR, Interpolation.INTER_AREA, Interpolation.INTER_LANCZOS4]
