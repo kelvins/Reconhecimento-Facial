@@ -43,4 +43,8 @@ Cabe aqui ressaltar que os algoritmos de detecção e reconhecimento facial util
 
 ----------------------
 
-Eventuais dúvidas sobre os algoritmos desenvolvidos podem ser esclarecidas através do e-mail **kelvinpfw@hotmail.com**
+Uma documentação mais detalhada sobre os algoritmos desenvolvidos pode ser encontrada na **[Wiki](https://github.com/kelvins/Face-Recognition-Algorithms/wiki)** do repositório.
+
+----------------------
+
+Eventuais dúvidas sobre os algoritmos ou sobre a pesquisa podem ser esclarecidas através do e-mail **kelvinpfw@hotmail.com**
