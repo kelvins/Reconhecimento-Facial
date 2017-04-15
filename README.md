@@ -45,9 +45,7 @@ Cabe aqui ressaltar que os algoritmos de detecção e reconhecimento facial util
 
 ### Documentação
 
-Uma documentação mais detalhada sobre os algoritmos desenvolvidos pode ser encontrada na **[Wiki](https://github.com/kelvins/Face-Recognition-Algorithms/wiki)** do repositório.
-
-----------------------
+Uma documentação mais detalhada sobre os algoritmos desenvolvidos pode ser encontrada na **[Wiki](https://github.com/kelvins/Reconhecimento-Facial/wiki)** do repositório.
 
 ### Dúvidas
 
