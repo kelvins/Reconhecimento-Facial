@@ -1,4 +1,4 @@
-# Algoritmos de Detecção e Reconhecimento Facial
+# Trabalho
 
 Este repositório foi criado com a finalidade de compartilhar os algoritmos desenvolvidos durante o trabalho de mestrado intitulado "**Comparação de Técnicas de Reconhecimento Facial para Identificação de Presença em um Ambiente Real e Semicontrolado**", com o objetivo de facilitar e tornar possíveis futuras replicações dos experimentos realizados.
 
@@ -21,7 +21,7 @@ Basicamente foram utilizados os algoritmos:
  * **[Transformada Wavelet discreta](https://www.mathworks.com/help/wavelet/ref/dwt2.html)**
    * Burrus, C. Sidney, Ramesh A. Gopinath, and Haitao Guo. "Introduction to wavelets and wavelet transforms: a primer." (1997).
 
-Trabalho desenvolvido por **Kelvin Salton do Prado** sob orientação do **Dr. Norton Trevisan Roman**.
+Trabalho desenvolvido por **Kelvin Salton do Prado** sob orientação do professor **Dr. Norton Trevisan Roman**.
 
 **Nota**: a maior parte dos algoritmos desenvolvidos fazem uso da biblioteca **[OpenCV](http://opencv.org)**.
 
