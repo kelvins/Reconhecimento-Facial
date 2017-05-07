@@ -53,5 +53,23 @@ class Voting:
                 subjectVoted.append(subjects[i])
                 valueOfVotes.append(weights[i])
 
-        indexMaxVoted = valueOfVotes.index(max(valueOfVotes))
-        return subjectVoted[indexMaxVoted]
+        maxValue = max(valueOfVotes)
+
+        # If we have duplicate values then we have a tie
+        if len(valueOfVotes) != len(set(valueOfVotes)):
+            mostVoted = []
+            # Create a list of the subjects that have more votes
+            for i in range(0, len(subjectVoted)):
+                if valueOfVotes[i] == maxValue:
+                    mostVoted.append(subjectVoted[i])
+
+            tempSubjects = []
+            # Create a new list of the subjects
+            for i in range(0, len(subjects)):
+                if subjects[i] in mostVoted:
+                    tempSubjects.append(subjects[i])
+
+            return self.majorityVoting(tempSubjects)
+        else:
+            indexMaxVoted = valueOfVotes.index(maxValue)
+            return subjectVoted[indexMaxVoted]
