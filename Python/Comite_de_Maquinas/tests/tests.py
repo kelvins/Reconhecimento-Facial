@@ -23,6 +23,14 @@ class MajorityVotingTest(unittest.TestCase):
         subjects = [5, 1, 5, 3, 3]
         self.assertEqual(voting.majorityVoting(subjects), 5)
 
+    def test5(self):
+        subjects = [0]
+        self.assertEqual(voting.majorityVoting(subjects), 0)
+
+    def test6(self):
+        subjects = []
+        self.assertEqual(voting.majorityVoting(subjects), -1)
+
 class WeightedVotingTest(unittest.TestCase):
     def test1(self):
         subjects = [1, 5, 2, 1, 1]
@@ -48,6 +56,36 @@ class WeightedVotingTest(unittest.TestCase):
         subjects = [1, 2, 1, 3, 3]
         weights  = [25, 30, 10, 15, 20]
         self.assertEqual(voting.weightedVoting(subjects, weights), 1)
+
+    def test6(self):
+        subjects = []
+        weights  = [25, 30, 10, 15, 20]
+        self.assertEqual(voting.weightedVoting(subjects, weights), -1)
+
+    def test7(self):
+        subjects = [1, 2, 1, 3, 3]
+        weights  = []
+        self.assertEqual(voting.weightedVoting(subjects, weights), -1)
+
+    def test8(self):
+        subjects = []
+        weights  = []
+        self.assertEqual(voting.weightedVoting(subjects, weights), -1)
+
+    def test9(self):
+        subjects = [1]
+        weights  = [1, 2]
+        self.assertEqual(voting.weightedVoting(subjects, weights), -1)
+
+    def test10(self):
+        subjects = [1, 2]
+        weights  = [1]
+        self.assertEqual(voting.weightedVoting(subjects, weights), -1)
+
+    def test11(self):
+        subjects = [0]
+        weights  = [0]
+        self.assertEqual(voting.weightedVoting(subjects, weights), 0)
 
 if __name__ == '__main__':
     unittest.main()
