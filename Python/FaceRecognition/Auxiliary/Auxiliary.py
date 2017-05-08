@@ -2,19 +2,20 @@
 # Import the libraries
 import cv2
 import os
+import time
 
 class Auxiliary:
     """
     Class that provides some auxiliary functions
     """
 
-    def __init__(self):
+    def __init__(self, sizeX=100, sizeY=100, interpolation=cv2.INTER_CUBIC):
         """
         Set the default values
     	"""
-        self.sizeX = 100
-        self.sizeY = 100
-        self.interpolation = cv2.INTER_CUBIC
+        self.sizeX = sizeX
+        self.sizeY = sizeY
+        self.interpolation = interpolation
         # INTER_CUBIC, INTER_AREA, INTER_LANCZOS4, INTER_LINEAR, INTER_NEAREST
 
         # Declare all supported files

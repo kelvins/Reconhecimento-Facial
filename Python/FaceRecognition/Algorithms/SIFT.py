@@ -75,4 +75,4 @@ class SIFT:
         # Index receives the position of the maximum value in the results vector (it means that this is the most similar image)
         index = results.index(max(results))
 
-        return labels[index]
+        return labels[index], max(results)
