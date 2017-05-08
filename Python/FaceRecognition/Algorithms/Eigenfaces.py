@@ -9,19 +9,18 @@ class Eigenfaces:
     Class that provides easy access to the Eigenfaces algorithm
     """
 
-    def __init__(self, numComponents=-1, threshold=-1):
+    def __init__(self, numComponents=0, threshold=-1):
         """
         Set the default values
         """
+        if numComponents < 0:
+            numComponents = 0
+
         # Creates the eigenface object passing a threshold variable by parameter
-        if numComponents >= 0  and threshold >= 0:
+        if threshold >= 0:
             self.faceRec = cv2.face.createEigenFaceRecognizer(num_components=numComponents, threshold=threshold)
-        elif numComponents >= 0:
-            self.faceRec = cv2.face.createEigenFaceRecognizer(num_components=numComponents)
-        elif numComponents >= 0:
-            self.faceRec = cv2.face.createEigenFaceRecognizer(threshold=threshold)
         else:
-            self.faceRec = cv2.face.createEigenFaceRecognizer() # num_components=0, threshold=DBL_MAX
+            self.faceRec = cv2.face.createEigenFaceRecognizer(num_components=numComponents) # threshold=DBL_MAX
 
     def train(self, images, labels):
         """
