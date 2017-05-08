@@ -3,7 +3,18 @@ class Voting:
     """
     Class the provides voting methods for the committee machine.
     """
+
     MAJORITY, WEIGHTED = range(2)
+
+    def __init__(self, votingScheme=MAJORITY, weights=[]):
+        self.votingScheme = votingScheme
+        self.weights = weights
+
+    def vote(self, subjects, weights=self.weights):
+        if self.votingScheme == WEIGHTED:
+            return weightedVoting(subjects, weights)
+        else:
+            return majorityVoting(subjects)
 
     def majorityVoting(self, subjects):
         """

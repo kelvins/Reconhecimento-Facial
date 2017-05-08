@@ -5,7 +5,7 @@ import os
 import sys
 import numpy as np
 
-sys.path.append('Auxiliary')
+sys.path.append('../Auxiliary')
 from Auxiliary import Auxiliary
 
 class FaceRecognition:
@@ -33,6 +33,9 @@ class FaceRecognition:
         self.nonFaces = 0
         self.recognized = 0
         self.unrecognized = 0
+
+    def getResults(self):
+        return self.nonFaces, self.recognized, self.unrecognized
 
     def train(self, trainPath):
         """
