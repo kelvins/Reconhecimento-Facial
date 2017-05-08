@@ -10,8 +10,10 @@ class Voting:
         self.votingScheme = votingScheme
         self.weights = weights
 
-    def vote(self, subjects, weights=self.weights):
+    def vote(self, subjects, weights):
         if self.votingScheme == WEIGHTED:
+            if len(weights) is None:
+                weights = self.weights
             return weightedVoting(subjects, weights)
         else:
             return majorityVoting(subjects)
