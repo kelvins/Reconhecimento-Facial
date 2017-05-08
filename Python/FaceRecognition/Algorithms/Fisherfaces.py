@@ -21,16 +21,23 @@ class Fisherfaces:
             self.faceRec = cv2.face.createFisherFaceRecognizer(num_components=numComponents, threshold=threshold)
         else:
             self.faceRec = cv2.face.createFisherFaceRecognizer(num_components=numComponents) # threshold=DBL_MAX
+            
+        self.algorithmTrained = False
 
     def train(self, images, labels):
         """
         Train the face recognition algorithm
         """
         self.faceRec.train(images, np.array(labels))
+        self.algorithmTrained = True
 
     def predict(self, image):
         """
         Predict the image
         """
+        if self.algorithmTrained is False:
+            print "The face recognition algorithm was not trained."
+            sys.exit()
+
         # Return the subject ID (label) and the confidence
         return self.faceRec.predict( image ) 

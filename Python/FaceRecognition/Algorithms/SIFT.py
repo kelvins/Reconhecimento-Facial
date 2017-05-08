@@ -31,6 +31,7 @@ class SIFT:
         self.matcher = cv2.BFMatcher(distance, crossCheck=crossCheck)
 
         self.labels = []
+        self.algorithmTrained = False
 
     def train(self, images, labels):
         """
@@ -51,11 +52,16 @@ class SIFT:
 
         # Train: Does nothing for BruteForceMatcher though
         self.matcher.train()
+        self.algorithmTrained = True
 
     def predict(self, image):
         """
         Predict the image
         """
+        if self.algorithmTrained is False:
+            print "The face recognition algorithm was not trained."
+            sys.exit()
+
         # Detects and computes the keypoints and descriptors using the sift algorithm
         keypoints, descriptors = self.faceRec.detectAndCompute(image, None)
     

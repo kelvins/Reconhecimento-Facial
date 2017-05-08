@@ -27,16 +27,23 @@ class LBPH:
             self.faceRec = cv2.face.createLBPHFaceRecognizer(radius=radius, neighbors=neighbors, grid_x=grid_x, grid_y=grid_y, threshold=threshold)
         else:
             self.faceRec = cv2.face.createLBPHFaceRecognizer(radius=radius, neighbors=neighbors, grid_x=grid_x, grid_y=grid_y) # threshold=DBL_MAX
+            
+        self.algorithmTrained = False
 
     def train(self, images, labels):
         """
         Train the face recognition algorithm
         """
         self.faceRec.train(images, np.array(labels))
+        self.algorithmTrained = True
 
     def predict(self, image):
         """
         Predict the image
         """
+        if self.algorithmTrained is False:
+            print "The face recognition algorithm was not trained."
+            sys.exit()
+
         # Return the subject ID (label) and the confidence
         return self.faceRec.predict( image ) 
