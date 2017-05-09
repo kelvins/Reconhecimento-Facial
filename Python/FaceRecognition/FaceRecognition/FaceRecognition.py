@@ -13,9 +13,10 @@ class FaceRecognition:
     Class that provides an interface to the face recognition algorithms
     """
 
-    def __init__(self, algorithm, auxiliary=Auxiliary()):
+    def __init__(self, algorithm, auxiliary=Auxiliary(), threshold=-1):
     	self.algorithm = algorithm
         self.auxiliary = auxiliary
+        self.threshold = threshold
         reset()
 
     def setDefaultSize(self, sizeX, sizeY):
@@ -37,6 +38,9 @@ class FaceRecognition:
     def getResults(self):
         return self.nonFaces, self.recognized, self.unrecognized
 
+    def setThreshold(self, threshold):
+        self.threshold = threshold
+        
     def train(self, trainPath):
         """
         Function responsible for train the face recognition algorithm based on the image files from the trainPath.
@@ -79,3 +83,19 @@ class FaceRecognition:
                     unrecognized += 1
             else:
                 nonFaces += 1
+
+            # Approach not using threshold (face images manually classified)
+            if self.threshold == -1:
+                if tempLabels[index] >= 0:
+                    if subjectID == tempLabels[index]:
+                        recognized += 1
+                    else:
+                        unrecognized += 1
+                else:
+                    nonFaces += 1
+            # Approach using threshold (don't know what is nonface)
+            else:
+                if confidence <= self.threshold:
+                    recognized += 1
+                else:
+                    unrecognized += 1
