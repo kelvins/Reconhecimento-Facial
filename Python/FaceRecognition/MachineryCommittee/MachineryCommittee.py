@@ -14,29 +14,15 @@ from Auxiliary import Auxiliary
 sys.path.append('../FaceRecognition')
 from FaceRecognition import FaceRecognition
 
-sys.path.append('../Algorithms')
-from Eigenfaces import Eigenfaces
-from Fisherfaces import Fisherfaces
-from LBPH import LBPH
-from SIFT import SIFT
-from SURF import SURF
-
 class MachineryCommittee:
     """
     Class that provides an interface for the MachineryCommittee
     """
 
-    def __init__(self, eigenfaces=Eigenfaces(), fisherfaces=Fisherfaces(), LBPH=LBPH(), SIFT=SIFT(), SURF=SURF(), auxiliary=Auxiliary(), voting=Voting()):
+    def __init__(self, faceRecognitionAlgorithms=[], auxiliary=Auxiliary(), voting=Voting()):
         self.auxiliary = auxiliary
-
-        self.eigenfaces = eigenfaces
-        self.fisherfaces = fisherfaces
-        self.LBPH = LBPH
-        self.SIFT = SIFT
-        self.SURF = SURF
-
+        self.faceRecognitionAlgorithms = faceRecognitionAlgorithms
         self.voting = voting
-
         reset()
 
     def setDefaultSize(self, sizeX, sizeY):
@@ -71,12 +57,9 @@ class MachineryCommittee:
         # Load all imagens and labels
         self.images, self.labels = self.auxiliary.loadAllImagesForTrain(trainPath)
 
-        # Train the algorithm
-        self.eigenfaces.train(self.images, self.labels)
-        self.fisherfaces.train(self.images, self.labels)
-        self.LBPH.train(self.images, self.labels)
-        self.SIFT.train(self.images, self.labels)
-        self.SURF.train(self.images, self.labels)
+        # Train the algorithms
+        for index in xrange(0, len(self.faceRecognitionAlgorithms)):
+            self.faceRecognitionAlgorithms[index].train(self.images, self.labels)
 
     def recognizeFaces(self, testPath):
         """
@@ -94,16 +77,19 @@ class MachineryCommittee:
 
         # For each image
         for index in xrange(0,len(tempImages)):
+            subjectID  = []
+            confidence = []
+
             # Predict
-            subjectID1, confidence1 = self.eigenfaces.predict(tempImages[index])
-            subjectID2, confidence2 = self.fisherfaces.predict(tempImages[index])
-            subjectID3, confidence3 = self.LBPH.predict(tempImages[index])
-            subjectID4, confidence4 = self.SIFT.predict(tempImages[index])
-            subjectID5, confidence5 = self.SURF.predict(tempImages[index])
+            for index in xrange(0, len(self.faceRecognitionAlgorithms)):
+                subID, conf = self.faceRecognitionAlgorithms[index].predict(tempImages[index])
+                subjectID.append(subID)
+                confidence.append(conf)
 
-            results = [subjectID1, subjectID2, subjectID3, subjectID4, subjectID5]
-            result = voting.vote(results)
+            # If using weighted voting the subjectID length should be equal to the weights length
+            result = voting.vote(subjectID)
 
+            # Approach not using threshold (face images manually classified)
             if tempLabels[index] >= 0:
                 if result == tempLabels[index]:
                     recognized += 1
