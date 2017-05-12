@@ -24,6 +24,9 @@ class Eigenfaces:
 
         self.algorithmTrained = False
 
+    def getAlgorithmName(self):
+        return "Eigenfaces"
+
     def train(self, images, labels):
         """
         Train the face recognition algorithm

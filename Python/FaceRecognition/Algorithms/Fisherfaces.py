@@ -24,6 +24,9 @@ class Fisherfaces:
             
         self.algorithmTrained = False
 
+    def getAlgorithmName(self):
+        return "Fisherfaces"
+
     def train(self, images, labels):
         """
         Train the face recognition algorithm

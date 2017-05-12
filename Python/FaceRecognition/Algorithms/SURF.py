@@ -29,6 +29,9 @@ class SURF:
         self.labels = []
         self.algorithmTrained = False
 
+    def getAlgorithmName(self):
+        return "Speeded Up Robust Features (SURF)"
+
     def train(self, images, labels):
         """
         Train the face recognition algorithm

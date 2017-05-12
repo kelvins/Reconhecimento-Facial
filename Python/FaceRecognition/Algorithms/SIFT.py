@@ -33,6 +33,9 @@ class SIFT:
         self.labels = []
         self.algorithmTrained = False
 
+    def getAlgorithmName(self):
+        return "Scale-Invariant Feature Transform (SIFT)"
+
     def train(self, images, labels):
         """
         Train the face recognition algorithm

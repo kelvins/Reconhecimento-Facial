@@ -30,6 +30,9 @@ class LBPH:
             
         self.algorithmTrained = False
 
+    def getAlgorithmName(self):
+        return "Local Binary Patterns Histogram (LBPH)"
+
     def train(self, images, labels):
         """
         Train the face recognition algorithm
