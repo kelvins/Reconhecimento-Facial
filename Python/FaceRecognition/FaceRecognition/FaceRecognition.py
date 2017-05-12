@@ -17,85 +17,121 @@ class FaceRecognition:
     	self.algorithm = algorithm
         self.auxiliary = auxiliary
         self.threshold = threshold
-        reset()
-
-    def setDefaultSize(self, sizeX, sizeY):
-        self.auxiliary.setDefaultSize(sizeX, sizeY)
-
-    def setInterpolation(self, interpolation):
-        self.auxiliary.setInterpolation(interpolation)
+        self.reset()
 
     def reset(self):
-    	self.images = []
-    	self.labels = []
-        resetResults()
+        # Reset all lists
+        self.trainImages = []
+        self.trainLabels = []
+        self.resetResults()
 
     def resetResults(self):
-        self.nonFaces = 0
-        self.recognized = 0
+        # Reset all results
+        self.recognized   = 0
         self.unrecognized = 0
+        self.nonFaces     = 0
 
-    def getResults(self):
-        return self.nonFaces, self.recognized, self.unrecognized
+        # Reset the report
+        self.predictSubjectIds   = []
+        self.predictConfidence   = []
+
+        # Reset test results
+        self.testImages = []
+        self.testLabels = []
+        self.testFileNames = []
+
+    def setAuxiliary(self, auxiliary):
+        self.auxiliary = auxiliary
+
+    def getAuxiliary(self):
+        return self.auxiliary
+
+    def setAlgorithm(self, algorithm):
+        self.algorithm = algorithm
+
+    def getAlgorithm(self):
+        return self.algorithm
 
     def setThreshold(self, threshold):
         self.threshold = threshold
+
+    def getThreshold(self):
+        return self.threshold
+
+    def getPredictedSubjectIds(self):
+        return self.predictSubjectIds
+
+    def getPredictedConfidence(self):
+        return self.predictConfidence
+
+    def getTestImages(self):
+        return self.testImages
+
+    def getTestLabels(self):
+        return self.testLabels
+
+    def getTestFileNames(self):
+        return self.testFileNames
+
+    def getTrainImages(self):
+        return self.trainImages
+
+    def getTrainLabels(self):
+        return self.trainLabels
+
+    def getResults(self):
+        return self.recognized, self.unrecognized, self.nonFaces
         
     def train(self, trainPath):
         """
         Function responsible for train the face recognition algorithm based on the image files from the trainPath.
         """
-        reset()
+        self.reset()
 
         if trainPath == "":
             print "The train path is empty."
             sys.exit()
 
         # Load all imagens and labels
-        self.images, self.labels = self.auxiliary.loadAllImagesForTrain(trainPath)
+        self.trainImages, self.trainLabels, _ = self.auxiliary.loadAllImagesForTrain(trainPath)
 
         # Train the algorithm
-        self.algorithm.train(self.images, self.labels)
+        self.algorithm.train(self.trainImages, self.trainLabels)
 
     def recognizeFaces(self, testPath):
         """
         Function that tries to recognize each face (path passed by parameter).
         """
 
-        resetResults()
+        self.resetResults()
 
         if testPath == "":
             print "The test path is empty."
             sys.exit()
 
         # Load all imagens and labels
-        tempImages, tempLabels = self.auxiliary.loadAllImagesForTest(testPath)
+        self.testImages, self.testLabels, self.testFileNames = self.auxiliary.loadAllImagesForTest(testPath)
 
         # For each image
-        for index in xrange(0,len(tempImages)):
+        for index in xrange(0, len(self.testImages)):
             # Predict
-            subjectID, confidence = self.algorithm.predict(tempImages[index])
+            subjectID, confidence = self.algorithm.predict(self.testImages[index])
 
-            if tempLabels[index] >= 0:
-                if subjectID == tempLabels[index]:
-                    recognized += 1
-                else:
-                    unrecognized += 1
-            else:
-                nonFaces += 1
+            self.predictSubjectIds.append( subjectID )
+            self.predictConfidence.append( confidence )
 
             # Approach not using threshold (face images manually classified)
             if self.threshold == -1:
-                if tempLabels[index] >= 0:
-                    if subjectID == tempLabels[index]:
-                        recognized += 1
+                if self.testLabels[index] >= 0:
+                    if subjectID == self.testLabels[index]:
+                        self.recognized += 1
                     else:
-                        unrecognized += 1
+                        self.unrecognized += 1
                 else:
-                    nonFaces += 1
+                    self.nonFaces += 1
             # Approach using threshold (don't know what is nonface)
             else:
                 if confidence <= self.threshold:
-                    recognized += 1
+                    self.recognized += 1
                 else:
-                    unrecognized += 1
+                    self.unrecognized += 1

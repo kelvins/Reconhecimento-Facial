@@ -9,6 +9,9 @@ from Auxiliary import Auxiliary
 sys.path.append('FaceRecognition')
 from FaceRecognition import FaceRecognition
 
+sys.path.append('Report')
+from Report import Report
+
 sys.path.append('Algorithms')
 from Eigenfaces import Eigenfaces
 from Fisherfaces import Fisherfaces
@@ -18,22 +21,38 @@ from SURF import SURF
 
 def main():
     # Define the path to the training files/folder
-    trainPath = "/Users/kelvinsp/Desktop/Treinamento6/"
+    trainPath = "/home/kelvin/Desktop/Github/Dataset/Train/"
 
     # Define the path to the test folder
-    testPath = "/Users/kelvinsp/Desktop/Teste6/"
+    testPath = "/home/kelvin/Desktop/Github/Dataset/Test/"
 
+    # Define the path to the results folder
+    resultsPath = "/home/kelvin/Desktop/Github/Results/"
+
+    # Create the auxiliary object
     auxiliary = Auxiliary(sizeX=100, sizeY=100, interpolation=cv2.INTER_CUBIC)
+
+    # Create the algorithm object
     algorithm = Eigenfaces() # numComponents=0, threshold=-1
 
+	# Create the face recognition object
     faceRecog = FaceRecognition(algorithm, auxiliary)
-    faceRecog.train(trainPath)
-    faceRecog.recognizeFaces(testPath)
-    nonFaces, recognized, unrecognized = faceRecog.getResults()
 
-    print "nonFaces" + str(nonFaces)
-    print "recognized" + str(recognized)
-    print "unrecognized" + str(unrecognized)
+    # Train the algorithm
+    faceRecog.train(trainPath)
+
+    # Try to recognize the faces
+    faceRecog.recognizeFaces(testPath)
+
+    # Create the report object
+    report = Report(faceRecog)
+
+    # Print the results
+    report.printResults()
+
+    # Save the report (text file)
+    #report.saveReport(resultsPath)
+    #report.saveAllResults(resultsPath)
 
 if __name__ == "__main__":
     main()
