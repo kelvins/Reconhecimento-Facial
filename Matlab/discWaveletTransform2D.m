@@ -1,5 +1,5 @@
 
-function newImage = discWaveletTransform2D(img, level, wname)
+function newImage = discWaveletTransform2D(image, level, wname)
 
     % Clear all variables and close all windows
     clear vars;
@@ -8,15 +8,15 @@ function newImage = discWaveletTransform2D(img, level, wname)
     % Apply the discrete 2D wavelet transform
     % Note: uses only the LL result to transform
     for i=1:level
-       [img,LH,HL,HH] = dwt2(img, wname) ;
+       [img, LH, HL, HH] = dwt2(image, wname);
     end   
     
     % Apply the inverse discrete 2D wavelet transform
     % Used to reconstruct the image
     % Note: uses only the LL result to transform
     for i=1:level
-       img = idwt2(img,[],[],[], wname);
+       image = idwt2(image, [], [], [], wname);
     end
     
-    newImage = img;
+    newImage = image;
 end
