@@ -3,6 +3,7 @@
 import cv2
 import os
 import time
+import numpy as np
 
 class Auxiliary:
     """
@@ -28,17 +29,45 @@ class Auxiliary:
         self.sizeX = sizeX
         self.sizeY = sizeY
 
-    def setInterpolation(self, interpolation):
+    def getDefaultSize(self):
         """
-        Set the default interpolation method (default is cv2.INTER_CUBIC)
+        Get the default size defined (default is 100x100)
         """
-        self.interpolation = interpolation
+        return self.sizeX, self.sizeY
 
     def setSupportedFiles(self, supportedFiles):
         """
         Set the default supportedFiles list (default is ["png", "jpg", "jpeg"])
         """
         self.supportedFiles = supportedFiles
+
+    def getSupportedFiles(self):
+        """
+        Set the supportedFiles list (default is ["png", "jpg", "jpeg"])
+        """
+        return self.supportedFiles
+
+    def setInterpolation(self, interpolation):
+        """
+        Set the default interpolation method (default is cv2.INTER_CUBIC)
+        """
+        self.interpolation = interpolation
+
+    def getInterpolationMethodName(self):
+        """
+        Get the selected interpolation method
+        """
+        if self.interpolation == cv2.INTER_CUBIC:
+            return "cv2.INTER_CUBIC"
+        if self.interpolation == cv2.INTER_AREA:
+            return "cv2.INTER_AREA"
+        if self.interpolation == cv2.INTER_LANCZOS4:
+            return "cv2.INTER_LANCZOS4"
+        if self.interpolation == cv2.INTER_LINEAR:
+            return "cv2.INTER_LINEAR"
+        if self.interpolation == cv2.INTER_NEAREST:
+            return "cv2.INTER_NEAREST"
+        return ""
 
     def toGrayscale(self, image):
         """
@@ -52,6 +81,12 @@ class Auxiliary:
         """
         return cv2.imread(path)
 
+    def saveImage(self, fileName, image):
+        """
+        Save an image based on the fileName passed by parameter
+        """
+        cv2.imwrite(fileName, image)
+
     def resizeImage(self, image, sizeX, sizeY, interpolationMethod):
         """
         Convert an image to grayscale
@@ -63,13 +98,19 @@ class Auxiliary:
         Preprocess an image
         """
         # Load the image
-        image = loadImage(path)
+        image = self.loadImage(path)
         # Convert to grayscale
-        image = toGrayscale(image)
+        image = self.toGrayscale(image)
         # Resize the image
-        image = resizeImage(image, self.sizeX, self.sizeY, self.interpolation)
+        image = self.resizeImage(image, self.sizeX, self.sizeY, self.interpolation)
         # Return the processed image
         return image
+
+    def concatenateImages(self, leftImage, rightImage):
+        """
+        Concatenate two images side by side (horizontally) and returns a new one
+        """
+        return np.concatenate((leftImage, rightImage), axis=1)
 
     def extractImagesPaths(self, path):
         """
@@ -90,10 +131,11 @@ class Auxiliary:
         """
         Load all images for train
         """
-        images = []
-        labels = []
+        images   = []
+        labels   = []
+        fileName = []
 
-        paths = extractImagesPaths(trainPath)
+        paths = self.extractImagesPaths(trainPath)
 
          # For each file path
         for filePath in paths:
@@ -105,19 +147,21 @@ class Auxiliary:
                 tempName  = pathSplit[len(pathSplit)-1]
                 subjectID = int(tempName.split("_")[0])
 
-                images.append( preprocessImage(filePath) )
+                images.append( self.preprocessImage(filePath) )
                 labels.append( subjectID )
+                fileName.append( tempName.split(".")[0] )
 
-        return images, labels
+        return images, labels, fileName
 
     def loadAllImagesForTest(self, testPath):
         """
         Load all images for test
         """
-        images = []
-        labels = []
+        images   = []
+        labels   = []
+        fileName = []
 
-        paths = extractImagesPaths(testPath)
+        paths = self.extractImagesPaths(testPath)
 
          # For each file path
         for filePath in paths:
@@ -133,35 +177,8 @@ class Auxiliary:
                 subjectID = tempName.split("_")[1]
                 subjectID = int(subjectID.split(".")[0])
 
-                images.append( preprocessImage(filePath) )
+                images.append( self.preprocessImage(filePath) )
                 labels.append( subjectID )
+                fileName.append( tempName.split(".")[0] )
                     
-        return images, labels
-
-    def printResults(self, content):
-        """
-        Function used to show the results
-        """
-        print "========================= Results =========================\n"
-        print content
-        print "==========================================================="
-
-    def saveResults(self, content, path=""):
-        """
-        Function used to automatically save the results in a defined folder
-        """
-
-        # Make sure that none folder will have the same name
-        time.sleep(1)
-
-        # If the parameters were set include it in the folder name
-        fileName = time.strftime("%Y_%m_%d_%H_%M_%S") + ".txt"
-
-        # If the path is not empty use it in the filename
-        if path != "":
-            fileName = path + "/" + fileName
-
-        # Save the text file
-        textFile = open(fileName, "w")
-        textFile.write(content)
-        textFile.close()
+        return images, labels, fileName
