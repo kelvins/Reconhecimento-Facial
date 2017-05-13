@@ -14,7 +14,7 @@ class Auxiliary:
     def __init__(self, sizeX=100, sizeY=100, interpolation=cv2.INTER_CUBIC):
         """
         Set the default values
-    	"""
+        """
         self.sizeX = sizeX
         self.sizeY = sizeY
         self.interpolation = interpolation
@@ -76,11 +76,14 @@ class Auxiliary:
         """
         Check if an image is in grayscale
         """
-        w, h = image.size
+        if len(image.shape) <= 2:
+            return True
+
+        h, w = image.shape[:2] # rows, cols, channels
         for i in range(w):
             for j in range(h):
-                r, g, b = image.getpixel((i, j))
-                if r != g != b:
+                p = image[i, j]
+                if p[0] != p[1] != p[2]:
                     return False
         return True
 
