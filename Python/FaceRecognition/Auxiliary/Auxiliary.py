@@ -3,6 +3,7 @@
 import cv2
 import os
 import time
+import Image
 import numpy as np
 
 class Auxiliary:
@@ -70,6 +71,18 @@ class Auxiliary:
         if self.interpolation == cv2.INTER_NEAREST:
             return "cv2.INTER_NEAREST"
         return ""
+
+    def isGrayscale(self, image):
+        """
+        Check if an image is in grayscale
+        """
+        w, h = image.size
+        for i in range(w):
+            for j in range(h):
+                r, g, b = image.getpixel((i, j))
+                if r != g != b:
+                    return False
+        return True
 
     def toGrayscale(self, image):
         """
