@@ -14,13 +14,25 @@ class Voting:
         self.votingScheme = votingScheme
         self.weights = weights
 
+    def setWeights(self, weights):
+        """
+        Set the weights
+        """
+        self.weights = weights
+
+    def setVotingScheme(self, votingScheme):
+        """
+        Set the selected voting scheme
+        """
+        self.votingScheme = votingScheme
+
     def getVotingSchemeName(self):
         """
         Get the name of the selected voting scheme to be used in the report.
         """
-        if self.votingScheme == MAJORITY:
+        if self.votingScheme == self.MAJORITY:
             return "Majority Voting"
-        elif self.votingScheme == WEIGHTED:
+        elif self.votingScheme == self.WEIGHTED:
             return "Weighted Voting"
         return ""
 
@@ -28,20 +40,20 @@ class Voting:
         """
         Call the selected voting scheme
         """
-        if self.votingScheme == WEIGHTED:
-            if len(weights) is None:
+        if self.votingScheme == self.WEIGHTED:
+            if not weights:
                 weights = self.weights
-            return weightedVoting(subjects, weights)
+            return self.weightedVoting(subjects, weights)
         else:
-            return majorityVoting(subjects)
+            return self.majorityVoting(subjects)
 
     def majorityVoting(self, subjects):
         """
         Majority voting.
+        Return -1 for empty list
         """
 
         if len(subjects) == 0:
-            print "The list is empty."
             return -1
 
         subjectVoted  = []
@@ -65,11 +77,9 @@ class Voting:
         """
 
         if len(subjects) == 0 or len(weights) == 0:
-            print "The list is empty."
             return -1
 
         if len(subjects) != len(weights):
-            print "The two lists must have the same size."
             return -1
 
         subjectVoted = []

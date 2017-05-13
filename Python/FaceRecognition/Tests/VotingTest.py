@@ -87,5 +87,60 @@ class WeightedVotingTest(unittest.TestCase):
         weights  = [0]
         self.assertEqual(voting.weightedVoting(subjects, weights), 0)
 
+class GetVotingSchemeNameTest(unittest.TestCase):
+    def test1(self):
+        vot = Voting(3)
+        self.assertEqual(vot.getVotingSchemeName(), "")
+
+    def test2(self):
+        vot = Voting()
+        self.assertEqual(vot.getVotingSchemeName(), "Majority Voting")
+
+    def test3(self):
+        vot = Voting(Voting.MAJORITY)
+        self.assertEqual(vot.getVotingSchemeName(), "Majority Voting")
+
+    def test4(self):
+        vot = Voting(Voting.WEIGHTED)
+        self.assertEqual(vot.getVotingSchemeName(), "Weighted Voting")
+
+class VoteTest(unittest.TestCase):
+    def test1(self):
+        subjects = []
+        weights  = []
+        voting.setVotingScheme(voting.MAJORITY)
+        self.assertEqual(voting.vote(subjects, weights), -1)
+
+    def test2(self):
+        subjects = []
+        weights  = []
+        voting.setVotingScheme(voting.WEIGHTED)
+        self.assertEqual(voting.vote(subjects, weights), -1)
+
+    def test3(self):
+        subjects = [3, 5, 2, 1, 1]
+        weights  = [25, 80, 10, 15, 20]
+        voting.setVotingScheme(voting.MAJORITY)
+        self.assertEqual(voting.vote(subjects, weights), 1)
+
+    def test4(self):
+        subjects = [4, 4, 3, 3, 3]
+        weights  = []
+        voting.setVotingScheme(voting.WEIGHTED)
+        self.assertEqual(voting.vote(subjects, weights), -1)
+
+    def test5(self):
+        subjects = [1, 4, 5, 2, 2]
+        weights  = [25, 80, 10, 15, 20]
+        voting.setVotingScheme(voting.WEIGHTED)
+        self.assertEqual(voting.vote(subjects, weights), 4)
+
+    def test6(self):
+        subjects = [2, 3, 5, 4, 5]
+        weights  = [25, 30, 10, 15, 20]
+        voting.setWeights(weights)
+        voting.setVotingScheme(voting.WEIGHTED)
+        self.assertEqual(voting.vote(subjects), 5)
+
 if __name__ == '__main__':
     unittest.main()
