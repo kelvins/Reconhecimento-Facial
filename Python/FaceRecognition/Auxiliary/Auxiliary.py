@@ -26,8 +26,10 @@ class Auxiliary:
         """
         Set the default size for the imagens (default is 100x100)
         """
-        self.sizeX = sizeX
-        self.sizeY = sizeY
+        if sizeX > 0:
+            self.sizeX = sizeX
+        if sizeY > 0:
+            self.sizeY = sizeY
 
     def getDefaultSize(self):
         """
