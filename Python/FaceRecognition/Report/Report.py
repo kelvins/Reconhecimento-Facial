@@ -13,9 +13,16 @@ class Report:
     """
 
     def __init__(self, faceRecognition):
+        """
+        Get the faceRecognition object
+        """
     	self.faceRecognition = faceRecognition
 
     def generateReportSummary(self):
+        """
+        Generate a report summary with informations about the test.
+        Return the content as a string.
+        """
         content = time.strftime("%d/%m/%Y %H:%M:%S")
         content += "\nAlgorithm: " + self.faceRecognition.getAlgorithm().getAlgorithmName()
         recognized, unrecognized, nonFaces = self.faceRecognition.getResults()
@@ -25,29 +32,37 @@ class Report:
         content += "\nNon Faces: "          + str(nonFaces)
         content += "\nThreshold Used: "     + str(self.faceRecognition.getThreshold())
         sizeX, sizeY = self.faceRecognition.getAuxiliary().getDefaultSize()
-        content += "\n\nDefault Size Images: " + str(sizeX) + "x" + str(sizeY) 
+        content += "\n\nDefault Size Images: " + str(sizeX) + "x" + str(sizeY)
         content += "\nInterpolation Method: "  + self.faceRecognition.getAuxiliary().getInterpolationMethodName()
         content += "\nSupported Files: " + ', '.join(self.faceRecognition.getAuxiliary().getSupportedFiles())
         return content
 
     def generateFullReport(self):
-        predictSubjectIds   = self.faceRecognition.getPredictedSubjectIds()
-        predictConfidence   = self.faceRecognition.getPredictedConfidence()
+        """
+        Generate the full report.
+        Return the content containing the information about each predicted image.
+        """
+        # Get the predicted results
+        predictSubjectIds = self.faceRecognition.getPredictedSubjectIds()
+        predictConfidence = self.faceRecognition.getPredictedConfidence()
+        # Get the test information (labels and filenames)
         testLabels    = self.faceRecognition.getTestLabels()
         testFileNames = self.faceRecognition.getTestFileNames()
-        
+
         content = ""
 
+        # Create each line based on the predicted subject IDs
         for index in xrange(0, len(predictSubjectIds)):
+            # Format: 1: Expected subject: 3: Classified as subject: 2: With confidence: 4123.123123: File name: 1_3
             content += str(index)
             content += ": Expected subject: " + str(testLabels[index])
-            content += ": Classified as subject: " + str(predictSubjectIds[index]) 
-            content += ": With confidence: " + str(predictConfidence[index]) 
+            content += ": Classified as subject: " + str(predictSubjectIds[index])
+            content += ": With confidence: " + str(predictConfidence[index])
             content += ": File name: " + testFileNames[index]
             content += "\n"
 
         return content
-        
+
     def printResults(self):
         """
         Function used to show the results
@@ -57,6 +72,9 @@ class Report:
         print "==========================================================="
 
     def writeFile(self, content, fileName):
+        """
+        Write the content to a text file based on the file name
+        """
         # Save the text file
         textFile = open(fileName, "w")
         textFile.write(content)
@@ -64,7 +82,8 @@ class Report:
 
     def saveReport(self, path=""):
         """
-        Function used to automatically save the report in a defined folder
+        Function used to automatically save the report in a defined folder.
+        Save only the text report not the images.
         """
 
         # Generate the report content
@@ -90,7 +109,8 @@ class Report:
 
     def saveAllResults(self, path=""):
         """
-        Function used to automatically save the report in a defined folder
+        Function used to automatically save the report in a defined folder.
+        Save the entire results, including the summary report, full report and all images.
         """
 
         # If the path is not empty use it in the filename
@@ -108,6 +128,7 @@ class Report:
         # Save the report
         self.saveReport(path)
 
+        # Create 3 new folders
         recognizedFolder   = path + "Recognized/"
         unrecognizedFolder = path + "Unrecognized/"
         nonfacesFolder     = path + "NonFaces/"
@@ -116,14 +137,17 @@ class Report:
         os.makedirs(unrecognizedFolder)
         os.makedirs(nonfacesFolder)
 
-        predictSubjectIds   = self.faceRecognition.getPredictedSubjectIds()
-        predictConfidence   = self.faceRecognition.getPredictedConfidence()
+        # The predicted results
+        predictSubjectIds = self.faceRecognition.getPredictedSubjectIds()
+        predictConfidence = self.faceRecognition.getPredictedConfidence()
+        # The tests information
         testImages    = self.faceRecognition.getTestImages()
         testLabels    = self.faceRecognition.getTestLabels()
         testFileNames = self.faceRecognition.getTestFileNames()
+        # The training information
         trainImages   = self.faceRecognition.getTrainImages()
         trainLabels   = self.faceRecognition.getTrainLabels()
-        
+
         delimiter = "_"
 
         for index in xrange(0, len(predictSubjectIds)):
@@ -132,6 +156,7 @@ class Report:
             label += "Classified" + delimiter + str(predictSubjectIds[index]) + delimiter
             label += "Confidence" + delimiter + str(predictConfidence[index]) + ".png"
 
+            # Find the image that matches based on the trainLabel and predictedSubjectIDs
             image1 = testImages[index]
             image2 = None
             for i in xrange(0, len(trainLabels)):
@@ -141,6 +166,7 @@ class Report:
             # Concatenate the images
             image = self.faceRecognition.getAuxiliary().concatenateImages(image1, image2)
 
+            # Get the correct fileName
             fileName = ""
             if str(testLabels[index]) == "-1":
                 fileName = nonfacesFolder
@@ -151,4 +177,5 @@ class Report:
 
             fileName += label
 
+            # Save the concatenated image in the correct folder
             self.faceRecognition.getAuxiliary().saveImage(fileName, image)

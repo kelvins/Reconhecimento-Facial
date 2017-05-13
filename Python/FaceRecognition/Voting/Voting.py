@@ -7,10 +7,27 @@ class Voting:
     MAJORITY, WEIGHTED = range(2)
 
     def __init__(self, votingScheme=MAJORITY, weights=[]):
+        """
+        Define the selected voting scheme (default is majoritary)
+        Set the weights (default is an empty list)
+        """
         self.votingScheme = votingScheme
         self.weights = weights
 
-    def vote(self, subjects, weights):
+    def getVotingSchemeName(self):
+        """
+        Get the name of the selected voting scheme to be used in the report.
+        """
+        if self.votingScheme == MAJORITY:
+            return "Majority Voting"
+        elif self.votingScheme == WEIGHTED:
+            return "Weighted Voting"
+        return ""
+
+    def vote(self, subjects, weights=[]):
+        """
+        Call the selected voting scheme
+        """
         if self.votingScheme == WEIGHTED:
             if len(weights) is None:
                 weights = self.weights

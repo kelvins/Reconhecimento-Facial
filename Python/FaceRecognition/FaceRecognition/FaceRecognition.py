@@ -81,7 +81,7 @@ class FaceRecognition:
 
     def getResults(self):
         return self.recognized, self.unrecognized, self.nonFaces
-        
+
     def train(self, trainPath):
         """
         Function responsible for train the face recognition algorithm based on the image files from the trainPath.
@@ -117,6 +117,7 @@ class FaceRecognition:
             # Predict
             subjectID, confidence = self.algorithm.predict(self.testImages[index])
 
+            # Store the predicted results to be used in the report
             self.predictSubjectIds.append( subjectID )
             self.predictConfidence.append( confidence )
 

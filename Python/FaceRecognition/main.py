@@ -21,13 +21,13 @@ from SURF import SURF
 
 def main():
     # Define the path to the training files/folder
-    trainPath = "/home/kelvin/Desktop/Github/Dataset/Train/"
+    trainPath = "../Train/"
 
     # Define the path to the test folder
-    testPath = "/home/kelvin/Desktop/Github/Dataset/Test/"
+    testPath = "../Test/"
 
     # Define the path to the results folder
-    resultsPath = "/home/kelvin/Desktop/Github/Results/"
+    resultsPath = "../Results/"
 
     # Create the auxiliary object
     auxiliary = Auxiliary(sizeX=100, sizeY=100, interpolation=cv2.INTER_CUBIC)
@@ -51,7 +51,9 @@ def main():
     report.printResults()
 
     # Save the report (text file)
-    #report.saveReport(resultsPath)
+    report.saveReport(resultsPath)
+
+    # Save all results (summary, full report and images)
     #report.saveAllResults(resultsPath)
 
 if __name__ == "__main__":
