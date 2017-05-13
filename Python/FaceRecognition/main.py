@@ -20,14 +20,18 @@ from SIFT import SIFT
 from SURF import SURF
 
 def main():
+
+    realPath = os.path.realpath(__file__)
+    dirPath  = os.path.dirname(realPath)
+
     # Define the path to the training files/folder
-    trainPath = "../Train/"
+    trainPath = dirPath + "/Dataset/Train/"
 
     # Define the path to the test folder
-    testPath = "../Test/"
+    testPath = dirPath + "/Dataset/Test/"
 
     # Define the path to the results folder
-    resultsPath = "../Results/"
+    resultsPath = dirPath + "/Results/"
 
     # Create the auxiliary object
     auxiliary = Auxiliary(sizeX=100, sizeY=100, interpolation=cv2.INTER_CUBIC)
