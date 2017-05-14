@@ -32,6 +32,10 @@ class MachineryCommittee:
         """
         self.trainImages = []
         self.trainLabels = []
+        # Reset the paths
+        self.trainPath = ""
+        self.testPath  = ""
+        # Reset the results
         self.resetResults()
 
     def resetResults(self):
@@ -95,12 +99,21 @@ class MachineryCommittee:
     def getResults(self):
         return self.nonFaces, self.recognized, self.unrecognized
 
+    def getTrainPath(self):
+        return self.trainPath
+
+    def getTestPath(self):
+        return self.testPath
+
     def train(self, trainPath):
         """
         Function responsible for train the face recognition algorithm based on the image files from the trainPath.
         """
         # Reset all lists and results
         self.reset()
+
+        # Store the train path
+        self.trainPath = trainPath
 
         if trainPath == "":
             print "The train path is empty."
@@ -119,6 +132,9 @@ class MachineryCommittee:
         """
         # Reset the results
         self.resetResults()
+
+        # Store the test path
+        self.testPath = testPath
 
         if testPath == "":
             print "The test path is empty."

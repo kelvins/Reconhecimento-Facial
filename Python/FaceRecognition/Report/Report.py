@@ -40,7 +40,9 @@ class Report:
                 content += "\nAlgorithm: " + self.object.getFRAlgorithms()[index].getAlgorithmName()
 
         recognized, unrecognized, nonFaces = self.object.getResults()
-        content += "\n\nTotal Images Analyzed: " + str(recognized + unrecognized + nonFaces)
+        content += "\nTrain Path: " + self.object.getTrainPath()
+        content += "\nTest Path: "  + self.object.getTestPath()
+        content += "\nTotal Images Analyzed: " + str(recognized + unrecognized + nonFaces)
         content += "\nRecognized Faces: "   + str(recognized)
         content += "\nUnrecognized Faces: " + str(unrecognized)
         content += "\nNon Faces: "          + str(nonFaces)
