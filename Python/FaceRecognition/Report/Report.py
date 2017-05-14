@@ -4,19 +4,25 @@ import os
 import sys
 import time
 
+sys.path.append('../Voting')
+from Voting import Voting
+
 sys.path.append('../FaceRecognition')
 from FaceRecognition import FaceRecognition
+
+sys.path.append('../MachineryCommittee')
+from MachineryCommittee import MachineryCommittee
 
 class Report:
     """
     Class that provides an interface to generate reports
     """
 
-    def __init__(self, faceRecognition):
+    def __init__(self, object):
         """
-        Get the faceRecognition object
+        Get the object (FaceRecognition or MachineryCommittee)
         """
-    	self.faceRecognition = faceRecognition
+    	self.object = object
 
     def generateReportSummary(self):
         """
@@ -24,20 +30,37 @@ class Report:
         Return the content as a string.
         """
         content = time.strftime("%d/%m/%Y %H:%M:%S")
-        content += "\nAlgorithm: " + self.faceRecognition.getAlgorithm().getAlgorithmName()
-        recognized, unrecognized, nonFaces = self.faceRecognition.getResults()
+
+        # For the face recognition class get only the name of the algorithm
+        if type(self.object) == FaceRecognition:
+            content += "\nAlgorithm: " + self.object.getAlgorithm().getAlgorithmName()
+        # For the machinery committee class get the name of all algorithms
+        elif type(self.object) == MachineryCommittee:
+            for index in xrange(0, len(self.object.getFRAlgorithms())):
+                content += "\nAlgorithm: " + self.object.getFRAlgorithms()[index].getAlgorithmName()
+
+        recognized, unrecognized, nonFaces = self.object.getResults()
         content += "\n\nTotal Images Analyzed: " + str(recognized + unrecognized + nonFaces)
         content += "\nRecognized Faces: "   + str(recognized)
         content += "\nUnrecognized Faces: " + str(unrecognized)
         content += "\nNon Faces: "          + str(nonFaces)
-        if self.faceRecognition.getThreshold() >= 0:
-            content += "\nThreshold Used: "     + str(self.faceRecognition.getThreshold())
-        else:
-            content += "\nThreshold Not Used."
+
+        # For face recognition class show the threshold
+        if type(self.object) == FaceRecognition:
+            if self.object.getThreshold() >= 0:
+                content += "\nThreshold Used: " + str(self.object.getThreshold())
+            else:
+                content += "\nThreshold Not Used."
+        # For machinery committee class show the voting algorithm name
+        elif type(self.object) == MachineryCommittee:
+            content += "\nVoting Scheme: " + self.object.getVoting().getVotingSchemeName()
+            if self.object.getVoting().getVotingScheme() == Voting.WEIGHTED:
+                content += "\nWeights: " + ', '.join(self.object.getVoting().getWeights())
+
         sizeX, sizeY = self.faceRecognition.getAuxiliary().getDefaultSize()
         content += "\n\nDefault Size Images: " + str(sizeX) + "x" + str(sizeY)
-        content += "\nInterpolation Method: "  + self.faceRecognition.getAuxiliary().getInterpolationMethodName()
-        content += "\nSupported Files: " + ', '.join(self.faceRecognition.getAuxiliary().getSupportedFiles())
+        content += "\nInterpolation Method: "  + self.object.getAuxiliary().getInterpolationMethodName()
+        content += "\nSupported Files: " + ', '.join(self.object.getAuxiliary().getSupportedFiles())
         return content
 
     def generateFullReport(self):
@@ -46,11 +69,11 @@ class Report:
         Return the content containing the information about each predicted image.
         """
         # Get the predicted results
-        predictSubjectIds = self.faceRecognition.getPredictedSubjectIds()
-        predictConfidence = self.faceRecognition.getPredictedConfidence()
+        predictSubjectIds = self.object.getPredictedSubjectIds()
+        predictConfidence = self.object.getPredictedConfidence()
         # Get the test information (labels and filenames)
-        testLabels    = self.faceRecognition.getTestLabels()
-        testFileNames = self.faceRecognition.getTestFileNames()
+        testLabels    = self.object.getTestLabels()
+        testFileNames = self.object.getTestFileNames()
 
         content = ""
 
@@ -99,7 +122,7 @@ class Report:
                 fileName = path + "/" + fileName
 
         # Save the text file
-        self.faceRecognition.getAuxiliary().writeTextFile(content, fileName)
+        self.object.getAuxiliary().writeTextFile(content, fileName)
 
     def saveAllResults(self, path=""):
         """
@@ -132,15 +155,15 @@ class Report:
         os.makedirs(nonfacesFolder)
 
         # The predicted results
-        predictSubjectIds = self.faceRecognition.getPredictedSubjectIds()
-        predictConfidence = self.faceRecognition.getPredictedConfidence()
+        predictSubjectIds = self.object.getPredictedSubjectIds()
+        predictConfidence = self.object.getPredictedConfidence()
         # The tests information
-        testImages    = self.faceRecognition.getTestImages()
-        testLabels    = self.faceRecognition.getTestLabels()
-        testFileNames = self.faceRecognition.getTestFileNames()
+        testImages    = self.object.getTestImages()
+        testLabels    = self.object.getTestLabels()
+        testFileNames = self.object.getTestFileNames()
         # The training information
-        trainImages   = self.faceRecognition.getTrainImages()
-        trainLabels   = self.faceRecognition.getTrainLabels()
+        trainImages   = self.object.getTrainImages()
+        trainLabels   = self.object.getTrainLabels()
 
         delimiter = "_"
 
@@ -148,7 +171,13 @@ class Report:
             # Patter: 1_Expected_2_Classified_2_Confidence_40192.12938291.png
             label = str(index) + delimiter + "Expected" + delimiter + str(testLabels[index]) + delimiter
             label += "Classified" + delimiter + str(predictSubjectIds[index]) + delimiter
-            label += "Confidence" + delimiter + str(predictConfidence[index]) + ".png"
+
+            if type(self.object) == FaceRecognition:
+                label += "Confidence" + delimiter + str(predictConfidence[index])
+            elif type(self.object) == MachineryCommittee:
+                label += "Voting" + delimiter + self.object.getVoting().getVotingSchemeName()
+
+            label += ".png"
 
             # Find the image that matches based on the trainLabel and predictedSubjectIDs
             image1 = testImages[index]
@@ -158,7 +187,7 @@ class Report:
                     image2 = trainImages[i]
 
             # Concatenate the images
-            image = self.faceRecognition.getAuxiliary().concatenateImages(image1, image2)
+            image = self.object.getAuxiliary().concatenateImages(image1, image2)
 
             # Get the correct fileName
             fileName = ""
@@ -172,4 +201,4 @@ class Report:
             fileName += label
 
             # Save the concatenated image in the correct folder
-            self.faceRecognition.getAuxiliary().saveImage(fileName, image)
+            self.object.getAuxiliary().saveImage(fileName, image)

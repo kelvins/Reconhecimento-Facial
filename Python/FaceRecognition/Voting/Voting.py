@@ -20,11 +20,23 @@ class Voting:
         """
         self.weights = weights
 
+    def getWeights(self):
+        """
+        Get the weights
+        """
+        return self.weights
+
     def setVotingScheme(self, votingScheme):
         """
         Set the selected voting scheme
         """
         self.votingScheme = votingScheme
+
+    def getVotingScheme(self):
+        """
+        Get the selected voting scheme
+        """
+        return self.votingScheme
 
     def getVotingSchemeName(self):
         """
