@@ -30,7 +30,10 @@ class Report:
         content += "\nRecognized Faces: "   + str(recognized)
         content += "\nUnrecognized Faces: " + str(unrecognized)
         content += "\nNon Faces: "          + str(nonFaces)
-        content += "\nThreshold Used: "     + str(self.faceRecognition.getThreshold())
+        if self.faceRecognition.getThreshold() >= 0:
+            content += "\nThreshold Used: "     + str(self.faceRecognition.getThreshold())
+        else:
+            content += "\nThreshold Not Used."
         sizeX, sizeY = self.faceRecognition.getAuxiliary().getDefaultSize()
         content += "\n\nDefault Size Images: " + str(sizeX) + "x" + str(sizeY)
         content += "\nInterpolation Method: "  + self.faceRecognition.getAuxiliary().getInterpolationMethodName()
@@ -71,15 +74,6 @@ class Report:
         print self.generateReportSummary()
         print "==========================================================="
 
-    def writeFile(self, content, fileName):
-        """
-        Write the content to a text file based on the file name
-        """
-        # Save the text file
-        textFile = open(fileName, "w")
-        textFile.write(content)
-        textFile.close()
-
     def saveReport(self, path=""):
         """
         Function used to automatically save the report in a defined folder.
@@ -105,7 +99,7 @@ class Report:
                 fileName = path + "/" + fileName
 
         # Save the text file
-        self.writeFile(content, fileName)
+        self.faceRecognition.getAuxiliary().writeTextFile(content, fileName)
 
     def saveAllResults(self, path=""):
         """

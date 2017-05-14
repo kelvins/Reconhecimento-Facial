@@ -72,6 +72,15 @@ class Auxiliary:
             return "cv2.INTER_NEAREST"
         return ""
 
+    def writeTextFile(self, content, fileName):
+        """
+        Write the content to a text file based on the file name
+        """
+        # Save the text file
+        textFile = open(fileName, "w")
+        textFile.write(content)
+        textFile.close()
+
     def isGrayscale(self, image):
         """
         Check if an image is in grayscale
@@ -198,5 +207,5 @@ class Auxiliary:
                 images.append( self.preprocessImage(filePath) )
                 labels.append( subjectID )
                 fileName.append( tempName.split(".")[0] )
-                    
+
         return images, labels, fileName
