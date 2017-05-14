@@ -19,27 +19,78 @@ class MachineryCommittee:
     Class that provides an interface for the MachineryCommittee
     """
 
-    def __init__(self, faceRecognitionAlgorithms=[], auxiliary=Auxiliary(), voting=Voting()):
+    def __init__(self, fralgorithms=[], auxiliary=Auxiliary(), voting=Voting()):
+        self.fralgorithms = fralgorithms
         self.auxiliary = auxiliary
-        self.faceRecognitionAlgorithms = faceRecognitionAlgorithms
         self.voting = voting
         reset()
 
-    def setDefaultSize(self, sizeX, sizeY):
-        self.auxiliary.setDefaultSize(sizeX, sizeY)
-
-    def setInterpolation(self, interpolation):
-        self.auxiliary.setInterpolation(interpolation)
-
     def reset(self):
-        self.images = []
-        self.labels = []
-        resetResults()
+        """
+        Reset all lists and results.
+        It is used to reset all values to re-train the algorithm
+        """
+        self.trainImages = []
+        self.trainLabels = []
+        self.resetResults()
 
     def resetResults(self):
-        self.nonFaces = 0
-        self.recognized = 0
+        """
+        Reset results (including the test lists and the predictions)
+        It is used to reset only the results of the tests
+        """
+        # Reset all results
+        self.recognized   = 0
         self.unrecognized = 0
+        self.nonFaces     = 0
+
+        # Reset the predicted results
+        self.predictSubjectIds = []
+        self.predictConfidence = []
+
+        # Reset test results
+        self.testImages = []
+        self.testLabels = []
+        self.testFileNames = []
+
+    def setFRAlgorithms(self, fralgorithms):
+        self.fralgorithms = fralgorithms
+
+    def getFRAlgorithms(self):
+        return self.fralgorithms
+
+    def setAuxiliary(self, auxiliary):
+        self.auxiliary = auxiliary
+
+    def getAuxiliary(self):
+        return self.auxiliary
+
+    def setVoting(self, voting):
+        self.voting = voting
+
+    def getVoting(self):
+        return self.voting
+
+    def getPredictedSubjectIds(self):
+        return self.predictSubjectIds
+
+    def getPredictedConfidence(self):
+        return self.predictConfidence
+
+    def getTestImages(self):
+        return self.testImages
+
+    def getTestLabels(self):
+        return self.testLabels
+
+    def getTestFileNames(self):
+        return self.testFileNames
+
+    def getTrainImages(self):
+        return self.trainImages
+
+    def getTrainLabels(self):
+        return self.trainLabels
 
     def getResults(self):
         return self.nonFaces, self.recognized, self.unrecognized
@@ -48,52 +99,58 @@ class MachineryCommittee:
         """
         Function responsible for train the face recognition algorithm based on the image files from the trainPath.
         """
-        reset()
+        # Reset all lists and results
+        self.reset()
 
         if trainPath == "":
             print "The train path is empty."
             sys.exit()
 
         # Load all imagens and labels
-        self.images, self.labels = self.auxiliary.loadAllImagesForTrain(trainPath)
+        self.trainImages, self.trainLabels, _ = self.auxiliary.loadAllImagesForTrain(trainPath)
 
-        # Train the algorithms
-        for index in xrange(0, len(self.faceRecognitionAlgorithms)):
-            self.faceRecognitionAlgorithms[index].train(self.images, self.labels)
+        # Train all the algorithms
+        for index in xrange(0, len(self.fralgorithms)):
+            self.fralgorithms[index].train(self.trainImages, self.trainLabels)
 
     def recognizeFaces(self, testPath):
         """
         Function that tries to recognize each face (path passed by parameter).
         """
-
-        resetResults()
+        # Reset the results
+        self.resetResults()
 
         if testPath == "":
             print "The test path is empty."
             sys.exit()
 
         # Load all imagens and labels
-        tempImages, tempLabels = self.auxiliary.loadAllImagesForTest(testPath)
+        self.testImages, self.testLabels, self.testFileNames = self.auxiliary.loadAllImagesForTest(testPath)
 
         # For each image
-        for index in xrange(0,len(tempImages)):
+        for index in xrange(0, len(self.testImages)):
             subjectID  = []
             confidence = []
 
             # Predict
-            for index in xrange(0, len(self.faceRecognitionAlgorithms)):
-                subID, conf = self.faceRecognitionAlgorithms[index].predict(tempImages[index])
+            for index in xrange(0, len(self.fralgorithms)):
+                subID, conf = self.fralgorithms[index].predict(self.testImages[index])
                 subjectID.append(subID)
                 confidence.append(conf)
 
             # If using weighted voting the subjectID length should be equal to the weights length
             result = voting.vote(subjectID)
 
+            # Store the predicted results to be used in the report
+            self.predictSubjectIds.append( result )
+            # We cannot use the confidence because we are using multiple algorithms
+            #self.predictConfidence.append( confidence )
+
             # Approach not using threshold (face images manually classified)
-            if tempLabels[index] >= 0:
-                if result == tempLabels[index]:
-                    recognized += 1
+            if self.testLabels[index] >= 0:
+                if result == self.testLabels[index]:
+                    self.recognized += 1
                 else:
-                    unrecognized += 1
+                    self.unrecognized += 1
             else:
-                nonFaces += 1
+                self.nonFaces += 1
