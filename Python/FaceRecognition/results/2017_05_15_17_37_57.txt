@@ -1,0 +1,30 @@
+Machinery Committee (multiple algorithms)
+
+Date/Time: 15/05/2017 17:37:56
+Train Path: /home/kelvin/Desktop/Reconhecimento-Facial/Python/FaceRecognition/dataset/train/1/
+Test Path: /home/kelvin/Desktop/Reconhecimento-Facial/Python/FaceRecognition/dataset/test/1/
+
+Voting Scheme: Majority Voting
+Algorithm: Eigenfaces
+Algorithm: Fisherfaces
+Algorithm: Local Binary Patterns Histogram (LBPH)
+Algorithm: Scale-Invariant Feature Transform (SIFT)
+Algorithm: Speeded Up Robust Features (SURF)
+
+Total Images Analyzed: 8
+Recognized Faces: 6
+Unrecognized Faces: 2
+Non Faces: 0
+
+Default Size Images: 200x200
+Interpolation Method: cv2.INTER_CUBIC
+Supported Files: png, jpg, jpeg
+===========================================================
+1: Expected subject: 3: Classified as subject: 3: Predicted Subjects: 3, 3, 3, 3, 3: File name: 4_3
+2: Expected subject: 2: Classified as subject: 2: Predicted Subjects: 2, 2, 2, 2, 2: File name: 1_2
+3: Expected subject: 3: Classified as subject: 3: Predicted Subjects: 3, 1, 3, 4, 3: File name: 5_3
+4: Expected subject: 4: Classified as subject: 3: Predicted Subjects: 3, 1, 4, 3, 1: File name: 8_4
+5: Expected subject: 1: Classified as subject: 3: Predicted Subjects: 3, 3, 3, 1, 1: File name: 6_1
+6: Expected subject: 2: Classified as subject: 2: Predicted Subjects: 2, 2, 3, 2, 3: File name: 7_2
+7: Expected subject: 2: Classified as subject: 2: Predicted Subjects: 2, 2, 2, 2, 2: File name: 3_2
+8: Expected subject: 1: Classified as subject: 1: Predicted Subjects: 1, 1, 1, 1, 1: File name: 2_1

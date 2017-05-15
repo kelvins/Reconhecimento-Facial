@@ -33,7 +33,7 @@ def faceFecognition():
     global trainPath, testPath, resultsPath
 
     # Create the auxiliary object
-    auxiliary = Auxiliary(sizeX=200, sizeY=200, interpolation=cv2.INTER_CUBIC)
+    auxiliary = Auxiliary(sizeX=100, sizeY=100, interpolation=cv2.INTER_CUBIC)
 
     # Create the algorithm object
     algorithm = Eigenfaces()
@@ -68,7 +68,7 @@ def machineryCommittee():
     global trainPath, testPath, resultsPath
 
     # Create the auxiliary object
-    auxiliary = Auxiliary(sizeX=200, sizeY=200, interpolation=cv2.INTER_CUBIC)
+    auxiliary = Auxiliary(sizeX=100, sizeY=100, interpolation=cv2.INTER_CUBIC)
 
     # Create the algorithm object
     algorithms = []
