@@ -21,7 +21,7 @@ class SURF:
             nOctaveLayers = 0
 
         # Creates the SURF object
-        self.faceRec = cv2.xfeatures2d.SURF_create(hessianThreshold=hessianThreshold, nOctaves=nOctaves, extended=extended, upright=upright)
+        self.faceRec = cv2.xfeatures2d.SURF_create(hessianThreshold=hessianThreshold, nOctaves=nOctaves, nOctaveLayers=nOctaveLayers, extended=extended, upright=upright)
 
         # Creates the matcher object
         self.matcher = cv2.BFMatcher(distance, crossCheck=crossCheck)
