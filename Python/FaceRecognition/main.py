@@ -3,8 +3,6 @@ import os
 import cv2
 import sys
 
-#sys.path.append('Auxiliary')
-#from Auxiliary import Auxiliary
 from classes.auxiliary import Auxiliary
 from classes.face_recognition import FaceRecognition
 from classes.voting import Voting
@@ -17,19 +15,22 @@ from algorithms.lbph import LBPH
 from algorithms.sift import SIFT
 from algorithms.surf import SURF
 
+# Set the paths to train, test and store the results
+realPath = os.path.realpath(__file__)
+dirPath  = os.path.dirname(realPath)
+
+# Define the path to the training files/folder
+trainPath = dirPath + "/dataset/train/2/"
+
+# Define the path to the test folder
+testPath = dirPath + "/dataset/test/2/"
+
+# Define the path to the results folder
+resultsPath = dirPath + "/results/"
+
 def faceFecognition():
 
-    realPath = os.path.realpath(__file__)
-    dirPath  = os.path.dirname(realPath)
-
-    # Define the path to the training files/folder
-    trainPath = dirPath + "/dataset/train/2/"
-
-    # Define the path to the test folder
-    testPath = dirPath + "/dataset/test/2/"
-
-    # Define the path to the results folder
-    resultsPath = dirPath + "/results/"
+    global trainPath, testPath, resultsPath
 
     # Create the auxiliary object
     auxiliary = Auxiliary(sizeX=100, sizeY=100, interpolation=cv2.INTER_CUBIC)
@@ -41,7 +42,7 @@ def faceFecognition():
     #algorithm = SIFT()
     #algorithm = SURF()
 
-	# Create the face recognition object
+    # Create the face recognition object
     faceRecog = FaceRecognition(algorithm, auxiliary)
 
     # Train the algorithm
@@ -64,17 +65,7 @@ def faceFecognition():
 
 def machineryCommittee():
 
-    realPath = os.path.realpath(__file__)
-    dirPath  = os.path.dirname(realPath)
-
-    # Define the path to the training files/folder
-    trainPath = dirPath + "/dataset/train/2/"
-
-    # Define the path to the test folder
-    testPath = dirPath + "/dataset/test/2/"
-
-    # Define the path to the results folder
-    resultsPath = dirPath + "/results/"
+    global trainPath, testPath, resultsPath
 
     # Create the auxiliary object
     auxiliary = Auxiliary(sizeX=100, sizeY=100, interpolation=cv2.INTER_CUBIC)
