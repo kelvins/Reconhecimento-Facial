@@ -11,9 +11,6 @@ from Voting import Voting
 sys.path.append('../Auxiliary')
 from Auxiliary import Auxiliary
 
-sys.path.append('../FaceRecognition')
-from FaceRecognition import FaceRecognition
-
 class MachineryCommittee:
     """
     Class that provides an interface for the MachineryCommittee
@@ -23,7 +20,7 @@ class MachineryCommittee:
         self.fralgorithms = fralgorithms
         self.auxiliary = auxiliary
         self.voting = voting
-        reset()
+        self.reset()
 
     def reset(self):
         """
@@ -155,7 +152,7 @@ class MachineryCommittee:
                 confidence.append(conf)
 
             # If using weighted voting the subjectID length should be equal to the weights length
-            result = voting.vote(subjectID)
+            result = self.voting.vote(subjectID)
 
             # Store the predicted results to be used in the report
             self.predictSubjectIds.append( result )

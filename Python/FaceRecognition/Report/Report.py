@@ -59,7 +59,7 @@ class Report:
             if self.object.getVoting().getVotingScheme() == Voting.WEIGHTED:
                 content += "\nWeights: " + ', '.join(self.object.getVoting().getWeights())
 
-        sizeX, sizeY = self.faceRecognition.getAuxiliary().getDefaultSize()
+        sizeX, sizeY = self.object.getAuxiliary().getDefaultSize()
         content += "\n\nDefault Size Images: " + str(sizeX) + "x" + str(sizeY)
         content += "\nInterpolation Method: "  + self.object.getAuxiliary().getInterpolationMethodName()
         content += "\nSupported Files: " + ', '.join(self.object.getAuxiliary().getSupportedFiles())

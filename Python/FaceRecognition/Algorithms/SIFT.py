@@ -75,7 +75,7 @@ class SIFT:
         matches = sorted(matches, key = lambda x:x.distance)
     
         # Creates a results vector to store the number of similar points for each image on the training set
-        results = [0]*len(labels)
+        results = [0]*len(self.labels)
 
         # Based on the matches vector we create the results vector that represents how many points this test image are similar to each image in the training set
         for match in matches:
@@ -84,4 +84,4 @@ class SIFT:
         # Index receives the position of the maximum value in the results vector (it means that this is the most similar image)
         index = results.index(max(results))
 
-        return labels[index], max(results)
+        return self.labels[index], max(results)
