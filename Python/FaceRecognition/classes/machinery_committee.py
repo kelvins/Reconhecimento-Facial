@@ -90,8 +90,14 @@ class MachineryCommittee:
     def getTrainLabels(self):
         return self.trainLabels
 
-    def getResults(self):
-        return self.nonFaces, self.recognized, self.unrecognized
+    def getRecognized(self):
+        return self.recognized
+
+    def getUnrecognized(self):
+        return self.unrecognized
+
+    def getNonFaces(self):
+        return self.nonFaces
 
     def getTrainPath(self):
         return self.trainPath
@@ -143,8 +149,8 @@ class MachineryCommittee:
             confidence = []
 
             # Predict
-            for index in xrange(0, len(self.fralgorithms)):
-                subID, conf = self.fralgorithms[index].predict(self.testImages[index])
+            for i in xrange(0, len(self.fralgorithms)):
+                subID, conf = self.fralgorithms[i].predict(self.testImages[index])
                 subjectID.append(subID)
                 confidence.append(conf)
 

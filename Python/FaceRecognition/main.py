@@ -23,10 +23,10 @@ def faceFecognition():
     dirPath  = os.path.dirname(realPath)
 
     # Define the path to the training files/folder
-    trainPath = dirPath + "/dataset/train/"
+    trainPath = dirPath + "/dataset/train/2/"
 
     # Define the path to the test folder
-    testPath = dirPath + "/dataset/test/"
+    testPath = dirPath + "/dataset/test/2/"
 
     # Define the path to the results folder
     resultsPath = dirPath + "/results/"
@@ -35,7 +35,11 @@ def faceFecognition():
     auxiliary = Auxiliary(sizeX=100, sizeY=100, interpolation=cv2.INTER_CUBIC)
 
     # Create the algorithm object
-    algorithm = Eigenfaces() # numComponents=0, threshold=-1
+    algorithm = Eigenfaces()
+    #algorithm = Fisherfaces()
+    #algorithm = LBPH()
+    #algorithm = SIFT()
+    #algorithm = SURF()
 
 	# Create the face recognition object
     faceRecog = FaceRecognition(algorithm, auxiliary)
@@ -64,13 +68,13 @@ def machineryCommittee():
     dirPath  = os.path.dirname(realPath)
 
     # Define the path to the training files/folder
-    trainPath = dirPath + "/Dataset/Train/"
+    trainPath = dirPath + "/dataset/train/2/"
 
     # Define the path to the test folder
-    testPath = dirPath + "/Dataset/Test/"
+    testPath = dirPath + "/dataset/test/2/"
 
     # Define the path to the results folder
-    resultsPath = dirPath + "/Results/"
+    resultsPath = dirPath + "/results/"
 
     # Create the auxiliary object
     auxiliary = Auxiliary(sizeX=100, sizeY=100, interpolation=cv2.INTER_CUBIC)
@@ -84,7 +88,7 @@ def machineryCommittee():
     algorithms.append( SURF() )
 
     # Set the weights based on the algorithms list order
-    weights = [20, 20, 20, 20, 20]
+    weights = [10, 10, 10, 10, 10]
 
     # Create the voting object setting the WEIGHTED as the voting scheme
     voting = Voting(Voting.WEIGHTED, weights)
@@ -111,5 +115,5 @@ def machineryCommittee():
     #report.saveAllResults(resultsPath)
 
 if __name__ == "__main__":
-    faceFecognition()
+    #faceFecognition()
     machineryCommittee()

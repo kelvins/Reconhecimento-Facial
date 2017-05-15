@@ -24,35 +24,40 @@ class Report:
         Generate a report summary with informations about the test.
         Return the content as a string.
         """
-        content = time.strftime("%d/%m/%Y %H:%M:%S")
+        if isinstance(self.object, FaceRecognition):
+            content = "Face Recognition (single algorithm)"
+        elif isinstance(self.object, MachineryCommittee):
+            content = "Machinery Committee (multiple algorithms)"
+
+        content += "\n\nDate/Time: " + time.strftime("%d/%m/%Y %H:%M:%S")
+        content += "\nTrain Path: " + self.object.getTrainPath()
+        content += "\nTest Path: "  + self.object.getTestPath() + "\n"
 
         # For the face recognition class get only the name of the algorithm
-        if type(self.object) == FaceRecognition:
+        if isinstance(self.object, FaceRecognition):
             content += "\nAlgorithm: " + self.object.getAlgorithm().getAlgorithmName()
-        # For the machinery committee class get the name of all algorithms
-        elif type(self.object) == MachineryCommittee:
-            for index in xrange(0, len(self.object.getFRAlgorithms())):
-                content += "\nAlgorithm: " + self.object.getFRAlgorithms()[index].getAlgorithmName()
-
-        recognized, unrecognized, nonFaces = self.object.getResults()
-        content += "\nTrain Path: " + self.object.getTrainPath()
-        content += "\nTest Path: "  + self.object.getTestPath()
-        content += "\nTotal Images Analyzed: " + str(recognized + unrecognized + nonFaces)
-        content += "\nRecognized Faces: "   + str(recognized)
-        content += "\nUnrecognized Faces: " + str(unrecognized)
-        content += "\nNon Faces: "          + str(nonFaces)
-
-        # For face recognition class show the threshold
-        if type(self.object) == FaceRecognition:
             if self.object.getThreshold() >= 0:
                 content += "\nThreshold Used: " + str(self.object.getThreshold())
             else:
                 content += "\nThreshold Not Used."
-        # For machinery committee class show the voting algorithm name
-        elif type(self.object) == MachineryCommittee:
+
+        # For the machinery committee class get the name of all algorithms
+        elif isinstance(self.object, MachineryCommittee):
             content += "\nVoting Scheme: " + self.object.getVoting().getVotingSchemeName()
-            if self.object.getVoting().getVotingScheme() == Voting.WEIGHTED:
-                content += "\nWeights: " + ', '.join(self.object.getVoting().getWeights())
+            weights = self.object.getVoting().getWeights()
+
+            for index in xrange(0, len(self.object.getFRAlgorithms())):
+                content += "\nAlgorithm: " + self.object.getFRAlgorithms()[index].getAlgorithmName()
+                # If it is using the WEIGHTED voting scheme
+                if self.object.getVoting().getVotingScheme() == Voting.WEIGHTED:
+                    # If the index is valid for the weights list
+                    if index < len(weights):
+                        content += " - Weight: " + str(weights[index])
+
+        content += "\n\nTotal Images Analyzed: " + str(len(self.object.getTestFileNames()))
+        content += "\nRecognized Faces: "   + str(self.object.getRecognized())
+        content += "\nUnrecognized Faces: " + str(self.object.getUnrecognized())
+        content += "\nNon Faces: "          + str(self.object.getNonFaces())
 
         sizeX, sizeY = self.object.getAuxiliary().getDefaultSize()
         content += "\n\nDefault Size Images: " + str(sizeX) + "x" + str(sizeY)
@@ -77,10 +82,11 @@ class Report:
         # Create each line based on the predicted subject IDs
         for index in xrange(0, len(predictSubjectIds)):
             # Format: 1: Expected subject: 3: Classified as subject: 2: With confidence: 4123.123123: File name: 1_3
-            content += str(index)
+            content += str(index+1)
             content += ": Expected subject: " + str(testLabels[index])
             content += ": Classified as subject: " + str(predictSubjectIds[index])
-            content += ": With confidence: " + str(predictConfidence[index])
+            if isinstance(self.object, FaceRecognition):
+                content += ": With confidence: " + str(predictConfidence[index])
             content += ": File name: " + testFileNames[index]
             content += "\n"
 
@@ -169,9 +175,9 @@ class Report:
             label = str(index) + delimiter + "Expected" + delimiter + str(testLabels[index]) + delimiter
             label += "Classified" + delimiter + str(predictSubjectIds[index]) + delimiter
 
-            if type(self.object) == FaceRecognition:
+            if isinstance(self.object, FaceRecognition):
                 label += "Confidence" + delimiter + str(predictConfidence[index])
-            elif type(self.object) == MachineryCommittee:
+            elif isinstance(self.object, MachineryCommittee):
                 label += "Voting" + delimiter + self.object.getVoting().getVotingSchemeName()
 
             label += ".png"

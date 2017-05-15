@@ -82,8 +82,14 @@ class FaceRecognition:
     def getTrainLabels(self):
         return self.trainLabels
 
-    def getResults(self):
-        return self.recognized, self.unrecognized, self.nonFaces
+    def getRecognized(self):
+        return self.recognized
+
+    def getUnrecognized(self):
+        return self.unrecognized
+
+    def getNonFaces(self):
+        return self.nonFaces
 
     def getTrainPath(self):
         return self.trainPath
