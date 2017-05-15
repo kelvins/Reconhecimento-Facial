@@ -84,4 +84,9 @@ class SIFT:
         # Index receives the position of the maximum value in the results vector (it means that this is the most similar image)
         index = results.index(max(results))
 
-        return self.labels[index], max(results)
+        # Calculate the confidence based on the number of matches and the max result
+        # The confidence range is: 0 - 100
+        # The closer to zero higher is the confidence
+        confidence = 100.0 - ((float(max(results)) * 100.0) / float(len(matches)))
+
+        return self.labels[index], confidence
