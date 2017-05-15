@@ -20,10 +20,10 @@ realPath = os.path.realpath(__file__)
 dirPath  = os.path.dirname(realPath)
 
 # Define the path to the training files/folder
-trainPath = dirPath + "/dataset/train/2/"
+trainPath = dirPath + "/dataset/train/1/"
 
 # Define the path to the test folder
-testPath = dirPath + "/dataset/test/2/"
+testPath = dirPath + "/dataset/test/1/"
 
 # Define the path to the results folder
 resultsPath = dirPath + "/results/"
@@ -33,7 +33,7 @@ def faceFecognition():
     global trainPath, testPath, resultsPath
 
     # Create the auxiliary object
-    auxiliary = Auxiliary(sizeX=100, sizeY=100, interpolation=cv2.INTER_CUBIC)
+    auxiliary = Auxiliary(sizeX=200, sizeY=200, interpolation=cv2.INTER_CUBIC)
 
     # Create the algorithm object
     algorithm = Eigenfaces()
@@ -58,7 +58,7 @@ def faceFecognition():
     report.printResults()
 
     # Save the report (text file)
-    #report.saveReport(resultsPath)
+    report.saveReport(resultsPath)
 
     # Save all results (summary, full report and images)
     #report.saveAllResults(resultsPath)
@@ -68,7 +68,7 @@ def machineryCommittee():
     global trainPath, testPath, resultsPath
 
     # Create the auxiliary object
-    auxiliary = Auxiliary(sizeX=100, sizeY=100, interpolation=cv2.INTER_CUBIC)
+    auxiliary = Auxiliary(sizeX=200, sizeY=200, interpolation=cv2.INTER_CUBIC)
 
     # Create the algorithm object
     algorithms = []
@@ -100,7 +100,7 @@ def machineryCommittee():
     report.printResults()
 
     # Save the report (text file)
-    #report.saveReport(resultsPath)
+    report.saveReport(resultsPath)
 
     # Save all results (summary, full report and images)
     #report.saveAllResults(resultsPath)

@@ -85,8 +85,12 @@ class Report:
             content += str(index+1)
             content += ": Expected subject: " + str(testLabels[index])
             content += ": Classified as subject: " + str(predictSubjectIds[index])
+
             if isinstance(self.object, FaceRecognition):
                 content += ": With confidence: " + str(predictConfidence[index])
+            elif isinstance(self.object, MachineryCommittee):
+                content += ": Predicted Subjects: " + ', '.join(map(str, predictConfidence[index]))
+
             content += ": File name: " + testFileNames[index]
             content += "\n"
 
@@ -108,7 +112,7 @@ class Report:
 
         # Generate the report content
         content = self.generateReportSummary()
-        content += "\n================================\n"
+        content += "\n===========================================================\n"
         content += self.generateFullReport()
 
         # Make sure that none folder will have the same name

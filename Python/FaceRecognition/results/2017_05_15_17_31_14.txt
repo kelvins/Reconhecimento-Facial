@@ -1,0 +1,26 @@
+Face Recognition (single algorithm)
+
+Date/Time: 15/05/2017 17:31:13
+Train Path: /home/kelvin/Desktop/Reconhecimento-Facial/Python/FaceRecognition/dataset/train/1/
+Test Path: /home/kelvin/Desktop/Reconhecimento-Facial/Python/FaceRecognition/dataset/test/1/
+
+Algorithm: Scale-Invariant Feature Transform (SIFT)
+Threshold Not Used.
+
+Total Images Analyzed: 8
+Recognized Faces: 4
+Unrecognized Faces: 4
+Non Faces: 0
+
+Default Size Images: 100x100
+Interpolation Method: cv2.INTER_CUBIC
+Supported Files: png, jpg, jpeg
+===========================================================
+1: Expected subject: 3: Classified as subject: 3: With confidence: 81.5384615385: File name: 4_3
+2: Expected subject: 2: Classified as subject: 2: With confidence: 78.6885245902: File name: 1_2
+3: Expected subject: 3: Classified as subject: 4: With confidence: 83.75: File name: 5_3
+4: Expected subject: 4: Classified as subject: 3: With confidence: 87.1428571429: File name: 8_4
+5: Expected subject: 1: Classified as subject: 3: With confidence: 86.6666666667: File name: 6_1
+6: Expected subject: 2: Classified as subject: 3: With confidence: 80.3278688525: File name: 7_2
+7: Expected subject: 2: Classified as subject: 2: With confidence: 80.2631578947: File name: 3_2
+8: Expected subject: 1: Classified as subject: 1: With confidence: 44.0677966102: File name: 2_1

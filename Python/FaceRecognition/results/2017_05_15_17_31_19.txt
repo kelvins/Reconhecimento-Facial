@@ -1,0 +1,26 @@
+Face Recognition (single algorithm)
+
+Date/Time: 15/05/2017 17:31:18
+Train Path: /home/kelvin/Desktop/Reconhecimento-Facial/Python/FaceRecognition/dataset/train/1/
+Test Path: /home/kelvin/Desktop/Reconhecimento-Facial/Python/FaceRecognition/dataset/test/1/
+
+Algorithm: Speeded Up Robust Features (SURF)
+Threshold Not Used.
+
+Total Images Analyzed: 8
+Recognized Faces: 4
+Unrecognized Faces: 4
+Non Faces: 0
+
+Default Size Images: 100x100
+Interpolation Method: cv2.INTER_CUBIC
+Supported Files: png, jpg, jpeg
+===========================================================
+1: Expected subject: 3: Classified as subject: 3: With confidence: 79.2452830189: File name: 4_3
+2: Expected subject: 2: Classified as subject: 3: With confidence: 76.1904761905: File name: 1_2
+3: Expected subject: 3: Classified as subject: 1: With confidence: 82.3529411765: File name: 5_3
+4: Expected subject: 4: Classified as subject: 4: With confidence: 85.7142857143: File name: 8_4
+5: Expected subject: 1: Classified as subject: 3: With confidence: 80.8510638298: File name: 6_1
+6: Expected subject: 2: Classified as subject: 3: With confidence: 79.0697674419: File name: 7_2
+7: Expected subject: 2: Classified as subject: 2: With confidence: 84.6153846154: File name: 3_2
+8: Expected subject: 1: Classified as subject: 1: With confidence: 43.3962264151: File name: 2_1

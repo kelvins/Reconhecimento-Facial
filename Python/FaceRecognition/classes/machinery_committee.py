@@ -159,8 +159,10 @@ class MachineryCommittee:
 
             # Store the predicted results to be used in the report
             self.predictSubjectIds.append( result )
-            # We cannot use the confidence because we are using multiple algorithms
-            #self.predictConfidence.append( confidence )
+            
+            # As we don't work with confidences in machinery committee
+            # We can store the subjectID list to check which algorithm has predicted which subject
+            self.predictConfidence.append( subjectID )
 
             # Approach not using threshold (face images manually classified)
             if self.testLabels[index] >= 0:
