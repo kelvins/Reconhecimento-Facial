@@ -87,10 +87,10 @@ class FaceRecognition:
         return self.recognized, self.unrecognized, self.nonFaces
 
     def getTrainPath(self):
-    	return self.trainPath
+        return self.trainPath
 
-   	def getTestPath(self):
-   		return self.testPath
+    def getTestPath(self):
+        return self.testPath
 
     def train(self, trainPath):
         """

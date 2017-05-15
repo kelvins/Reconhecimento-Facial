@@ -9,6 +9,12 @@ from Auxiliary import Auxiliary
 sys.path.append('FaceRecognition')
 from FaceRecognition import FaceRecognition
 
+sys.path.append('Voting')
+from Voting import Voting
+
+sys.path.append('MachineryCommittee')
+from MachineryCommittee import MachineryCommittee
+
 sys.path.append('Report')
 from Report import Report
 
@@ -55,7 +61,7 @@ def main():
     report.printResults()
 
     # Save the report (text file)
-    report.saveReport(resultsPath)
+    #report.saveReport(resultsPath)
 
     # Save all results (summary, full report and images)
     #report.saveAllResults(resultsPath)

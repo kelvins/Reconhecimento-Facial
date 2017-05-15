@@ -13,6 +13,7 @@ from FaceRecognition import FaceRecognition
 sys.path.append('../MachineryCommittee')
 from MachineryCommittee import MachineryCommittee
 
+
 class Report:
     """
     Class that provides an interface to generate reports
