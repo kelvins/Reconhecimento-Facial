@@ -58,6 +58,11 @@ class Report:
         content += "\nRecognized Faces: "   + str(self.object.getRecognized())
         content += "\nUnrecognized Faces: " + str(self.object.getUnrecognized())
         content += "\nNon Faces: "          + str(self.object.getNonFaces())
+        
+        totalFaceImages = float(self.object.getRecognized() + self.object.getUnrecognized())
+        accuracy = (float(self.object.getRecognized()) / totalFaceImages) * 100.0
+        content += "\nRecognition Rate - Recognized / Total Face Images"
+        content += "\nAccuracy: " + str(accuracy)
 
         sizeX, sizeY = self.object.getAuxiliary().getDefaultSize()
         content += "\n\nDefault Size Images: " + str(sizeX) + "x" + str(sizeY)
