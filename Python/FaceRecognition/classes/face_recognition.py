@@ -5,8 +5,7 @@ import os
 import sys
 import numpy as np
 
-sys.path.append('../Auxiliary')
-from Auxiliary import Auxiliary
+from auxiliary import Auxiliary
 
 class FaceRecognition:
     """

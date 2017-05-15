@@ -4,15 +4,9 @@ import os
 import sys
 import time
 
-sys.path.append('../Voting')
-from Voting import Voting
-
-sys.path.append('../FaceRecognition')
-from FaceRecognition import FaceRecognition
-
-sys.path.append('../MachineryCommittee')
-from MachineryCommittee import MachineryCommittee
-
+from voting import Voting
+from face_recognition import FaceRecognition
+from machinery_committee import MachineryCommittee
 
 class Report:
     """

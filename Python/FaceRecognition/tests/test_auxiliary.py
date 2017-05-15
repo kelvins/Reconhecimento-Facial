@@ -2,8 +2,8 @@ import cv2
 import sys
 import unittest
 
-sys.path.append('../Auxiliary')
-from Auxiliary import Auxiliary
+sys.path.append('../classes')
+from auxiliary import Auxiliary
 
 auxiliary = Auxiliary()
 

@@ -5,11 +5,8 @@ import os
 import sys
 import numpy as np
 
-sys.path.append('../Voting')
-from Voting import Voting
-
-sys.path.append('../Auxiliary')
-from Auxiliary import Auxiliary
+from voting import Voting
+from auxiliary import Auxiliary
 
 class MachineryCommittee:
     """

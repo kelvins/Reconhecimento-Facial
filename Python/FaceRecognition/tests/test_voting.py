@@ -1,8 +1,8 @@
 import sys
 import unittest
 
-sys.path.append('../Voting')
-from Voting import Voting
+sys.path.append('../classes')
+from voting import Voting
 
 voting = Voting()
 
