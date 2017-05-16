@@ -13,16 +13,18 @@ class SIFT:
         """
         Set the default values
         """
+        
+        # If the parameter is invalid get its default value
         if nfeatures < 0:
             nfeatures = 0
         if nOctaveLayers < 0:
-            nOctaveLayers = 0
+            nOctaveLayers = 3
         if contrastThreshold < 0.0:
-            contrastThreshold = 0.0
+            contrastThreshold = 0.04
         if edgeThreshold < 0:
-            edgeThreshold = 0
+            edgeThreshold = 10
         if sigma < 0.0:
-            sigma = 0.0
+            sigma = 1.6
 
         # Creates the SIFT object
         self.faceRec = cv2.xfeatures2d.SIFT_create(nfeatures=nfeatures, nOctaveLayers=nOctaveLayers, contrastThreshold=contrastThreshold, edgeThreshold=edgeThreshold, sigma=sigma)

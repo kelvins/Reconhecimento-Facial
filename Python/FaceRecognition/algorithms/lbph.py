@@ -13,14 +13,16 @@ class LBPH:
         """
         Set the default values
         """
+        
+        # If the parameter is invalid get its default value
         if radius < 1:
             radius = 1
         if neighbors < 1:
-            neighbors = 1
+            neighbors = 8
         if grid_x < 1:
-            grid_x = 1
+            grid_x = 8
         if grid_y < 1:
-            grid_y = 1
+            grid_y = 8
 
         # Creates the LBPH object passing a threshold variable by parameter
         if threshold >= 0:

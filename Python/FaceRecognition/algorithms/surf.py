@@ -13,12 +13,14 @@ class SURF:
         """
         Set the default values
         """
+
+        # If the parameter is invalid get its default value
         if hessianThreshold < 0:
-            hessianThreshold = 0
+            hessianThreshold = 100
         if nOctaves < 0:
-            nOctaves = 0
+            nOctaves = 4
         if nOctaveLayers < 0:
-            nOctaveLayers = 0
+            nOctaveLayers = 3
 
         # Creates the SURF object
         self.faceRec = cv2.xfeatures2d.SURF_create(hessianThreshold=hessianThreshold, nOctaves=nOctaves, nOctaveLayers=nOctaveLayers, extended=extended, upright=upright)
