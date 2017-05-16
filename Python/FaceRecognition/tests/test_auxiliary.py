@@ -89,5 +89,19 @@ class ConcatenateImagesTest(unittest.TestCase):
         img = auxiliary.loadImage("images/python_concatenated.png")
         self.assertEqual(img.shape[:2], (100, 200))
 
+class ExtractPathsTest(unittest.TestCase):
+    def test1(self):
+        paths = auxiliary.extractImagesPaths("images/")
+        self.assertEqual(len(paths), 3)
+
+class WriteTextFileTest(unittest.TestCase):
+    def test1(self):
+        content  = "WriteTextFileTest"
+        fileName = "images/WriteTextFileTest.txt"
+        auxiliary.writeTextFile(content, fileName)
+
+        paths = auxiliary.extractFilesPaths("images/")
+        self.assertEqual(len(paths), 4)
+
 if __name__ == '__main__':
     unittest.main()
