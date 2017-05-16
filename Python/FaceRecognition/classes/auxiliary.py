@@ -156,6 +156,21 @@ class Auxiliary:
 
         return paths
 
+    def extractFilesPaths(self, path):
+        """
+        Extract all paths for all files type
+        """
+        paths = []
+
+         # In the path folder search for all files in all directories
+        for dirname, dirnames, filenames in os.walk(path):
+            # For each file found
+            for filename in filenames:
+                # Creates the filePath joining the directory name and the file name
+                paths.append( os.path.join(dirname, filename) )
+
+        return paths
+
     def loadAllImagesForTrain(self, trainPath):
         """
         Load all images for train
