@@ -149,8 +149,10 @@ class Auxiliary:
         for dirname, dirnames, filenames in os.walk(path):
             # For each file found
             for filename in filenames:
-                # Creates the filePath joining the directory name and the file name
-                paths.append( os.path.join(dirname, filename) )
+                # Check if it is a valid image file
+                if filename.split(".")[1] in self.supportedFiles:
+                    # Creates the filePath joining the directory name and the file name
+                    paths.append( os.path.join(dirname, filename) )
 
         return paths
 
