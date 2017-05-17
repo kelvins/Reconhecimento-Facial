@@ -14,7 +14,7 @@ from algorithms.fisherfaces import Fisherfaces
 from algorithms.lbph import LBPH
 from algorithms.sift import SIFT
 from algorithms.surf import SURF
-
+"""
 # Set the paths to train, test and store the results
 realPath = os.path.realpath(__file__)
 dirPath  = os.path.dirname(realPath)
@@ -27,41 +27,51 @@ testPath = dirPath + "/dataset/test/1/"
 
 # Define the path to the results folder
 resultsPath = dirPath + "/results/"
+"""
+
+trainPath = "/home/kelvin/Desktop/FaceRecognition/Train/"
+testPath  = "/home/kelvin/Desktop/FaceRecognition/Test/"
+resultsPath = "/home/kelvin/Desktop/FaceRecognition/Results/Eigenfaces"
 
 def faceFecognition():
 
     global trainPath, testPath, resultsPath
 
-    # Create the auxiliary object
-    auxiliary = Auxiliary(sizeX=100, sizeY=100, interpolation=cv2.INTER_CUBIC)
+    # Train folder loop
+    for trainIndex in xrange(1, 7):
+        # Test folder loop
+        for testIndex in xrange(1, 13):
 
-    # Create the algorithm object
-    algorithm = Eigenfaces()
-    #algorithm = Fisherfaces()
-    #algorithm = LBPH()
-    #algorithm = SIFT()
-    #algorithm = SURF()
+            # Create the auxiliary object
+            auxiliary = Auxiliary(sizeX=100, sizeY=100, interpolation=cv2.INTER_CUBIC)
 
-    # Create the face recognition object
-    faceRecog = FaceRecognition(algorithm, auxiliary)
+            # Create the algorithm object
+            algorithm = Eigenfaces()
+            #algorithm = Fisherfaces()
+            #algorithm = LBPH()
+            #algorithm = SIFT()
+            #algorithm = SURF()
 
-    # Train the algorithm
-    faceRecog.train(trainPath)
+            # Create the face recognition object
+            faceRecog = FaceRecognition(algorithm, auxiliary)
 
-    # Try to recognize the faces
-    faceRecog.recognizeFaces(testPath)
+            # Train the algorithm
+            faceRecog.train(trainPath + str(trainIndex) + "/")
 
-    # Create the report object
-    report = Report(faceRecog)
+            # Try to recognize the faces
+            faceRecog.recognizeFaces(testPath + str(testIndex) + "/")
 
-    # Print the results
-    report.printResults()
+            # Create the report object
+            report = Report(faceRecog)
 
-    # Save the report (text file)
-    report.saveReport(resultsPath)
+            # Print the results
+            report.printResults()
 
-    # Save all results (summary, full report and images)
-    #report.saveAllResults(resultsPath)
+            # Save the report (text file)
+            report.saveReport(resultsPath)
+
+            # Save all results (summary, full report and images)
+            #report.saveAllResults(resultsPath)
 
 def machineryCommittee():
 
@@ -106,5 +116,5 @@ def machineryCommittee():
     #report.saveAllResults(resultsPath)
 
 if __name__ == "__main__":
-    #faceFecognition()
-    machineryCommittee()
+    faceFecognition()
+    #machineryCommittee()
