@@ -2,6 +2,7 @@
 import os
 import cv2
 import sys
+import gc
 
 from classes.auxiliary import Auxiliary
 from classes.face_recognition import FaceRecognition
@@ -30,19 +31,18 @@ testPath = dirPath + "/dataset/test/1/"
 resultsPath = dirPath + "/results/"
 """
 
-algs = [Eigenfaces(), Fisherfaces(), LBPH(), SIFT(), SURF()]
 algNames = ["Eigenfaces", "Fisherfaces", "LBPH", "SIFT", "SURF"]
 
-trainPath = "/home/kelvin/Desktop/FaceRecognition/Train/"
-testPath  = "/home/kelvin/Desktop/FaceRecognition/Test/"
-resultsPath = "/home/kelvin/Desktop/FaceRecognition/Results/"
+trainPath = "/home/kelvin/Desktop/FaceRecognition/Tests/TREINAMENTO/BASE"
+testPath  = "/home/kelvin/Desktop/FaceRecognition/Tests/TESTE/TESTEVIDEO"
+resultsPath = "/home/kelvin/Desktop/FaceRecognition/Tests/RESULTS/"
 
 def faceFecognition():
 
     global trainPath, testPath, resultsPath
 
     # Algorithms loop
-    for algsIndex in xrange(0, len(algs)):
+    for algsIndex in xrange(4, 5):
         # Train folder loop
         for trainIndex in xrange(1, 7):
             # Test folder loop
@@ -51,8 +51,19 @@ def faceFecognition():
                 # Create the auxiliary object
                 auxiliary = Auxiliary(sizeX=100, sizeY=100, interpolation=cv2.INTER_CUBIC)
 
+                print algNames[algsIndex] + ": Train: " + str(trainIndex) + ": Test: " + str(testIndex)
+
                 # Create the algorithm object
-                algorithm = algs[algsIndex]
+                if algsIndex == 0:
+                    algorithm = Eigenfaces()
+                elif algsIndex == 1:
+                    algorithm = Fisherfaces()
+                elif algsIndex == 2:
+                    algorithm = LBPH()
+                elif algsIndex == 3:
+                    algorithm = SIFT()
+                elif algsIndex == 4:
+                    algorithm = SURF()
                 #algorithm = Eigenfaces()
                 #algorithm = Fisherfaces()
                 #algorithm = LBPH()
@@ -72,13 +83,20 @@ def faceFecognition():
                 report = Report(faceRecog)
 
                 # Print the results
-                report.printResults()
+                #report.printResults()
 
                 # Save the report (text file)
-                report.saveReport(resultsPath + algNames[algsIndex] + "/")
+                report.saveReport(resultsPath + algNames[algsIndex] + "/" + str(trainIndex) + "/")
 
                 # Save all results (summary, full report and images)
                 #report.saveAllResults(resultsPath)
+
+                del auxiliary
+                del algorithm
+                del faceRecog
+                del report
+                
+                gc.collect()
 
 def machineryCommittee():
 
@@ -92,16 +110,15 @@ def machineryCommittee():
             # Create the auxiliary object
             auxiliary = Auxiliary(sizeX=100, sizeY=100, interpolation=cv2.INTER_CUBIC)
 
+            print "Train: " + str(trainIndex) + ": Test: " + str(testIndex)
+
             # Create the algorithm object
-            algorithms = algs
-            """
             algorithms = []
             algorithms.append( Eigenfaces() )
             algorithms.append( Fisherfaces() )
             algorithms.append( LBPH() )
             algorithms.append( SIFT() )
             algorithms.append( SURF() )
-            """
 
             # Set the weights based on the algorithms list order
             #weights = [10, 10, 10, 10, 10]
@@ -123,14 +140,23 @@ def machineryCommittee():
             report = Report(machineryCommittee)
 
             # Print the results
-            report.printResults()
+            #report.printResults()
 
             # Save the report (text file)
-            report.saveReport(resultsPath)
+            report.saveReport(resultsPath + "COMITE/" + str(trainIndex) + "/")
 
             # Save all results (summary, full report and images)
             #report.saveAllResults(resultsPath)
 
+            del auxiliary
+            del algorithms
+            del voting
+            del machineryCommittee
+            del report
+            
+            gc.collect()
+
+
 if __name__ == "__main__":
-    faceFecognition()
-    #machineryCommittee()
+    #faceFecognition()
+    machineryCommittee()
