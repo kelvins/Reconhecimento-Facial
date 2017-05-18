@@ -81,7 +81,10 @@ class SIFT:
 
         # Based on the matches vector we create the results vector that represents how many points this test image are similar to each image in the training set
         for match in matches:
-            results[match.imgIdx] += 1
+            if match.imgIdx >= 0 and match.imgIdx < len(results):
+                results[match.imgIdx] += 1
+            else:
+                print "Error invalid index"
 
         # Index receives the position of the maximum value in the results vector (it means that this is the most similar image)
         index = results.index(max(results))
