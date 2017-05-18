@@ -89,6 +89,9 @@ class SIFT:
         # Calculate the confidence based on the number of matches and the max result
         # The confidence range is: 0 - 100
         # The closer to zero higher is the confidence
-        confidence = 100.0 - ((float(max(results)) * 100.0) / float(len(matches)))
+        if len(matches) > 0:
+            confidence = 100.0 - ((float(max(results)) * 100.0) / float(len(matches)))
+        else:
+            confidence = 0.0
 
         return self.labels[index], confidence
