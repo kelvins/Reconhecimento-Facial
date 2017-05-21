@@ -33,70 +33,80 @@ resultsPath = dirPath + "/results/"
 
 algNames = ["Eigenfaces", "Fisherfaces", "LBPH", "SIFT", "SURF"]
 
+initialThreshold = [1200,  400,  20,  2,  2]
+finalThreshold   = [1800, 1000, 140, 80, 80]
+stepThreshold    = [   5,    5,   2,  2,  2]
+
 trainPath = "/home/kelvin/Desktop/FaceRecognition/Tests/TREINAMENTO/BASE"
 testPath  = "/home/kelvin/Desktop/FaceRecognition/Tests/TESTE/TESTEVIDEO"
-resultsPath = "/home/kelvin/Desktop/FaceRecognition/Tests/RESULTS/"
+resultsPath = "/home/kelvin/Desktop/FaceRecognition/Tests/RESULTS2/"
+
+#LBPH 20 - 140 - 1
+#EIGENFACES 1200 - 1800 - 5
+#FISHERFACES 400 - 1000 - 5
 
 def faceFecognition():
 
     global trainPath, testPath, resultsPath
 
     # Algorithms loop
-    for algsIndex in xrange(4, 5):
+    for algsIndex in xrange(0, 5):
         # Train folder loop
         for trainIndex in xrange(1, 7):
             # Test folder loop
             for testIndex in xrange(1, 13):
+                # For each threshold
+                for threshold in xrange(initialThreshold[algsIndex], finalThreshold[algsIndex]+1, stepThreshold[algsIndex]):
 
-                # Create the auxiliary object
-                auxiliary = Auxiliary(sizeX=100, sizeY=100, interpolation=cv2.INTER_CUBIC)
+                    # Create the auxiliary object
+                    auxiliary = Auxiliary(sizeX=100, sizeY=100, interpolation=cv2.INTER_CUBIC)
 
-                print algNames[algsIndex] + ": Train: " + str(trainIndex) + ": Test: " + str(testIndex)
+                    print algNames[algsIndex] + ": Train: " + str(trainIndex) + ": Test: " + str(testIndex)
 
-                # Create the algorithm object
-                if algsIndex == 0:
-                    algorithm = Eigenfaces()
-                elif algsIndex == 1:
-                    algorithm = Fisherfaces()
-                elif algsIndex == 2:
-                    algorithm = LBPH()
-                elif algsIndex == 3:
-                    algorithm = SIFT()
-                elif algsIndex == 4:
-                    algorithm = SURF()
-                #algorithm = Eigenfaces()
-                #algorithm = Fisherfaces()
-                #algorithm = LBPH()
-                #algorithm = SIFT()
-                #algorithm = SURF()
+                    # Create the algorithm object
+                    if algsIndex == 0:
+                        algorithm = Eigenfaces()
+                    elif algsIndex == 1:
+                        algorithm = Fisherfaces()
+                    elif algsIndex == 2:
+                        algorithm = LBPH()
+                    elif algsIndex == 3:
+                        algorithm = SIFT()
+                    elif algsIndex == 4:
+                        algorithm = SURF()
+                    #algorithm = Eigenfaces()
+                    #algorithm = Fisherfaces()
+                    #algorithm = LBPH()
+                    #algorithm = SIFT()
+                    #algorithm = SURF()
 
-                # Create the face recognition object
-                faceRecog = FaceRecognition(algorithm, auxiliary)
+                    # Create the face recognition object
+                    faceRecog = FaceRecognition(algorithm, auxiliary, threshold)
 
-                # Train the algorithm
-                faceRecog.train(trainPath + str(trainIndex) + "/")
+                    # Train the algorithm
+                    faceRecog.train(trainPath + str(trainIndex) + "/")
 
-                # Try to recognize the faces
-                faceRecog.recognizeFaces(testPath + str(testIndex) + "/")
+                    # Try to recognize the faces
+                    faceRecog.recognizeFaces(testPath + str(testIndex) + "/")
 
-                # Create the report object
-                report = Report(faceRecog)
+                    # Create the report object
+                    report = Report(faceRecog)
 
-                # Print the results
-                #report.printResults()
+                    # Print the results
+                    #report.printResults()
 
-                # Save the report (text file)
-                report.saveReport(resultsPath + algNames[algsIndex] + "/" + str(trainIndex) + "/")
+                    # Save the report (text file)
+                    report.saveReport(resultsPath + algNames[algsIndex] + "/" + str(trainIndex) + "/" + str(testIndex) + "/")
 
-                # Save all results (summary, full report and images)
-                #report.saveAllResults(resultsPath)
+                    # Save all results (summary, full report and images)
+                    #report.saveAllResults(resultsPath)
 
-                del auxiliary
-                del algorithm
-                del faceRecog
-                del report
-                
-                gc.collect()
+                    del auxiliary
+                    del algorithm
+                    del faceRecog
+                    del report
+
+                    gc.collect()
 
 def machineryCommittee():
 
@@ -153,7 +163,7 @@ def machineryCommittee():
             del voting
             del machineryCommittee
             del report
-            
+
             gc.collect()
 
 
