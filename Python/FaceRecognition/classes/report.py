@@ -132,6 +132,10 @@ class Report:
 
         # If the path is not empty use it in the filename
         if path != "":
+            # If the path does not exist, create it
+            if not os.path.exists(path):
+                os.makedirs(path)
+
             if path.endswith(".txt"):
                 fileName = path
             elif path.endswith("/"):
