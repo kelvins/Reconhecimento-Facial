@@ -58,7 +58,7 @@ class Report:
         content += "\nRecognized Faces: "   + str(self.object.getRecognized())
         content += "\nUnrecognized Faces: " + str(self.object.getUnrecognized())
         content += "\nNon Faces: "          + str(self.object.getNonFaces())
-        
+
         content += "\nRecognition Rate - Recognized / Total Face Images"
         totalFaceImages = float(self.object.getRecognized() + self.object.getUnrecognized())
         # Avoid division by zero
@@ -132,7 +132,9 @@ class Report:
 
         # If the path is not empty use it in the filename
         if path != "":
-            if path.endswith("/"):
+            if path.endswith(".txt"):
+                fileName = path
+            elif path.endswith("/"):
                 fileName = path + fileName
             else:
                 fileName = path + "/" + fileName
