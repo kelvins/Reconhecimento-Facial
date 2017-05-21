@@ -13,7 +13,7 @@ class SIFT:
         """
         Set the default values
         """
-        
+
         # If the parameter is invalid get its default value
         if nfeatures < 0:
             nfeatures = 0
@@ -48,7 +48,7 @@ class SIFT:
 
             # Detects and computes the keypoints and descriptors using the sift algorithm
             keypoints, descriptors = self.faceRec.detectAndCompute(image, None)
-    
+
             # Creates an numpy array
             clusters = np.array([descriptors])
 
@@ -69,13 +69,13 @@ class SIFT:
 
         # Detects and computes the keypoints and descriptors using the sift algorithm
         keypoints, descriptors = self.faceRec.detectAndCompute(image, None)
-    
+
         # Get all matches based on the descriptors
         matches = self.matcher.match(descriptors)
 
         # Order by distance
         matches = sorted(matches, key = lambda x:x.distance)
-    
+
         # Creates a results vector to store the number of similar points for each image on the training set
         results = [0]*len(self.labels)
 
@@ -85,6 +85,7 @@ class SIFT:
                 results[match.imgIdx] += 1
             else:
                 print "Error invalid index"
+                sys.exit()
 
         # Index receives the position of the maximum value in the results vector (it means that this is the most similar image)
         index = results.index(max(results))
