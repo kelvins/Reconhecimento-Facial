@@ -7,7 +7,7 @@ import gc
 from classes.auxiliary import Auxiliary
 from classes.face_recognition import FaceRecognition
 from classes.voting import Voting
-from classes.machinery_committee import MachineryCommittee
+from classes.ensemble import Ensemble
 from classes.report import Report
 
 from algorithms.eigenfaces import Eigenfaces
@@ -32,14 +32,14 @@ resultsPath = dirPath + "/results/"
 """
 
 algNames = ["Eigenfaces", "Fisherfaces", "LBPH", "SIFT", "SURF"]
-
+"""
 initialThreshold = [1200,  400,  20,  2,  2]
 finalThreshold   = [1800, 1000, 140, 80, 80]
 stepThreshold    = [   5,    5,   2,  2,  2]
-
+"""
 trainPath = "/home/kelvins/Desktop/Reconhecimento-Facial/Python/Dataset/Train/BASE"
 testPath  = "/home/kelvins/Desktop/Reconhecimento-Facial/Python/Dataset/Test/VIDEO"
-resultsPath = "/home/kelvins/Desktop/Reconhecimento-Facial/Python/Dataset/Results"
+resultsPath = "/home/kelvins/Desktop/Reconhecimento-Facial/Python/Dataset/Results/20170522_Ensembles/Majority"
 
 #LBPH 20 - 140 - 1
 #EIGENFACES 1200 - 1800 - 5
@@ -108,65 +108,73 @@ def faceFecognition():
 
                     gc.collect()
 
-def machineryCommittee():
+def ensemble():
 
     global trainPath, testPath, resultsPath
 
-    # Train folder loop
-    for trainIndex in xrange(1, 7):
-        # Test folder loop
-        for testIndex in xrange(1, 13):
+    weights = []
+    weights.append([60, 10, 10, 10, 10])
+    weights.append([10, 60, 10, 10, 10])
+    weights.append([10, 10, 60, 10, 10])
+    weights.append([10, 10, 10, 60, 10])
+    weights.append([10, 10, 10, 10, 60])
 
-            # Create the auxiliary object
-            auxiliary = Auxiliary(sizeX=100, sizeY=100, interpolation=cv2.INTER_CUBIC)
+    for weight in weights:
+        # Train folder loop
+        for trainIndex in xrange(1, 7):
+            # Test folder loop
+            for testIndex in xrange(1, 13):
 
-            print "Train: " + str(trainIndex) + ": Test: " + str(testIndex)
+                # Create the auxiliary object
+                auxiliary = Auxiliary(sizeX=100, sizeY=100, interpolation=cv2.INTER_CUBIC)
 
-            # Create the algorithm object
-            algorithms = []
-            algorithms.append( Eigenfaces() )
-            algorithms.append( Fisherfaces() )
-            algorithms.append( LBPH() )
-            algorithms.append( SIFT() )
-            algorithms.append( SURF() )
+                print "Train: " + str(trainIndex) + ": Test: " + str(testIndex)
 
-            # Set the weights based on the algorithms list order
-            #weights = [10, 10, 10, 10, 10]
+                # Create the algorithm object
+                algorithms = []
+                algorithms.append( Eigenfaces() )
+                algorithms.append( Fisherfaces() )
+                algorithms.append( LBPH() )
+                algorithms.append( SIFT() )
+                algorithms.append( SURF() )
 
-            # Create the voting object setting the WEIGHTED as the voting scheme
-            #voting = Voting(Voting.WEIGHTED, weights)
-            voting = Voting()
+                # Set the weights based on the algorithms list order
+                #weights = [10, 10, 10, 10, 10]
 
-            # Create the face recognition object
-            machineryCommittee = MachineryCommittee(algorithms, auxiliary, voting)
+                # Create the voting object setting the WEIGHTED as the voting scheme
+                voting = Voting(Voting.WEIGHTED, weight)
+                #voting = Voting()
 
-            # Train the algorithm
-            machineryCommittee.train(trainPath + str(trainIndex) + "/")
+                # Create the ensemble object
+                ensemble = Ensemble(algorithms, auxiliary, voting)
 
-            # Try to recognize the faces
-            machineryCommittee.recognizeFaces(testPath + str(testIndex) + "/")
+                # Train the algorithm
+                ensemble.train(trainPath + str(trainIndex) + "/")
 
-            # Create the report object
-            report = Report(machineryCommittee)
+                # Try to recognize the faces
+                ensemble.recognizeFaces(testPath + str(testIndex) + "/")
 
-            # Print the results
-            #report.printResults()
+                # Create the report object
+                report = Report(ensemble)
 
-            # Save the report (text file)
-            report.saveReport(resultsPath + "COMITE/" + str(trainIndex) + "/")
+                # Print the results
+                #report.printResults()
 
-            # Save all results (summary, full report and images)
-            #report.saveAllResults(resultsPath)
+                # Save the report (text file)
+                report.saveReport(resultsPath + "/" + str(trainIndex) + "/")
 
-            del auxiliary
-            del algorithms
-            del voting
-            del machineryCommittee
-            del report
+                # Save all results (summary, full report and images)
+                #report.saveAllResults(resultsPath)
 
-            gc.collect()
+                del auxiliary
+                del algorithms
+                del voting
+                del ensemble
+                del report
+
+                gc.collect()
 
 
 if __name__ == "__main__":
-    faceFecognition()
-    #machineryCommittee()
+    #faceFecognition()
+    ensemble()

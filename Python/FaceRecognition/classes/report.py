@@ -6,7 +6,7 @@ import time
 
 from voting import Voting
 from face_recognition import FaceRecognition
-from machinery_committee import MachineryCommittee
+from ensemble import Ensemble
 
 class Report:
     """
@@ -15,7 +15,7 @@ class Report:
 
     def __init__(self, object):
         """
-        Get the object (FaceRecognition or MachineryCommittee)
+        Get the object (FaceRecognition or Ensemble)
         """
     	self.object = object
 
@@ -26,8 +26,8 @@ class Report:
         """
         if isinstance(self.object, FaceRecognition):
             content = "Face Recognition (single algorithm)"
-        elif isinstance(self.object, MachineryCommittee):
-            content = "Machinery Committee (multiple algorithms)"
+        elif isinstance(self.object, Ensemble):
+            content = "Ensemble (multiple algorithms)"
 
         content += "\n\nDate/Time: " + time.strftime("%d/%m/%Y %H:%M:%S")
         content += "\nTrain Path: " + self.object.getTrainPath()
@@ -41,8 +41,8 @@ class Report:
             else:
                 content += "\nThreshold Not Used."
 
-        # For the machinery committee class get the name of all algorithms
-        elif isinstance(self.object, MachineryCommittee):
+        # For the Ensemble class get the name of all algorithms
+        elif isinstance(self.object, Ensemble):
             content += "\nVoting Scheme: " + self.object.getVoting().getVotingSchemeName()
             weights = self.object.getVoting().getWeights()
 
@@ -97,7 +97,7 @@ class Report:
 
             if isinstance(self.object, FaceRecognition):
                 content += ": With confidence: " + str(predictConfidence[index])
-            elif isinstance(self.object, MachineryCommittee):
+            elif isinstance(self.object, Ensemble):
                 content += ": Predicted Subjects: " + ', '.join(map(str, predictConfidence[index]))
 
             content += ": File name: " + testFileNames[index]
@@ -196,7 +196,7 @@ class Report:
 
             if isinstance(self.object, FaceRecognition):
                 label += "Confidence" + delimiter + str(predictConfidence[index])
-            elif isinstance(self.object, MachineryCommittee):
+            elif isinstance(self.object, Ensemble):
                 label += "Voting" + delimiter + self.object.getVoting().getVotingSchemeName()
 
             label += ".png"

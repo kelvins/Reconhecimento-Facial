@@ -8,9 +8,9 @@ import numpy as np
 from voting import Voting
 from auxiliary import Auxiliary
 
-class MachineryCommittee:
+class Ensemble:
     """
-    Class that provides an interface for the MachineryCommittee
+    Class that provides an interface for the Ensemble
     """
 
     def __init__(self, fralgorithms=[], auxiliary=Auxiliary(), voting=Voting()):
@@ -159,8 +159,8 @@ class MachineryCommittee:
 
             # Store the predicted results to be used in the report
             self.predictSubjectIds.append( result )
-            
-            # As we don't work with confidences in machinery committee
+
+            # As we don't work with confidences in ensemble
             # We can store the subjectID list to check which algorithm has predicted which subject
             self.predictConfidence.append( subjectID )
 

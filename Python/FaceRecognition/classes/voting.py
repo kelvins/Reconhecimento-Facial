@@ -1,7 +1,7 @@
 
 class Voting:
     """
-    Class the provides voting methods for the committee machine.
+    Class the provides voting methods for the ensemble.
     """
 
     MAJORITY, WEIGHTED = range(2)

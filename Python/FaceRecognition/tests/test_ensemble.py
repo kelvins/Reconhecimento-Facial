@@ -5,7 +5,7 @@ sys.path.append('../classes')
 sys.path.append('../algorithms')
 from report import Report
 from auxiliary import Auxiliary
-from machinery_committee import MachineryCommittee
+from ensemble import Ensemble
 from eigenfaces import Eigenfaces
 
 class ReportSummaryTest(unittest.TestCase):
