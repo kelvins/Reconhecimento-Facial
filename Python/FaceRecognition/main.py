@@ -39,7 +39,7 @@ stepThreshold    = [   5,    5,   2,  2,  2]
 """
 trainPath = "/home/kelvins/Desktop/Reconhecimento-Facial/Python/Dataset/Train/BASE"
 testPath  = "/home/kelvins/Desktop/Reconhecimento-Facial/Python/Dataset/Test/VIDEO"
-resultsPath = "/home/kelvins/Desktop/Reconhecimento-Facial/Python/Dataset/Results/20170522_Ensembles/Majority"
+resultsPath = "/home/kelvins/Desktop/Reconhecimento-Facial/Python/Dataset/Results/2017052501_Ensembles/Weighted"
 
 #LBPH 20 - 140 - 1
 #EIGENFACES 1200 - 1800 - 5
@@ -113,11 +113,14 @@ def ensemble():
     global trainPath, testPath, resultsPath
 
     weights = []
-    weights.append([60, 10, 10, 10, 10])
-    weights.append([10, 60, 10, 10, 10])
-    weights.append([10, 10, 60, 10, 10])
-    weights.append([10, 10, 10, 60, 10])
-    weights.append([10, 10, 10, 10, 60])
+    # We can't set a higher value
+    # For example: [60, 10, 10, 10, 10]
+    # the result will always be the result of eigenfaces
+    weights.append([20, 10, 10, 10, 10])
+    weights.append([10, 20, 10, 10, 10])
+    weights.append([10, 10, 20, 10, 10])
+    weights.append([10, 10, 10, 20, 10])
+    weights.append([10, 10, 10, 10, 20])
 
     for weight in weights:
         # Train folder loop
@@ -161,7 +164,7 @@ def ensemble():
                 #report.printResults()
 
                 # Save the report (text file)
-                report.saveReport(resultsPath + "/" + str(trainIndex) + "/")
+                report.saveReport(resultsPath + "_" + '_'.join(map(str, weight)) "/" + str(trainIndex) + "/")
 
                 # Save all results (summary, full report and images)
                 #report.saveAllResults(resultsPath)
