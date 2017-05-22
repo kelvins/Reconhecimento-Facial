@@ -43,4 +43,4 @@ class Eigenfaces:
             sys.exit()
 
         # Return the subject ID (label) and the confidence
-        return self.faceRec.predict( image ) 
+        return self.faceRec.predict( image )

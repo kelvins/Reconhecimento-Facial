@@ -37,9 +37,9 @@ initialThreshold = [1200,  400,  20,  2,  2]
 finalThreshold   = [1800, 1000, 140, 80, 80]
 stepThreshold    = [   5,    5,   2,  2,  2]
 
-trainPath = "/home/kelvin/Desktop/FaceRecognition/Tests/TREINAMENTO/BASE"
-testPath  = "/home/kelvin/Desktop/FaceRecognition/Tests/TESTE/TESTEVIDEO"
-resultsPath = "/home/kelvin/Desktop/FaceRecognition/Tests/RESULTS2/"
+trainPath = "/home/kelvins/Desktop/Reconhecimento-Facial/Python/Dataset/Train/BASE"
+testPath  = "/home/kelvins/Desktop/Reconhecimento-Facial/Python/Dataset/Test/VIDEO"
+resultsPath = "/home/kelvins/Desktop/Reconhecimento-Facial/Python/Dataset/Results"
 
 #LBPH 20 - 140 - 1
 #EIGENFACES 1200 - 1800 - 5
@@ -168,5 +168,5 @@ def machineryCommittee():
 
 
 if __name__ == "__main__":
-    #faceFecognition()
-    machineryCommittee()
+    faceFecognition()
+    #machineryCommittee()
