@@ -3,7 +3,7 @@
 import cv2
 import os
 import time
-import Image
+from PIL import Image
 import numpy as np
 
 class Auxiliary:
