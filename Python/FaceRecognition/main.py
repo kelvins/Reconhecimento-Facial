@@ -39,7 +39,7 @@ stepThreshold    = [   5,    5,   2,  2,  2]
 """
 trainPath = "/home/kelvins/Desktop/Reconhecimento-Facial/Python/Dataset/Train/BASE"
 testPath  = "/home/kelvins/Desktop/Reconhecimento-Facial/Python/Dataset/Test/VIDEO"
-resultsPath = "/home/kelvins/Desktop/Reconhecimento-Facial/Python/Dataset/Results/2017052501_Ensembles"
+resultsPath = "/home/kelvins/Desktop/Reconhecimento-Facial/Python/Dataset/Results/2017052501_Ensembles2"
 
 #LBPH 20 - 140 - 1
 #EIGENFACES 1200 - 1800 - 5
@@ -111,7 +111,7 @@ def faceFecognition():
 def ensemble():
 
     global trainPath, testPath, resultsPath
-
+    """
     weights = []
     # We can't set a higher value
     # For example: [60, 10, 10, 10, 10]
@@ -131,23 +131,37 @@ def ensemble():
     print len(weights)
 
     for i in xrange(0, len(weights)):
+    """
+    algs = []
+    algs.append([Eigenfaces(), LBPH(), Fisherfaces()])
+    algs.append([Eigenfaces(), LBPH(), SIFT()])
+    algs.append([Eigenfaces(), LBPH(), SURF()])
+    algs.append([Eigenfaces(), Fisherfaces(), SIFT()])
+    algs.append([Eigenfaces(), Fisherfaces(), SURF()])
+    algs.append([Eigenfaces(), SIFT(), SURF()])
+    algs.append([LBPH(), Fisherfaces(), SIFT()])
+    algs.append([LBPH(), Fisherfaces(), SURF()])
+    algs.append([LBPH(), SIFT(), SURF()])
+    algs.append([Fisherfaces(), SIFT(), SURF()])
+
+    for alg in algs:
         # Create the auxiliary object
         auxiliary = Auxiliary(sizeX=100, sizeY=100, interpolation=cv2.INTER_CUBIC)
 
         # Create the algorithm object
-        algorithms = []
-        algorithms.append( Eigenfaces() )
-        algorithms.append( LBPH() )
-        algorithms.append( Fisherfaces() )
-        algorithms.append( SIFT() )
-        algorithms.append( SURF() )
+        algorithms = alg
+        #algorithms.append( Eigenfaces() )
+        #algorithms.append( LBPH() )
+        #algorithms.append( Fisherfaces() )
+        #algorithms.append( SIFT() )
+        #algorithms.append( SURF() )
 
         # Set the weights based on the algorithms list order
         #weights = [10, 10, 10, 10, 10]
 
         # Create the voting object setting the WEIGHTED as the voting scheme
-        voting = Voting(Voting.WEIGHTED, weights[i])
-        #voting = Voting()
+        #voting = Voting(Voting.WEIGHTED, weights[i])
+        voting = Voting()
 
         # Create the ensemble object
         ensemble = Ensemble(algorithms, auxiliary, voting)
@@ -167,19 +181,16 @@ def ensemble():
         # Save the report (text file)
         report.saveReport(resultsPath + "/")
 
-        perc = (float(i) * 100.0) / float(len(weights))
-        output = "["
-        if perc < 10:
-            output += "0"
-        output += "{0:.2f}".format(perc) + " %] [" + ', '.join(map(str, weights[i])) + "]"
-
+        output = ""
+        for x in xrange(0, len(algorithms)):
+            output += algorithms[x].getAlgorithmName() + ", "
         # Avoid division by zero
         totalFaceImages = float(ensemble.getRecognized() + ensemble.getUnrecognized())
-        if totalFaceImages > 0.0:cd
+        if totalFaceImages > 0.0:
             accuracy = (float(ensemble.getRecognized()) / totalFaceImages) * 100.0
-            output += " Accuracy: " + "{0:.2f}".format(accuracy) + " %"
+            output += "Accuracy: " + "{0:.2f}".format(accuracy) + " %"
         else:
-            output += " Accuracy: 0.0 %"
+            output += "Accuracy: 0.0 %"
 
         print output
 
@@ -192,7 +203,6 @@ def ensemble():
         del ensemble
         del report
 
-        del perc
         del totalFaceImages
         del output
         del accuracy
