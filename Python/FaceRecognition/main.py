@@ -39,7 +39,7 @@ stepThreshold    = [   5,    5,   2,  2,  2]
 """
 trainPath = "/home/kelvins/Desktop/Reconhecimento-Facial/Python/Dataset/Train/BASE"
 testPath  = "/home/kelvins/Desktop/Reconhecimento-Facial/Python/Dataset/Test/VIDEO"
-resultsPath = "/home/kelvins/Desktop/Reconhecimento-Facial/Python/Dataset/Results/2017052501_Ensembles/Weighted"
+resultsPath = "/home/kelvins/Desktop/Reconhecimento-Facial/Python/Dataset/Results/2017052501_Ensembles"
 
 #LBPH 20 - 140 - 1
 #EIGENFACES 1200 - 1800 - 5
@@ -116,66 +116,88 @@ def ensemble():
     # We can't set a higher value
     # For example: [60, 10, 10, 10, 10]
     # the result will always be the result of eigenfaces
-    weights.append([20, 10, 10, 10, 10])
-    weights.append([10, 20, 10, 10, 10])
-    weights.append([10, 10, 20, 10, 10])
-    weights.append([10, 10, 10, 20, 10])
-    weights.append([10, 10, 10, 10, 20])
 
-    for weight in weights:
-        # Train folder loop
-        for trainIndex in xrange(1, 7):
-            # Test folder loop
-            for testIndex in xrange(1, 13):
+    for i in xrange(0, 31, 5):
+        weights.append([i, 10, 10, 10, 10])
+    for i in xrange(0, 31, 5):
+        weights.append([10, i, 10, 10, 10])
+    for i in xrange(0, 31, 5):
+        weights.append([10, 10, i, 10, 10])
+    for i in xrange(0, 31, 5):
+        weights.append([10, 10, 10, i, 10])
+    for i in xrange(0, 31, 5):
+        weights.append([10, 10, 10, 10, i])
 
-                # Create the auxiliary object
-                auxiliary = Auxiliary(sizeX=100, sizeY=100, interpolation=cv2.INTER_CUBIC)
+    print len(weights)
 
-                print "Train: " + str(trainIndex) + ": Test: " + str(testIndex)
+    for i in xrange(0, len(weights)):
+        # Create the auxiliary object
+        auxiliary = Auxiliary(sizeX=100, sizeY=100, interpolation=cv2.INTER_CUBIC)
 
-                # Create the algorithm object
-                algorithms = []
-                algorithms.append( Eigenfaces() )
-                algorithms.append( Fisherfaces() )
-                algorithms.append( LBPH() )
-                algorithms.append( SIFT() )
-                algorithms.append( SURF() )
+        # Create the algorithm object
+        algorithms = []
+        algorithms.append( Eigenfaces() )
+        algorithms.append( LBPH() )
+        algorithms.append( Fisherfaces() )
+        algorithms.append( SIFT() )
+        algorithms.append( SURF() )
 
-                # Set the weights based on the algorithms list order
-                #weights = [10, 10, 10, 10, 10]
+        # Set the weights based on the algorithms list order
+        #weights = [10, 10, 10, 10, 10]
 
-                # Create the voting object setting the WEIGHTED as the voting scheme
-                voting = Voting(Voting.WEIGHTED, weight)
-                #voting = Voting()
+        # Create the voting object setting the WEIGHTED as the voting scheme
+        voting = Voting(Voting.WEIGHTED, weights[i])
+        #voting = Voting()
 
-                # Create the ensemble object
-                ensemble = Ensemble(algorithms, auxiliary, voting)
+        # Create the ensemble object
+        ensemble = Ensemble(algorithms, auxiliary, voting)
 
-                # Train the algorithm
-                ensemble.train(trainPath + str(trainIndex) + "/")
+        # Train the algorithm
+        ensemble.train(trainPath + "6/")
 
-                # Try to recognize the faces
-                ensemble.recognizeFaces(testPath + str(testIndex) + "/")
+        # Try to recognize the faces
+        ensemble.recognizeFaces(testPath + "11/")
 
-                # Create the report object
-                report = Report(ensemble)
+        # Create the report object
+        report = Report(ensemble)
 
-                # Print the results
-                #report.printResults()
+        # Print the results
+        #report.printResults()
 
-                # Save the report (text file)
-                report.saveReport(resultsPath + "_" + '_'.join(map(str, weight)) "/" + str(trainIndex) + "/")
+        # Save the report (text file)
+        report.saveReport(resultsPath + "/")
 
-                # Save all results (summary, full report and images)
-                #report.saveAllResults(resultsPath)
+        perc = (float(i) * 100.0) / float(len(weights))
+        output = "["
+        if perc < 10:
+            output += "0"
+        output += "{0:.2f}".format(perc) + " %] [" + ', '.join(map(str, weights[i])) + "]"
 
-                del auxiliary
-                del algorithms
-                del voting
-                del ensemble
-                del report
+        # Avoid division by zero
+        totalFaceImages = float(ensemble.getRecognized() + ensemble.getUnrecognized())
+        if totalFaceImages > 0.0:cd
+            accuracy = (float(ensemble.getRecognized()) / totalFaceImages) * 100.0
+            output += " Accuracy: " + "{0:.2f}".format(accuracy) + " %"
+        else:
+            output += " Accuracy: 0.0 %"
 
-                gc.collect()
+        print output
+
+        # Save all results (summary, full report and images)
+        #report.saveAllResults(resultsPath)
+
+        del auxiliary
+        del algorithms
+        del voting
+        del ensemble
+        del report
+
+        del perc
+        del totalFaceImages
+        del output
+        del accuracy
+
+        gc.collect()
 
 
 if __name__ == "__main__":
