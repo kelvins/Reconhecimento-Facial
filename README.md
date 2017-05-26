@@ -23,7 +23,7 @@ Basicamente foram utilizados os algoritmos:
 
 Trabalho desenvolvido por **Kelvin Salton do Prado** sob orientação do professor **Dr. Norton Trevisan Roman**.
 
-**Nota**: a maior parte dos algoritmos desenvolvidos fazem uso da biblioteca **[OpenCV](http://opencv.org)**. Instruções sobre a instalação do **OpenCV** no **Ubuntu** podem ser encontradas **[aqui](https://github.com/kelvins/Reconhecimento-Facial/wiki/Instalando-OpenCV-no-Ubuntu)**.
+**Nota**: a maior parte dos algoritmos desenvolvidos fazem uso da biblioteca **[OpenCV](http://opencv.org)**. Instruções sobre a instalação da **OpenCV** no **Ubuntu** podem ser encontradas **[aqui](https://github.com/kelvins/Reconhecimento-Facial/wiki/Instalando-OpenCV-no-Ubuntu)**.
 
 ----------------------
 
