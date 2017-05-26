@@ -1,0 +1,378 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>classes.face_recognition &mdash; FaceRecognition 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="FaceRecognition 1.0.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> FaceRecognition
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FaceRecognition</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>classes.face_recognition</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for classes.face_recognition</h1><div class="highlight"><pre>
+<span></span>
+<span class="c1"># Import the libraries</span>
+<span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">auxiliary</span> <span class="k">import</span> <span class="n">Auxiliary</span>
+
+<div class="viewcode-block" id="FaceRecognition"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition">[docs]</a><span class="k">class</span> <span class="nc">FaceRecognition</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class that provides an interface to the face recognition algorithms</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="n">auxiliary</span><span class="o">=</span><span class="n">Auxiliary</span><span class="p">(),</span> <span class="n">threshold</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+    	<span class="bp">self</span><span class="o">.</span><span class="n">algorithm</span> <span class="o">=</span> <span class="n">algorithm</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">auxiliary</span> <span class="o">=</span> <span class="n">auxiliary</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="n">threshold</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+<div class="viewcode-block" id="FaceRecognition.reset"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Reset all lists</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trainImages</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trainLabels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># Reset the paths</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trainPath</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">testPath</span>  <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="c1"># Reset the results</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resetResults</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="FaceRecognition.resetResults"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.resetResults">[docs]</a>    <span class="k">def</span> <span class="nf">resetResults</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Reset all results</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recognized</span>   <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unrecognized</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nonFaces</span>     <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># Reset the report</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">predictSubjectIds</span>   <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">predictConfidence</span>   <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Reset test results</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">testImages</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">testLabels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">testFileNames</span> <span class="o">=</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="FaceRecognition.setAuxiliary"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.setAuxiliary">[docs]</a>    <span class="k">def</span> <span class="nf">setAuxiliary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">auxiliary</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">auxiliary</span> <span class="o">=</span> <span class="n">auxiliary</span></div>
+
+<div class="viewcode-block" id="FaceRecognition.getAuxiliary"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.getAuxiliary">[docs]</a>    <span class="k">def</span> <span class="nf">getAuxiliary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">auxiliary</span></div>
+
+<div class="viewcode-block" id="FaceRecognition.setAlgorithm"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.setAlgorithm">[docs]</a>    <span class="k">def</span> <span class="nf">setAlgorithm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">algorithm</span> <span class="o">=</span> <span class="n">algorithm</span></div>
+
+<div class="viewcode-block" id="FaceRecognition.getAlgorithm"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.getAlgorithm">[docs]</a>    <span class="k">def</span> <span class="nf">getAlgorithm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">algorithm</span></div>
+
+<div class="viewcode-block" id="FaceRecognition.setThreshold"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.setThreshold">[docs]</a>    <span class="k">def</span> <span class="nf">setThreshold</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">threshold</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="n">threshold</span></div>
+
+<div class="viewcode-block" id="FaceRecognition.getThreshold"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.getThreshold">[docs]</a>    <span class="k">def</span> <span class="nf">getThreshold</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span></div>
+
+<div class="viewcode-block" id="FaceRecognition.getPredictedSubjectIds"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.getPredictedSubjectIds">[docs]</a>    <span class="k">def</span> <span class="nf">getPredictedSubjectIds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">predictSubjectIds</span></div>
+
+<div class="viewcode-block" id="FaceRecognition.getPredictedConfidence"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.getPredictedConfidence">[docs]</a>    <span class="k">def</span> <span class="nf">getPredictedConfidence</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">predictConfidence</span></div>
+
+<div class="viewcode-block" id="FaceRecognition.getTestImages"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.getTestImages">[docs]</a>    <span class="k">def</span> <span class="nf">getTestImages</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">testImages</span></div>
+
+<div class="viewcode-block" id="FaceRecognition.getTestLabels"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.getTestLabels">[docs]</a>    <span class="k">def</span> <span class="nf">getTestLabels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">testLabels</span></div>
+
+<div class="viewcode-block" id="FaceRecognition.getTestFileNames"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.getTestFileNames">[docs]</a>    <span class="k">def</span> <span class="nf">getTestFileNames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">testFileNames</span></div>
+
+<div class="viewcode-block" id="FaceRecognition.getTrainImages"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.getTrainImages">[docs]</a>    <span class="k">def</span> <span class="nf">getTrainImages</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainImages</span></div>
+
+<div class="viewcode-block" id="FaceRecognition.getTrainLabels"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.getTrainLabels">[docs]</a>    <span class="k">def</span> <span class="nf">getTrainLabels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainLabels</span></div>
+
+<div class="viewcode-block" id="FaceRecognition.getRecognized"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.getRecognized">[docs]</a>    <span class="k">def</span> <span class="nf">getRecognized</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">recognized</span></div>
+
+<div class="viewcode-block" id="FaceRecognition.getUnrecognized"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.getUnrecognized">[docs]</a>    <span class="k">def</span> <span class="nf">getUnrecognized</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">unrecognized</span></div>
+
+<div class="viewcode-block" id="FaceRecognition.getNonFaces"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.getNonFaces">[docs]</a>    <span class="k">def</span> <span class="nf">getNonFaces</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nonFaces</span></div>
+
+<div class="viewcode-block" id="FaceRecognition.getTrainPath"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.getTrainPath">[docs]</a>    <span class="k">def</span> <span class="nf">getTrainPath</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainPath</span></div>
+
+<div class="viewcode-block" id="FaceRecognition.getTestPath"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.getTestPath">[docs]</a>    <span class="k">def</span> <span class="nf">getTestPath</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">testPath</span></div>
+
+<div class="viewcode-block" id="FaceRecognition.train"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trainPath</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function responsible for train the face recognition algorithm based on the image files from the trainPath.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+        <span class="c1"># Store the train path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trainPath</span> <span class="o">=</span> <span class="n">trainPath</span>
+
+        <span class="k">if</span> <span class="n">trainPath</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="nb">print</span> <span class="s2">&quot;The train path is empty.&quot;</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+
+        <span class="c1"># Load all imagens and labels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trainImages</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainLabels</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">auxiliary</span><span class="o">.</span><span class="n">loadAllImagesForTrain</span><span class="p">(</span><span class="n">trainPath</span><span class="p">)</span>
+
+        <span class="c1"># Train the algorithm</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">algorithm</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trainImages</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainLabels</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FaceRecognition.recognizeFaces"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.recognizeFaces">[docs]</a>    <span class="k">def</span> <span class="nf">recognizeFaces</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">testPath</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function that tries to recognize each face (path passed by parameter).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resetResults</span><span class="p">()</span>
+
+        <span class="c1"># Store the test path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">testPath</span> <span class="o">=</span> <span class="n">testPath</span>
+
+        <span class="k">if</span> <span class="n">testPath</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="nb">print</span> <span class="s2">&quot;The test path is empty.&quot;</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+
+        <span class="c1"># Load all imagens and labels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">testImages</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">testLabels</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">testFileNames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">auxiliary</span><span class="o">.</span><span class="n">loadAllImagesForTest</span><span class="p">(</span><span class="n">testPath</span><span class="p">)</span>
+
+        <span class="c1"># For each image</span>
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">testImages</span><span class="p">)):</span>
+            <span class="c1"># Predict</span>
+            <span class="n">subjectID</span><span class="p">,</span> <span class="n">confidence</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">algorithm</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">testImages</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+
+            <span class="c1"># Store the predicted results to be used in the report</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">predictSubjectIds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">subjectID</span> <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">predictConfidence</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">confidence</span> <span class="p">)</span>
+
+            <span class="c1"># Approach not using threshold (face images manually classified)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">testLabels</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">subjectID</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">testLabels</span><span class="p">[</span><span class="n">index</span><span class="p">]:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">recognized</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">unrecognized</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">nonFaces</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="c1"># Approach using threshold (don&#39;t know what is nonface)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">confidence</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">recognized</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">unrecognized</span> <span class="o">+=</span> <span class="mi">1</span></div></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, KelvinSP.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
