@@ -1,0 +1,431 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>main &mdash; FaceRecognition 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="FaceRecognition 1.0.0 documentation" href="../index.html"/>
+        <link rel="up" title="Module code" href="index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> FaceRecognition
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FaceRecognition</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>main</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for main</h1><div class="highlight"><pre>
+<span></span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">gc</span>
+
+<span class="kn">from</span> <span class="nn">classes.auxiliary</span> <span class="k">import</span> <span class="n">Auxiliary</span>
+<span class="kn">from</span> <span class="nn">classes.face_recognition</span> <span class="k">import</span> <span class="n">FaceRecognition</span>
+<span class="kn">from</span> <span class="nn">classes.voting</span> <span class="k">import</span> <span class="n">Voting</span>
+<span class="kn">from</span> <span class="nn">classes.ensemble</span> <span class="k">import</span> <span class="n">Ensemble</span>
+<span class="kn">from</span> <span class="nn">classes.report</span> <span class="k">import</span> <span class="n">Report</span>
+
+<span class="kn">from</span> <span class="nn">algorithms.eigenfaces</span> <span class="k">import</span> <span class="n">Eigenfaces</span>
+<span class="kn">from</span> <span class="nn">algorithms.fisherfaces</span> <span class="k">import</span> <span class="n">Fisherfaces</span>
+<span class="kn">from</span> <span class="nn">algorithms.lbph</span> <span class="k">import</span> <span class="n">LBPH</span>
+<span class="kn">from</span> <span class="nn">algorithms.sift</span> <span class="k">import</span> <span class="n">SIFT</span>
+<span class="kn">from</span> <span class="nn">algorithms.surf</span> <span class="k">import</span> <span class="n">SURF</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"># Set the paths to train, test and store the results</span>
+<span class="sd">realPath = os.path.realpath(__file__)</span>
+<span class="sd">dirPath  = os.path.dirname(realPath)</span>
+
+<span class="sd"># Define the path to the training files/folder</span>
+<span class="sd">trainPath = dirPath + &quot;/dataset/train/1/&quot;</span>
+
+<span class="sd"># Define the path to the test folder</span>
+<span class="sd">testPath = dirPath + &quot;/dataset/test/1/&quot;</span>
+
+<span class="sd"># Define the path to the results folder</span>
+<span class="sd">resultsPath = dirPath + &quot;/results/&quot;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">algNames</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Eigenfaces&quot;</span><span class="p">,</span> <span class="s2">&quot;Fisherfaces&quot;</span><span class="p">,</span> <span class="s2">&quot;LBPH&quot;</span><span class="p">,</span> <span class="s2">&quot;SIFT&quot;</span><span class="p">,</span> <span class="s2">&quot;SURF&quot;</span><span class="p">]</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">initialThreshold = [1200,  400,  20,  2,  2]</span>
+<span class="sd">finalThreshold   = [1800, 1000, 140, 80, 80]</span>
+<span class="sd">stepThreshold    = [   5,    5,   2,  2,  2]</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">trainPath</span> <span class="o">=</span> <span class="s2">&quot;/home/kelvins/Desktop/Reconhecimento-Facial/Python/Dataset/Train/BASE&quot;</span>
+<span class="n">testPath</span>  <span class="o">=</span> <span class="s2">&quot;/home/kelvins/Desktop/Reconhecimento-Facial/Python/Dataset/Test/VIDEO&quot;</span>
+<span class="n">resultsPath</span> <span class="o">=</span> <span class="s2">&quot;/home/kelvins/Desktop/Reconhecimento-Facial/Python/Dataset/Results/2017052501_Ensembles2&quot;</span>
+
+<span class="c1">#LBPH 20 - 140 - 1</span>
+<span class="c1">#EIGENFACES 1200 - 1800 - 5</span>
+<span class="c1">#FISHERFACES 400 - 1000 - 5</span>
+
+<div class="viewcode-block" id="faceFecognition"><a class="viewcode-back" href="../main.html#main.faceFecognition">[docs]</a><span class="k">def</span> <span class="nf">faceFecognition</span><span class="p">():</span>
+
+    <span class="k">global</span> <span class="n">trainPath</span><span class="p">,</span> <span class="n">testPath</span><span class="p">,</span> <span class="n">resultsPath</span>
+
+    <span class="c1"># Algorithms loop</span>
+    <span class="k">for</span> <span class="n">algsIndex</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>
+        <span class="c1"># Train folder loop</span>
+        <span class="k">for</span> <span class="n">trainIndex</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">):</span>
+            <span class="c1"># Test folder loop</span>
+            <span class="k">for</span> <span class="n">testIndex</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">13</span><span class="p">):</span>
+                <span class="c1"># For each threshold</span>
+                <span class="k">for</span> <span class="n">threshold</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">initialThreshold</span><span class="p">[</span><span class="n">algsIndex</span><span class="p">],</span> <span class="n">finalThreshold</span><span class="p">[</span><span class="n">algsIndex</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">stepThreshold</span><span class="p">[</span><span class="n">algsIndex</span><span class="p">]):</span>
+
+                    <span class="c1"># Create the auxiliary object</span>
+                    <span class="n">auxiliary</span> <span class="o">=</span> <span class="n">Auxiliary</span><span class="p">(</span><span class="n">sizeX</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">sizeY</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="n">cv2</span><span class="o">.</span><span class="n">INTER_CUBIC</span><span class="p">)</span>
+
+                    <span class="nb">print</span> <span class="n">algNames</span><span class="p">[</span><span class="n">algsIndex</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;: Train: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">trainIndex</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;: Test: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">testIndex</span><span class="p">)</span>
+
+                    <span class="c1"># Create the algorithm object</span>
+                    <span class="k">if</span> <span class="n">algsIndex</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">algorithm</span> <span class="o">=</span> <span class="n">Eigenfaces</span><span class="p">()</span>
+                    <span class="k">elif</span> <span class="n">algsIndex</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">algorithm</span> <span class="o">=</span> <span class="n">Fisherfaces</span><span class="p">()</span>
+                    <span class="k">elif</span> <span class="n">algsIndex</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                        <span class="n">algorithm</span> <span class="o">=</span> <span class="n">LBPH</span><span class="p">()</span>
+                    <span class="k">elif</span> <span class="n">algsIndex</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                        <span class="n">algorithm</span> <span class="o">=</span> <span class="n">SIFT</span><span class="p">()</span>
+                    <span class="k">elif</span> <span class="n">algsIndex</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                        <span class="n">algorithm</span> <span class="o">=</span> <span class="n">SURF</span><span class="p">()</span>
+                    <span class="c1">#algorithm = Eigenfaces()</span>
+                    <span class="c1">#algorithm = Fisherfaces()</span>
+                    <span class="c1">#algorithm = LBPH()</span>
+                    <span class="c1">#algorithm = SIFT()</span>
+                    <span class="c1">#algorithm = SURF()</span>
+
+                    <span class="c1"># Create the face recognition object</span>
+                    <span class="n">faceRecog</span> <span class="o">=</span> <span class="n">FaceRecognition</span><span class="p">(</span><span class="n">algorithm</span><span class="p">,</span> <span class="n">auxiliary</span><span class="p">,</span> <span class="n">threshold</span><span class="p">)</span>
+
+                    <span class="c1"># Train the algorithm</span>
+                    <span class="n">faceRecog</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">trainPath</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">trainIndex</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span>
+
+                    <span class="c1"># Try to recognize the faces</span>
+                    <span class="n">faceRecog</span><span class="o">.</span><span class="n">recognizeFaces</span><span class="p">(</span><span class="n">testPath</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">testIndex</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span>
+
+                    <span class="c1"># Create the report object</span>
+                    <span class="n">report</span> <span class="o">=</span> <span class="n">Report</span><span class="p">(</span><span class="n">faceRecog</span><span class="p">)</span>
+
+                    <span class="c1"># Print the results</span>
+                    <span class="c1">#report.printResults()</span>
+
+                    <span class="c1"># Save the report (text file)</span>
+                    <span class="n">report</span><span class="o">.</span><span class="n">saveReport</span><span class="p">(</span><span class="n">resultsPath</span> <span class="o">+</span> <span class="n">algNames</span><span class="p">[</span><span class="n">algsIndex</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">trainIndex</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">testIndex</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span>
+
+                    <span class="c1"># Save all results (summary, full report and images)</span>
+                    <span class="c1">#report.saveAllResults(resultsPath)</span>
+
+                    <span class="k">del</span> <span class="n">auxiliary</span>
+                    <span class="k">del</span> <span class="n">algorithm</span>
+                    <span class="k">del</span> <span class="n">faceRecog</span>
+                    <span class="k">del</span> <span class="n">report</span>
+
+                    <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ensemble"><a class="viewcode-back" href="../main.html#main.ensemble">[docs]</a><span class="k">def</span> <span class="nf">ensemble</span><span class="p">():</span>
+
+    <span class="k">global</span> <span class="n">trainPath</span><span class="p">,</span> <span class="n">testPath</span><span class="p">,</span> <span class="n">resultsPath</span>
+
+    <span class="n">weights</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># We can&#39;t set a higher value</span>
+    <span class="c1"># For example: [60, 10, 10, 10, 10]</span>
+    <span class="c1"># the result will always be the result of eigenfaces</span>
+
+    <span class="n">weights</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">40</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+    <span class="n">weights</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+    <span class="n">weights</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+    <span class="n">weights</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+    <span class="n">weights</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">40</span><span class="p">])</span>
+
+    <span class="c1">#print len(weights)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">weights</span><span class="p">)):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        algs = []</span>
+<span class="sd">        algs.append([Eigenfaces(), LBPH(), Fisherfaces()])</span>
+<span class="sd">        algs.append([Eigenfaces(), LBPH(), SIFT()])</span>
+<span class="sd">        algs.append([Eigenfaces(), LBPH(), SURF()])</span>
+<span class="sd">        algs.append([Eigenfaces(), Fisherfaces(), SIFT()])</span>
+<span class="sd">        algs.append([Eigenfaces(), Fisherfaces(), SURF()])</span>
+<span class="sd">        algs.append([Eigenfaces(), SIFT(), SURF()])</span>
+<span class="sd">        algs.append([LBPH(), Fisherfaces(), SIFT()])</span>
+<span class="sd">        algs.append([LBPH(), Fisherfaces(), SURF()])</span>
+<span class="sd">        algs.append([LBPH(), SIFT(), SURF()])</span>
+<span class="sd">        algs.append([Fisherfaces(), Sy  IFT(), SURF()])</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1">#for alg in algs:</span>
+        <span class="c1"># Create the auxiliary object</span>
+        <span class="n">auxiliary</span> <span class="o">=</span> <span class="n">Auxiliary</span><span class="p">(</span><span class="n">sizeX</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">sizeY</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="n">cv2</span><span class="o">.</span><span class="n">INTER_CUBIC</span><span class="p">)</span>
+
+        <span class="c1"># Create the algorithm object</span>
+        <span class="n">algorithms</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">algorithms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">Eigenfaces</span><span class="p">()</span> <span class="p">)</span>
+        <span class="n">algorithms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">LBPH</span><span class="p">()</span> <span class="p">)</span>
+        <span class="n">algorithms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">Fisherfaces</span><span class="p">()</span> <span class="p">)</span>
+        <span class="n">algorithms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">SIFT</span><span class="p">()</span> <span class="p">)</span>
+        <span class="n">algorithms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">SURF</span><span class="p">()</span> <span class="p">)</span>
+
+        <span class="c1"># Set the weights based on the algorithms list order</span>
+        <span class="c1">#weights = [10, 10, 10, 10, 10]</span>
+
+        <span class="c1"># Create the voting object setting the WEIGHTED as the voting scheme</span>
+        <span class="n">voting</span> <span class="o">=</span> <span class="n">Voting</span><span class="p">(</span><span class="n">Voting</span><span class="o">.</span><span class="n">WEIGHTED</span><span class="p">,</span> <span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="c1">#voting = Voting()</span>
+
+        <span class="c1"># Create the ensemble object</span>
+        <span class="n">ensemble</span> <span class="o">=</span> <span class="n">Ensemble</span><span class="p">(</span><span class="n">algorithms</span><span class="p">,</span> <span class="n">auxiliary</span><span class="p">,</span> <span class="n">voting</span><span class="p">)</span>
+
+        <span class="c1"># Train the algorithm</span>
+        <span class="n">ensemble</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">trainPath</span> <span class="o">+</span> <span class="s2">&quot;6/&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Try to recognize the faces</span>
+        <span class="n">ensemble</span><span class="o">.</span><span class="n">recognizeFaces</span><span class="p">(</span><span class="n">testPath</span> <span class="o">+</span> <span class="s2">&quot;11/&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Create the report object</span>
+        <span class="n">report</span> <span class="o">=</span> <span class="n">Report</span><span class="p">(</span><span class="n">ensemble</span><span class="p">)</span>
+
+        <span class="c1"># Print the results</span>
+        <span class="c1">#report.printResults()</span>
+
+        <span class="c1"># Save the report (text file)</span>
+        <span class="n">report</span><span class="o">.</span><span class="n">saveReport</span><span class="p">(</span><span class="n">resultsPath</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span>
+
+        <span class="n">output</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+        <span class="c1">#for x in xrange(0, len(algorithms)):</span>
+        <span class="c1">#    output += algorithms[x].getAlgorithmName() + &quot;, &quot;</span>
+        <span class="c1"># Avoid division by zero</span>
+        <span class="n">totalFaceImages</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ensemble</span><span class="o">.</span><span class="n">getRecognized</span><span class="p">()</span> <span class="o">+</span> <span class="n">ensemble</span><span class="o">.</span><span class="n">getUnrecognized</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">totalFaceImages</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="n">accuracy</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">ensemble</span><span class="o">.</span><span class="n">getRecognized</span><span class="p">())</span> <span class="o">/</span> <span class="n">totalFaceImages</span><span class="p">)</span> <span class="o">*</span> <span class="mf">100.0</span>
+            <span class="n">output</span> <span class="o">+=</span> <span class="s2">&quot;Accuracy: &quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{0:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">accuracy</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; %&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">output</span> <span class="o">+=</span> <span class="s2">&quot;Accuracy: 0.0 %&quot;</span>
+
+        <span class="nb">print</span> <span class="n">output</span>
+
+        <span class="c1"># Save all results (summary, full report and images)</span>
+        <span class="c1">#report.saveAllResults(resultsPath)</span>
+
+        <span class="k">del</span> <span class="n">auxiliary</span>
+        <span class="k">del</span> <span class="n">algorithms</span>
+        <span class="k">del</span> <span class="n">voting</span>
+        <span class="k">del</span> <span class="n">ensemble</span>
+        <span class="k">del</span> <span class="n">report</span>
+
+        <span class="k">del</span> <span class="n">totalFaceImages</span>
+        <span class="k">del</span> <span class="n">output</span>
+        <span class="k">del</span> <span class="n">accuracy</span>
+
+        <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">faceFecognition</span><span class="p">()</span>
+    <span class="c1">#ensemble()</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, KelvinSP.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
