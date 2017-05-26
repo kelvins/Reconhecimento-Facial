@@ -19,6 +19,9 @@ class FaceRecognition:
         self.reset()
 
     def reset(self):
+        """
+        Reset all values, including train and test paths
+        """
         # Reset all lists
         self.trainImages = []
         self.trainLabels = []
@@ -29,6 +32,9 @@ class FaceRecognition:
         self.resetResults()
 
     def resetResults(self):
+        """
+        Reset all results
+        """
         # Reset all results
         self.recognized   = 0
         self.unrecognized = 0
@@ -43,8 +49,8 @@ class FaceRecognition:
         self.nonFacesAboveThreshold     = 0
 
         # Reset the report
-        self.predictSubjectIds   = []
-        self.predictConfidence   = []
+        self.predictSubjectIds = []
+        self.predictConfidence = []
 
         # Reset test results
         self.testImages = []

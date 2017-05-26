@@ -7,6 +7,7 @@ import time
 from voting import Voting
 from face_recognition import FaceRecognition
 from ensemble import Ensemble
+from auxiliary import Auxiliary
 
 class Report:
     """
@@ -18,6 +19,7 @@ class Report:
         Get the object (FaceRecognition or Ensemble)
         """
     	self.object = object
+        self.auxiliary = Auxiliary()
 
     def generateReportSummary(self):
         """
@@ -55,18 +57,45 @@ class Report:
                         content += " - Weight: " + str(weights[index])
 
         content += "\n\nTotal Images Analyzed: " + str(len(self.object.getTestFileNames()))
-        content += "\nRecognized Faces: "   + str(self.object.getRecognized())
-        content += "\nUnrecognized Faces: " + str(self.object.getUnrecognized())
-        content += "\nNon Faces: "          + str(self.object.getNonFaces())
+
+        totalFaceImages = 0.0
+        accuracy2 = 0.0
+
+        if isinstance(self.object, FaceRecognition):
+            if self.object.getThreshold() >= 0:
+                totalFaceImages = self.object.getRecognizedBelowThreshold() + self.object.getUnrecognizedBelowThreshold()
+                # Calculate the accuracy using only the results below the threshold
+                accuracy2 = self.auxiliary.calcAccuracy(self.object.getRecognizedBelowThreshold(), totalFaceImages)
+
+                totalFaceImages += self.object.getRecognizedAboveThreshold() + self.object.getUnrecognizedAboveThreshold()
+                # Calculate the accuracy using the total number of face images
+                accuracy = self.auxiliary.calcAccuracy(self.object.getRecognizedBelowThreshold(), totalFaceImages)
+
+                content += "\nRecognized Faces Below Threshold: "   + str(self.object.getRecognizedBelowThreshold())
+                content += "\nUnrecognized Faces Below Threshold: " + str(self.object.getUnrecognizedBelowThreshold())
+                content += "\nNon Faces Below Threshold: "          + str(self.object.getNonFacesBelowThreshold())
+                content += "\nRecognized Faces Above Threshold: "   + str(self.object.getRecognizedAboveThreshold())
+                content += "\nUnrecognized Faces Above Threshold: " + str(self.object.getUnrecognizedAboveThreshold())
+                content += "\nNon Faces Above Threshold: "          + str(self.object.getNonFacesAboveThreshold())
+            else:
+                totalFaceImages = float(self.object.getRecognized() + self.object.getUnrecognized())
+                accuracy = self.auxiliary.calcAccuracy(self.object.getRecognized(), totalFaceImages)
+                content += "\nRecognized Faces: "   + str(self.object.getRecognized())
+                content += "\nUnrecognized Faces: " + str(self.object.getUnrecognized())
+                content += "\nNon Faces: "          + str(self.object.getNonFaces())
+        else:
+            totalFaceImages = float(self.object.getRecognized() + self.object.getUnrecognized())
+            accuracy = self.auxiliary.calcAccuracy(self.object.getRecognized(), totalFaceImages)
+            content += "\nRecognized Faces: "   + str(self.object.getRecognized())
+            content += "\nUnrecognized Faces: " + str(self.object.getUnrecognized())
+            content += "\nNon Faces: "          + str(self.object.getNonFaces())
 
         content += "\nRecognition Rate - Recognized / Total Face Images"
-        totalFaceImages = float(self.object.getRecognized() + self.object.getUnrecognized())
-        # Avoid division by zero
-        if totalFaceImages > 0.0:
-            accuracy = (float(self.object.getRecognized()) / totalFaceImages) * 100.0
-            content += "\nAccuracy: " + str(accuracy) + " %"
-        else:
-            content += "\nAccuracy: 0.0 %"
+        content += "\nAccuracy: " + str(accuracy) + " %"
+
+        if isinstance(self.object, FaceRecognition):
+            if self.object.getThreshold() >= 0:
+                content += "\nAccuracy Only Below Threshold: " + str(accuracy2) + " %"
 
         sizeX, sizeY = self.object.getAuxiliary().getDefaultSize()
         content += "\n\nDefault Size Images: " + str(sizeX) + "x" + str(sizeY)
@@ -144,7 +173,7 @@ class Report:
                 fileName = path + "/" + fileName
 
         # Save the text file
-        self.object.getAuxiliary().writeTextFile(content, fileName)
+        self.auxiliary.writeTextFile(content, fileName)
 
     def saveAllResults(self, path=""):
         """
@@ -209,7 +238,7 @@ class Report:
                     image2 = trainImages[i]
 
             # Concatenate the images
-            image = self.object.getAuxiliary().concatenateImages(image1, image2)
+            image = self.auxiliary.concatenateImages(image1, image2)
 
             # Get the correct fileName
             fileName = ""
@@ -223,4 +252,4 @@ class Report:
             fileName += label
 
             # Save the concatenated image in the correct folder
-            self.object.getAuxiliary().saveImage(fileName, image)
+            self.auxiliary.saveImage(fileName, image)
