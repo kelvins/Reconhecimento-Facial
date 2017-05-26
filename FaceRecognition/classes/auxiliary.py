@@ -72,6 +72,16 @@ class Auxiliary:
             return "cv2.INTER_NEAREST"
         return ""
 
+    def calcAccuracy(self, totalFaceImages, recognizedImages):
+        """
+        Calculates the accuracy (percentage)
+        """
+        # Avoid division by zero
+        if totalFaceImages > 0:
+            return (float(recognizedImages) / float(totalFaceImages)) * 100.0
+        else:
+            return 0.0
+
     def writeTextFile(self, content, fileName):
         """
         Write the content to a text file based on the file name
