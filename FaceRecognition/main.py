@@ -111,57 +111,53 @@ def faceFecognition():
 def ensemble():
 
     global trainPath, testPath, resultsPath
-    """
+
     weights = []
     # We can't set a higher value
     # For example: [60, 10, 10, 10, 10]
     # the result will always be the result of eigenfaces
 
-    for i in xrange(0, 31, 5):
-        weights.append([i, 10, 10, 10, 10])
-    for i in xrange(0, 31, 5):
-        weights.append([10, i, 10, 10, 10])
-    for i in xrange(0, 31, 5):
-        weights.append([10, 10, i, 10, 10])
-    for i in xrange(0, 31, 5):
-        weights.append([10, 10, 10, i, 10])
-    for i in xrange(0, 31, 5):
-        weights.append([10, 10, 10, 10, i])
+    weights.append([40, 10, 10, 10, 10])
+    weights.append([10, 40, 10, 10, 10])
+    weights.append([10, 10, 40, 10, 10])
+    weights.append([10, 10, 10, 40, 10])
+    weights.append([10, 10, 10, 10, 40])
 
-    print len(weights)
+    #print len(weights)
 
     for i in xrange(0, len(weights)):
-    """
-    algs = []
-    algs.append([Eigenfaces(), LBPH(), Fisherfaces()])
-    algs.append([Eigenfaces(), LBPH(), SIFT()])
-    algs.append([Eigenfaces(), LBPH(), SURF()])
-    algs.append([Eigenfaces(), Fisherfaces(), SIFT()])
-    algs.append([Eigenfaces(), Fisherfaces(), SURF()])
-    algs.append([Eigenfaces(), SIFT(), SURF()])
-    algs.append([LBPH(), Fisherfaces(), SIFT()])
-    algs.append([LBPH(), Fisherfaces(), SURF()])
-    algs.append([LBPH(), SIFT(), SURF()])
-    algs.append([Fisherfaces(), SIFT(), SURF()])
+        """
+        algs = []
+        algs.append([Eigenfaces(), LBPH(), Fisherfaces()])
+        algs.append([Eigenfaces(), LBPH(), SIFT()])
+        algs.append([Eigenfaces(), LBPH(), SURF()])
+        algs.append([Eigenfaces(), Fisherfaces(), SIFT()])
+        algs.append([Eigenfaces(), Fisherfaces(), SURF()])
+        algs.append([Eigenfaces(), SIFT(), SURF()])
+        algs.append([LBPH(), Fisherfaces(), SIFT()])
+        algs.append([LBPH(), Fisherfaces(), SURF()])
+        algs.append([LBPH(), SIFT(), SURF()])
+        algs.append([Fisherfaces(), Sy  IFT(), SURF()])
+        """
 
-    for alg in algs:
+        #for alg in algs:
         # Create the auxiliary object
         auxiliary = Auxiliary(sizeX=100, sizeY=100, interpolation=cv2.INTER_CUBIC)
 
         # Create the algorithm object
-        algorithms = alg
-        #algorithms.append( Eigenfaces() )
-        #algorithms.append( LBPH() )
-        #algorithms.append( Fisherfaces() )
-        #algorithms.append( SIFT() )
-        #algorithms.append( SURF() )
+        algorithms = []
+        algorithms.append( Eigenfaces() )
+        algorithms.append( LBPH() )
+        algorithms.append( Fisherfaces() )
+        algorithms.append( SIFT() )
+        algorithms.append( SURF() )
 
         # Set the weights based on the algorithms list order
         #weights = [10, 10, 10, 10, 10]
 
         # Create the voting object setting the WEIGHTED as the voting scheme
-        #voting = Voting(Voting.WEIGHTED, weights[i])
-        voting = Voting()
+        voting = Voting(Voting.WEIGHTED, weights[i])
+        #voting = Voting()
 
         # Create the ensemble object
         ensemble = Ensemble(algorithms, auxiliary, voting)
@@ -181,9 +177,9 @@ def ensemble():
         # Save the report (text file)
         report.saveReport(resultsPath + "/")
 
-        output = ""
-        for x in xrange(0, len(algorithms)):
-            output += algorithms[x].getAlgorithmName() + ", "
+        output = ', '.join(map(str, weights[i])) + " "
+        #for x in xrange(0, len(algorithms)):
+        #    output += algorithms[x].getAlgorithmName() + ", "
         # Avoid division by zero
         totalFaceImages = float(ensemble.getRecognized() + ensemble.getUnrecognized())
         if totalFaceImages > 0.0:
@@ -211,5 +207,5 @@ def ensemble():
 
 
 if __name__ == "__main__":
-    #faceFecognition()
-    ensemble()
+    faceFecognition()
+    #ensemble()

@@ -18,7 +18,7 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('/home/kelvins/Desktop/Reconhecimento-Facial/Python/FaceRecognition/'))
+sys.path.insert(0, os.path.abspath('/home/kelvins/Desktop/Reconhecimento-Facial/FaceRecognition/'))
 
 
 # -- General configuration ------------------------------------------------
