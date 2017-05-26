@@ -23,7 +23,7 @@ Basicamente foram utilizados os algoritmos:
 
 Trabalho desenvolvido por **Kelvin Salton do Prado** sob orientação do professor **Dr. Norton Trevisan Roman**.
 
-**Nota**: a maior parte dos algoritmos desenvolvidos fazem uso da biblioteca **[OpenCV](http://opencv.org)**.
+**Nota**: a maior parte dos algoritmos desenvolvidos fazem uso da biblioteca **[OpenCV](http://opencv.org)**. Instruções sobre a instalação do **OpenCV** no **Ubuntu** podem ser encontradas **[aqui](https://github.com/kelvins/Reconhecimento-Facial/wiki/Instalando-OpenCV-no-Ubuntu)**.
 
 ----------------------
 
@@ -45,7 +45,9 @@ Cabe aqui ressaltar que os algoritmos de detecção e reconhecimento facial util
 
 ### Documentação
 
-Uma documentação mais detalhada sobre os algoritmos desenvolvidos pode ser encontrada na **[Wiki](../../wiki)** do repositório.
+A documentação do projeto FaceRecognition pode ser acessada aqui: [![FaceRecognition Docs](https://img.shields.io/badge/documentation-FaceRecognition-blue.svg)](https://kelvins.github.io/Reconhecimento-Facial/build/html/index.html)
+
+Outros documentos relacionados aos demais códigos e ao repositório em geral podem ser encontrados na **[Wiki](../../wiki)**.
 
 ----------------------
 
