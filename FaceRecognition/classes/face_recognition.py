@@ -34,6 +34,14 @@ class FaceRecognition:
         self.unrecognized = 0
         self.nonFaces     = 0
 
+        # Reset all results (using threshold)
+        self.recognizedBelowThreshold   = 0
+        self.unrecognizedBelowThreshold = 0
+        self.nonFacesBelowThreshold     = 0
+        self.recognizedAboveThreshold   = 0
+        self.unrecognizedAboveThreshold = 0
+        self.nonFacesAboveThreshold     = 0
+
         # Reset the report
         self.predictSubjectIds   = []
         self.predictConfidence   = []
@@ -97,6 +105,24 @@ class FaceRecognition:
     def getTestPath(self):
         return self.testPath
 
+    def getRecognizedBelowThreshold(self):
+        return self.recognizedBelowThreshold
+
+    def getUnrecognizedBelowThreshold(self):
+        return self.unrecognizedBelowThreshold
+
+    def getNonFacesBelowThreshold(self):
+        return self.nonFacesBelowThreshold
+
+    def getRecognizedAboveThreshold(self):
+        return self.recognizedAboveThreshold
+
+    def getUnrecognizedAboveThreshold(self):
+        return self.unrecognizedAboveThreshold
+
+    def getNonFacesAboveThreshold(self):
+        return self.nonFacesAboveThreshold
+
     def train(self, trainPath):
         """
         Function responsible for train the face recognition algorithm based on the image files from the trainPath.
@@ -150,9 +176,23 @@ class FaceRecognition:
                         self.unrecognized += 1
                 else:
                     self.nonFaces += 1
-            # Approach using threshold (don't know what is nonface)
+            # Approach using threshold
             else:
+                # Compute results below threshold
                 if confidence <= self.threshold:
-                    self.recognized += 1
+                    if self.testLabels[index] >= 0:
+                        if subjectID == self.testLabels[index]:
+                            self.recognizedBelowThreshold += 1
+                        else:
+                            self.unrecognizedBelowThreshold += 1
+                    else:
+                        self.nonFacesBelowThreshold += 1
+                # Compute results above threshold
                 else:
-                    self.unrecognized += 1
+                    if self.testLabels[index] >= 0:
+                        if subjectID == self.testLabels[index]:
+                            self.recognizedAboveThreshold += 1
+                        else:
+                            self.unrecognizedAboveThreshold += 1
+                    else:
+                        self.nonFacesAboveThreshold += 1
