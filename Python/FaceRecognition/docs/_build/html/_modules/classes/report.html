@@ -1,0 +1,446 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>classes.report &mdash; FaceRecognition 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="FaceRecognition 1.0.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> FaceRecognition
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FaceRecognition</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>classes.report</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for classes.report</h1><div class="highlight"><pre>
+<span></span>
+<span class="c1"># Import the libraries</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">voting</span> <span class="k">import</span> <span class="n">Voting</span>
+<span class="kn">from</span> <span class="nn">face_recognition</span> <span class="k">import</span> <span class="n">FaceRecognition</span>
+<span class="kn">from</span> <span class="nn">ensemble</span> <span class="k">import</span> <span class="n">Ensemble</span>
+
+<div class="viewcode-block" id="Report"><a class="viewcode-back" href="../../classes.html#classes.report.Report">[docs]</a><span class="k">class</span> <span class="nc">Report</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class that provides an interface to generate reports</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the object (FaceRecognition or Ensemble)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    	<span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="o">=</span> <span class="nb">object</span>
+
+<div class="viewcode-block" id="Report.generateReportSummary"><a class="viewcode-back" href="../../classes.html#classes.report.Report.generateReportSummary">[docs]</a>    <span class="k">def</span> <span class="nf">generateReportSummary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate a report summary with informations about the test.</span>
+<span class="sd">        Return the content as a string.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="p">,</span> <span class="n">FaceRecognition</span><span class="p">):</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="s2">&quot;Face Recognition (single algorithm)&quot;</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="p">,</span> <span class="n">Ensemble</span><span class="p">):</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="s2">&quot;Ensemble (multiple algorithms)&quot;</span>
+
+        <span class="n">content</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Date/Time: &quot;</span> <span class="o">+</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">/%m/%Y %H:%M:%S&quot;</span><span class="p">)</span>
+        <span class="n">content</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Train Path: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getTrainPath</span><span class="p">()</span>
+        <span class="n">content</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Test Path: &quot;</span>  <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getTestPath</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+        <span class="c1"># For the face recognition class get only the name of the algorithm</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="p">,</span> <span class="n">FaceRecognition</span><span class="p">):</span>
+            <span class="n">content</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Algorithm: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getAlgorithm</span><span class="p">()</span><span class="o">.</span><span class="n">getAlgorithmName</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getThreshold</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">content</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Threshold Used: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getThreshold</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">content</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Threshold Not Used.&quot;</span>
+
+        <span class="c1"># For the Ensemble class get the name of all algorithms</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="p">,</span> <span class="n">Ensemble</span><span class="p">):</span>
+            <span class="n">content</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Voting Scheme: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getVoting</span><span class="p">()</span><span class="o">.</span><span class="n">getVotingSchemeName</span><span class="p">()</span>
+            <span class="n">weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getVoting</span><span class="p">()</span><span class="o">.</span><span class="n">getWeights</span><span class="p">()</span>
+
+            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getFRAlgorithms</span><span class="p">())):</span>
+                <span class="n">content</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Algorithm: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getFRAlgorithms</span><span class="p">()[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">getAlgorithmName</span><span class="p">()</span>
+                <span class="c1"># If it is using the WEIGHTED voting scheme</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getVoting</span><span class="p">()</span><span class="o">.</span><span class="n">getVotingScheme</span><span class="p">()</span> <span class="o">==</span> <span class="n">Voting</span><span class="o">.</span><span class="n">WEIGHTED</span><span class="p">:</span>
+                    <span class="c1"># If the index is valid for the weights list</span>
+                    <span class="k">if</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">weights</span><span class="p">):</span>
+                        <span class="n">content</span> <span class="o">+=</span> <span class="s2">&quot; - Weight: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">weights</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+
+        <span class="n">content</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Total Images Analyzed: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getTestFileNames</span><span class="p">()))</span>
+        <span class="n">content</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Recognized Faces: &quot;</span>   <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getRecognized</span><span class="p">())</span>
+        <span class="n">content</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Unrecognized Faces: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getUnrecognized</span><span class="p">())</span>
+        <span class="n">content</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Non Faces: &quot;</span>          <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getNonFaces</span><span class="p">())</span>
+
+        <span class="n">content</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Recognition Rate - Recognized / Total Face Images&quot;</span>
+        <span class="n">totalFaceImages</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getRecognized</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getUnrecognized</span><span class="p">())</span>
+        <span class="c1"># Avoid division by zero</span>
+        <span class="k">if</span> <span class="n">totalFaceImages</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="n">accuracy</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getRecognized</span><span class="p">())</span> <span class="o">/</span> <span class="n">totalFaceImages</span><span class="p">)</span> <span class="o">*</span> <span class="mf">100.0</span>
+            <span class="n">content</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Accuracy: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">accuracy</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; %&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">content</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Accuracy: 0.0 %&quot;</span>
+
+        <span class="n">sizeX</span><span class="p">,</span> <span class="n">sizeY</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getAuxiliary</span><span class="p">()</span><span class="o">.</span><span class="n">getDefaultSize</span><span class="p">()</span>
+        <span class="n">content</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Default Size Images: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sizeX</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;x&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sizeY</span><span class="p">)</span>
+        <span class="n">content</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Interpolation Method: &quot;</span>  <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getAuxiliary</span><span class="p">()</span><span class="o">.</span><span class="n">getInterpolationMethodName</span><span class="p">()</span>
+        <span class="n">content</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Supported Files: &quot;</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getAuxiliary</span><span class="p">()</span><span class="o">.</span><span class="n">getSupportedFiles</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">content</span></div>
+
+<div class="viewcode-block" id="Report.generateFullReport"><a class="viewcode-back" href="../../classes.html#classes.report.Report.generateFullReport">[docs]</a>    <span class="k">def</span> <span class="nf">generateFullReport</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate the full report.</span>
+<span class="sd">        Return the content containing the information about each predicted image.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Get the predicted results</span>
+        <span class="n">predictSubjectIds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getPredictedSubjectIds</span><span class="p">()</span>
+        <span class="n">predictConfidence</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getPredictedConfidence</span><span class="p">()</span>
+        <span class="c1"># Get the test information (labels and filenames)</span>
+        <span class="n">testLabels</span>    <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getTestLabels</span><span class="p">()</span>
+        <span class="n">testFileNames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getTestFileNames</span><span class="p">()</span>
+
+        <span class="n">content</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="c1"># Create each line based on the predicted subject IDs</span>
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">predictSubjectIds</span><span class="p">)):</span>
+            <span class="c1"># Format: 1: Expected subject: 3: Classified as subject: 2: With confidence: 4123.123123: File name: 1_3</span>
+            <span class="n">content</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">content</span> <span class="o">+=</span> <span class="s2">&quot;: Expected subject: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">testLabels</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+            <span class="n">content</span> <span class="o">+=</span> <span class="s2">&quot;: Classified as subject: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">predictSubjectIds</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="p">,</span> <span class="n">FaceRecognition</span><span class="p">):</span>
+                <span class="n">content</span> <span class="o">+=</span> <span class="s2">&quot;: With confidence: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">predictConfidence</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="p">,</span> <span class="n">Ensemble</span><span class="p">):</span>
+                <span class="n">content</span> <span class="o">+=</span> <span class="s2">&quot;: Predicted Subjects: &quot;</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">predictConfidence</span><span class="p">[</span><span class="n">index</span><span class="p">]))</span>
+
+            <span class="n">content</span> <span class="o">+=</span> <span class="s2">&quot;: File name: &quot;</span> <span class="o">+</span> <span class="n">testFileNames</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+            <span class="n">content</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+        <span class="k">return</span> <span class="n">content</span></div>
+
+<div class="viewcode-block" id="Report.printResults"><a class="viewcode-back" href="../../classes.html#classes.report.Report.printResults">[docs]</a>    <span class="k">def</span> <span class="nf">printResults</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function used to show the results</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span> <span class="s2">&quot;========================= Results =========================&quot;</span>
+        <span class="nb">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">generateReportSummary</span><span class="p">()</span>
+        <span class="nb">print</span> <span class="s2">&quot;===========================================================&quot;</span></div>
+
+<div class="viewcode-block" id="Report.saveReport"><a class="viewcode-back" href="../../classes.html#classes.report.Report.saveReport">[docs]</a>    <span class="k">def</span> <span class="nf">saveReport</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function used to automatically save the report in a defined folder.</span>
+<span class="sd">        Save only the text report not the images.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Generate the report content</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generateReportSummary</span><span class="p">()</span>
+        <span class="n">content</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">===========================================================</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">content</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generateFullReport</span><span class="p">()</span>
+
+        <span class="c1"># Make sure that none folder will have the same name</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># If the parameters were set include it in the folder name</span>
+        <span class="n">fileName</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y_%m_</span><span class="si">%d</span><span class="s2">_%H_%M_%S&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.txt&quot;</span>
+
+        <span class="c1"># If the path is not empty use it in the filename</span>
+        <span class="k">if</span> <span class="n">path</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="c1"># If the path does not exist, create it</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.txt&quot;</span><span class="p">):</span>
+                <span class="n">fileName</span> <span class="o">=</span> <span class="n">path</span>
+            <span class="k">elif</span> <span class="n">path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">):</span>
+                <span class="n">fileName</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="n">fileName</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">fileName</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">fileName</span>
+
+        <span class="c1"># Save the text file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getAuxiliary</span><span class="p">()</span><span class="o">.</span><span class="n">writeTextFile</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">fileName</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Report.saveAllResults"><a class="viewcode-back" href="../../classes.html#classes.report.Report.saveAllResults">[docs]</a>    <span class="k">def</span> <span class="nf">saveAllResults</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function used to automatically save the report in a defined folder.</span>
+<span class="sd">        Save the entire results, including the summary report, full report and all images.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># If the path is not empty use it in the filename</span>
+        <span class="k">if</span> <span class="n">path</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="n">path</span> <span class="o">+=</span> <span class="s2">&quot;/&quot;</span>
+
+        <span class="c1"># Defined the name of the new folder</span>
+        <span class="n">path</span> <span class="o">+=</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y_%m_</span><span class="si">%d</span><span class="s2">_%H_%M_%S&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
+
+        <span class="c1"># If the path does not exist, create it</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+        <span class="c1"># Save the report</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">saveReport</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+        <span class="c1"># Create 3 new folders</span>
+        <span class="n">recognizedFolder</span>   <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;Recognized/&quot;</span>
+        <span class="n">unrecognizedFolder</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;Unrecognized/&quot;</span>
+        <span class="n">nonfacesFolder</span>     <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;NonFaces/&quot;</span>
+
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">recognizedFolder</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">unrecognizedFolder</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">nonfacesFolder</span><span class="p">)</span>
+
+        <span class="c1"># The predicted results</span>
+        <span class="n">predictSubjectIds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getPredictedSubjectIds</span><span class="p">()</span>
+        <span class="n">predictConfidence</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getPredictedConfidence</span><span class="p">()</span>
+        <span class="c1"># The tests information</span>
+        <span class="n">testImages</span>    <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getTestImages</span><span class="p">()</span>
+        <span class="n">testLabels</span>    <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getTestLabels</span><span class="p">()</span>
+        <span class="n">testFileNames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getTestFileNames</span><span class="p">()</span>
+        <span class="c1"># The training information</span>
+        <span class="n">trainImages</span>   <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getTrainImages</span><span class="p">()</span>
+        <span class="n">trainLabels</span>   <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getTrainLabels</span><span class="p">()</span>
+
+        <span class="n">delimiter</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span>
+
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">predictSubjectIds</span><span class="p">)):</span>
+            <span class="c1"># Patter: 1_Expected_2_Classified_2_Confidence_40192.12938291.png</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="o">+</span> <span class="n">delimiter</span> <span class="o">+</span> <span class="s2">&quot;Expected&quot;</span> <span class="o">+</span> <span class="n">delimiter</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">testLabels</span><span class="p">[</span><span class="n">index</span><span class="p">])</span> <span class="o">+</span> <span class="n">delimiter</span>
+            <span class="n">label</span> <span class="o">+=</span> <span class="s2">&quot;Classified&quot;</span> <span class="o">+</span> <span class="n">delimiter</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">predictSubjectIds</span><span class="p">[</span><span class="n">index</span><span class="p">])</span> <span class="o">+</span> <span class="n">delimiter</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="p">,</span> <span class="n">FaceRecognition</span><span class="p">):</span>
+                <span class="n">label</span> <span class="o">+=</span> <span class="s2">&quot;Confidence&quot;</span> <span class="o">+</span> <span class="n">delimiter</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">predictConfidence</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="p">,</span> <span class="n">Ensemble</span><span class="p">):</span>
+                <span class="n">label</span> <span class="o">+=</span> <span class="s2">&quot;Voting&quot;</span> <span class="o">+</span> <span class="n">delimiter</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getVoting</span><span class="p">()</span><span class="o">.</span><span class="n">getVotingSchemeName</span><span class="p">()</span>
+
+            <span class="n">label</span> <span class="o">+=</span> <span class="s2">&quot;.png&quot;</span>
+
+            <span class="c1"># Find the image that matches based on the trainLabel and predictedSubjectIDs</span>
+            <span class="n">image1</span> <span class="o">=</span> <span class="n">testImages</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+            <span class="n">image2</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">trainLabels</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">trainLabels</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">predictSubjectIds</span><span class="p">[</span><span class="n">index</span><span class="p">]):</span>
+                    <span class="n">image2</span> <span class="o">=</span> <span class="n">trainImages</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+            <span class="c1"># Concatenate the images</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getAuxiliary</span><span class="p">()</span><span class="o">.</span><span class="n">concatenateImages</span><span class="p">(</span><span class="n">image1</span><span class="p">,</span> <span class="n">image2</span><span class="p">)</span>
+
+            <span class="c1"># Get the correct fileName</span>
+            <span class="n">fileName</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">testLabels</span><span class="p">[</span><span class="n">index</span><span class="p">])</span> <span class="o">==</span> <span class="s2">&quot;-1&quot;</span><span class="p">:</span>
+                <span class="n">fileName</span> <span class="o">=</span> <span class="n">nonfacesFolder</span>
+            <span class="k">elif</span> <span class="nb">str</span><span class="p">(</span><span class="n">testLabels</span><span class="p">[</span><span class="n">index</span><span class="p">])</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">predictSubjectIds</span><span class="p">[</span><span class="n">index</span><span class="p">]):</span>
+                <span class="n">fileName</span> <span class="o">=</span> <span class="n">recognizedFolder</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">fileName</span> <span class="o">=</span> <span class="n">unrecognizedFolder</span>
+
+            <span class="n">fileName</span> <span class="o">+=</span> <span class="n">label</span>
+
+            <span class="c1"># Save the concatenated image in the correct folder</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">getAuxiliary</span><span class="p">()</span><span class="o">.</span><span class="n">saveImage</span><span class="p">(</span><span class="n">fileName</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, KelvinSP.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

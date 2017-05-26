@@ -1,0 +1,448 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>classes.auxiliary &mdash; FaceRecognition 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="FaceRecognition 1.0.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> FaceRecognition
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FaceRecognition</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>classes.auxiliary</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for classes.auxiliary</h1><div class="highlight"><pre>
+<span></span>
+<span class="c1"># Import the libraries</span>
+<span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="k">import</span> <span class="n">Image</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<div class="viewcode-block" id="Auxiliary"><a class="viewcode-back" href="../../classes.html#classes.auxiliary.Auxiliary">[docs]</a><span class="k">class</span> <span class="nc">Auxiliary</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class that provides some auxiliary functions</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sizeX</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">sizeY</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="n">cv2</span><span class="o">.</span><span class="n">INTER_CUBIC</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the default values</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span> <span class="o">=</span> <span class="n">sizeX</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span> <span class="o">=</span> <span class="n">sizeY</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interpolation</span> <span class="o">=</span> <span class="n">interpolation</span>
+        <span class="c1"># INTER_CUBIC, INTER_AREA, INTER_LANCZOS4, INTER_LINEAR, INTER_NEAREST</span>
+
+        <span class="c1"># Declare all supported files</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">supportedFiles</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;png&quot;</span><span class="p">,</span> <span class="s2">&quot;jpg&quot;</span><span class="p">,</span> <span class="s2">&quot;jpeg&quot;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Auxiliary.setDefaultSize"><a class="viewcode-back" href="../../classes.html#classes.auxiliary.Auxiliary.setDefaultSize">[docs]</a>    <span class="k">def</span> <span class="nf">setDefaultSize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sizeX</span><span class="p">,</span> <span class="n">sizeY</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the default size for the imagens (default is 100x100)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">sizeX</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span> <span class="o">=</span> <span class="n">sizeX</span>
+        <span class="k">if</span> <span class="n">sizeY</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span> <span class="o">=</span> <span class="n">sizeY</span></div>
+
+<div class="viewcode-block" id="Auxiliary.getDefaultSize"><a class="viewcode-back" href="../../classes.html#classes.auxiliary.Auxiliary.getDefaultSize">[docs]</a>    <span class="k">def</span> <span class="nf">getDefaultSize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the default size defined (default is 100x100)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span></div>
+
+<div class="viewcode-block" id="Auxiliary.setSupportedFiles"><a class="viewcode-back" href="../../classes.html#classes.auxiliary.Auxiliary.setSupportedFiles">[docs]</a>    <span class="k">def</span> <span class="nf">setSupportedFiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">supportedFiles</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the default supportedFiles list (default is [&quot;png&quot;, &quot;jpg&quot;, &quot;jpeg&quot;])</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">supportedFiles</span> <span class="o">=</span> <span class="n">supportedFiles</span></div>
+
+<div class="viewcode-block" id="Auxiliary.getSupportedFiles"><a class="viewcode-back" href="../../classes.html#classes.auxiliary.Auxiliary.getSupportedFiles">[docs]</a>    <span class="k">def</span> <span class="nf">getSupportedFiles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the supportedFiles list (default is [&quot;png&quot;, &quot;jpg&quot;, &quot;jpeg&quot;])</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">supportedFiles</span></div>
+
+<div class="viewcode-block" id="Auxiliary.setInterpolation"><a class="viewcode-back" href="../../classes.html#classes.auxiliary.Auxiliary.setInterpolation">[docs]</a>    <span class="k">def</span> <span class="nf">setInterpolation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interpolation</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the default interpolation method (default is cv2.INTER_CUBIC)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interpolation</span> <span class="o">=</span> <span class="n">interpolation</span></div>
+
+<div class="viewcode-block" id="Auxiliary.getInterpolationMethodName"><a class="viewcode-back" href="../../classes.html#classes.auxiliary.Auxiliary.getInterpolationMethodName">[docs]</a>    <span class="k">def</span> <span class="nf">getInterpolationMethodName</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the selected interpolation method</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolation</span> <span class="o">==</span> <span class="n">cv2</span><span class="o">.</span><span class="n">INTER_CUBIC</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;cv2.INTER_CUBIC&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolation</span> <span class="o">==</span> <span class="n">cv2</span><span class="o">.</span><span class="n">INTER_AREA</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;cv2.INTER_AREA&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolation</span> <span class="o">==</span> <span class="n">cv2</span><span class="o">.</span><span class="n">INTER_LANCZOS4</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;cv2.INTER_LANCZOS4&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolation</span> <span class="o">==</span> <span class="n">cv2</span><span class="o">.</span><span class="n">INTER_LINEAR</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;cv2.INTER_LINEAR&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolation</span> <span class="o">==</span> <span class="n">cv2</span><span class="o">.</span><span class="n">INTER_NEAREST</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;cv2.INTER_NEAREST&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="Auxiliary.writeTextFile"><a class="viewcode-back" href="../../classes.html#classes.auxiliary.Auxiliary.writeTextFile">[docs]</a>    <span class="k">def</span> <span class="nf">writeTextFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="n">fileName</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write the content to a text file based on the file name</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Save the text file</span>
+        <span class="n">textFile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fileName</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+        <span class="n">textFile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+        <span class="n">textFile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Auxiliary.isGrayscale"><a class="viewcode-back" href="../../classes.html#classes.auxiliary.Auxiliary.isGrayscale">[docs]</a>    <span class="k">def</span> <span class="nf">isGrayscale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if an image is in grayscale</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="n">h</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="c1"># rows, cols, channels</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">w</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">h</span><span class="p">):</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">image</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="Auxiliary.toGrayscale"><a class="viewcode-back" href="../../classes.html#classes.auxiliary.Auxiliary.toGrayscale">[docs]</a>    <span class="k">def</span> <span class="nf">toGrayscale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert an image to grayscale</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2GRAY</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Auxiliary.loadImage"><a class="viewcode-back" href="../../classes.html#classes.auxiliary.Auxiliary.loadImage">[docs]</a>    <span class="k">def</span> <span class="nf">loadImage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load an image based on the path passed by parameter</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">path</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Auxiliary.saveImage"><a class="viewcode-back" href="../../classes.html#classes.auxiliary.Auxiliary.saveImage">[docs]</a>    <span class="k">def</span> <span class="nf">saveImage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fileName</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save an image based on the fileName passed by parameter</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">fileName</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Auxiliary.resizeImage"><a class="viewcode-back" href="../../classes.html#classes.auxiliary.Auxiliary.resizeImage">[docs]</a>    <span class="k">def</span> <span class="nf">resizeImage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">sizeX</span><span class="p">,</span> <span class="n">sizeY</span><span class="p">,</span> <span class="n">interpolationMethod</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert an image to grayscale</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="p">(</span><span class="n">sizeX</span><span class="p">,</span> <span class="n">sizeY</span><span class="p">),</span> <span class="n">interpolation</span><span class="o">=</span><span class="n">interpolationMethod</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Auxiliary.preprocessImage"><a class="viewcode-back" href="../../classes.html#classes.auxiliary.Auxiliary.preprocessImage">[docs]</a>    <span class="k">def</span> <span class="nf">preprocessImage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Preprocess an image</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Load the image</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loadImage</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="c1"># Convert to grayscale</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">toGrayscale</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+        <span class="c1"># Resize the image</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resizeImage</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolation</span><span class="p">)</span>
+        <span class="c1"># Return the processed image</span>
+        <span class="k">return</span> <span class="n">image</span></div>
+
+<div class="viewcode-block" id="Auxiliary.concatenateImages"><a class="viewcode-back" href="../../classes.html#classes.auxiliary.Auxiliary.concatenateImages">[docs]</a>    <span class="k">def</span> <span class="nf">concatenateImages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">leftImage</span><span class="p">,</span> <span class="n">rightImage</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Concatenate two images side by side (horizontally) and returns a new one</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">leftImage</span><span class="p">,</span> <span class="n">rightImage</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Auxiliary.extractImagesPaths"><a class="viewcode-back" href="../../classes.html#classes.auxiliary.Auxiliary.extractImagesPaths">[docs]</a>    <span class="k">def</span> <span class="nf">extractImagesPaths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract all paths for each image</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">paths</span> <span class="o">=</span> <span class="p">[]</span>
+
+         <span class="c1"># In the path folder search for all files in all directories</span>
+        <span class="k">for</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">dirnames</span><span class="p">,</span> <span class="n">filenames</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="c1"># For each file found</span>
+            <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
+                <span class="c1"># Check if it is a valid image file</span>
+                <span class="k">if</span> <span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">supportedFiles</span><span class="p">:</span>
+                    <span class="c1"># Creates the filePath joining the directory name and the file name</span>
+                    <span class="n">paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span> <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">paths</span></div>
+
+<div class="viewcode-block" id="Auxiliary.extractFilesPaths"><a class="viewcode-back" href="../../classes.html#classes.auxiliary.Auxiliary.extractFilesPaths">[docs]</a>    <span class="k">def</span> <span class="nf">extractFilesPaths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract all paths for all files type</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">paths</span> <span class="o">=</span> <span class="p">[]</span>
+
+         <span class="c1"># In the path folder search for all files in all directories</span>
+        <span class="k">for</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">dirnames</span><span class="p">,</span> <span class="n">filenames</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="c1"># For each file found</span>
+            <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
+                <span class="c1"># Creates the filePath joining the directory name and the file name</span>
+                <span class="n">paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span> <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">paths</span></div>
+
+<div class="viewcode-block" id="Auxiliary.loadAllImagesForTrain"><a class="viewcode-back" href="../../classes.html#classes.auxiliary.Auxiliary.loadAllImagesForTrain">[docs]</a>    <span class="k">def</span> <span class="nf">loadAllImagesForTrain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trainPath</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load all images for train</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">images</span>   <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">labels</span>   <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">fileName</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">paths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extractImagesPaths</span><span class="p">(</span><span class="n">trainPath</span><span class="p">)</span>
+
+         <span class="c1"># For each file path</span>
+        <span class="k">for</span> <span class="n">filePath</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
+            <span class="c1"># Check if it is a valid image file</span>
+            <span class="k">if</span> <span class="n">filePath</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">supportedFiles</span><span class="p">:</span>
+
+                <span class="c1"># Get the subject id (label) based on the format: subjectID_imageNumber.png</span>
+                <span class="n">pathSplit</span> <span class="o">=</span> <span class="n">filePath</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+                <span class="n">tempName</span>  <span class="o">=</span> <span class="n">pathSplit</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">pathSplit</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">subjectID</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tempName</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+
+                <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">preprocessImage</span><span class="p">(</span><span class="n">filePath</span><span class="p">)</span> <span class="p">)</span>
+                <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">subjectID</span> <span class="p">)</span>
+                <span class="n">fileName</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">tempName</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">images</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">fileName</span></div>
+
+<div class="viewcode-block" id="Auxiliary.loadAllImagesForTest"><a class="viewcode-back" href="../../classes.html#classes.auxiliary.Auxiliary.loadAllImagesForTest">[docs]</a>    <span class="k">def</span> <span class="nf">loadAllImagesForTest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">testPath</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load all images for test</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">images</span>   <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">labels</span>   <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">fileName</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">paths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extractImagesPaths</span><span class="p">(</span><span class="n">testPath</span><span class="p">)</span>
+
+         <span class="c1"># For each file path</span>
+        <span class="k">for</span> <span class="n">filePath</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
+
+            <span class="c1"># Check if it is a valid image file</span>
+            <span class="k">if</span> <span class="n">filePath</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">supportedFiles</span><span class="p">:</span>
+
+                <span class="c1"># Get the subject id (label)</span>
+                <span class="c1"># IMPORTANT: it follows the patter: imageNumber_subjectID.png</span>
+                <span class="c1"># It is different from the pattern on the training set</span>
+                <span class="n">pathSplit</span> <span class="o">=</span> <span class="n">filePath</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+                <span class="n">tempName</span>  <span class="o">=</span> <span class="n">pathSplit</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">pathSplit</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">subjectID</span> <span class="o">=</span> <span class="n">tempName</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">subjectID</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">subjectID</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+
+                <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">preprocessImage</span><span class="p">(</span><span class="n">filePath</span><span class="p">)</span> <span class="p">)</span>
+                <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">subjectID</span> <span class="p">)</span>
+                <span class="n">fileName</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">tempName</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">images</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">fileName</span></div></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, KelvinSP.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
