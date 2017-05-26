@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>algorithms.lbph &mdash; FaceRecognition 1.0.0 documentation</title>
+  <title>algorithms.fisherfaces &mdash; FaceRecognition 1.0.0 documentation</title>
   
 
   
@@ -26,7 +26,7 @@
 
   
   
-    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/css/theme.css" type="text/css" />
   
 
   
@@ -39,7 +39,7 @@
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
-  <script src="../../_static/js/modernizr.min.js"></script>
+  <script src="../../static/js/modernizr.min.js"></script>
 
 </head>
 
@@ -135,7 +135,7 @@
         
           <li><a href="../index.html">Module code</a> &raquo;</li>
         
-      <li>algorithms.lbph</li>
+      <li>algorithms.fisherfaces</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -152,52 +152,44 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for algorithms.lbph</h1><div class="highlight"><pre>
+  <h1>Source code for algorithms.fisherfaces</h1><div class="highlight"><pre>
 <span></span>
 <span class="c1"># Import the libraries</span>
 <span class="kn">import</span> <span class="nn">cv2</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<div class="viewcode-block" id="LBPH"><a class="viewcode-back" href="../../algorithms.html#algorithms.lbph.LBPH">[docs]</a><span class="k">class</span> <span class="nc">LBPH</span><span class="p">:</span>
+<div class="viewcode-block" id="Fisherfaces"><a class="viewcode-back" href="../../algorithms.html#algorithms.fisherfaces.Fisherfaces">[docs]</a><span class="k">class</span> <span class="nc">Fisherfaces</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Class that provides easy access to the LBPH algorithm</span>
+<span class="sd">    Class that provides easy access to the Fisherfaces algorithm</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">neighbors</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">grid_x</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">grid_y</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numComponents</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set the default values</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        
-        <span class="c1"># If the parameter is invalid get its default value</span>
-        <span class="k">if</span> <span class="n">radius</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">radius</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="k">if</span> <span class="n">neighbors</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">neighbors</span> <span class="o">=</span> <span class="mi">8</span>
-        <span class="k">if</span> <span class="n">grid_x</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">grid_x</span> <span class="o">=</span> <span class="mi">8</span>
-        <span class="k">if</span> <span class="n">grid_y</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">grid_y</span> <span class="o">=</span> <span class="mi">8</span>
+        <span class="k">if</span> <span class="n">numComponents</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">numComponents</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="c1"># Creates the LBPH object passing a threshold variable by parameter</span>
+        <span class="c1"># Creates the fisherfaces object passing a threshold variable by parameter</span>
         <span class="k">if</span> <span class="n">threshold</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">faceRec</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">face</span><span class="o">.</span><span class="n">createLBPHFaceRecognizer</span><span class="p">(</span><span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span> <span class="n">neighbors</span><span class="o">=</span><span class="n">neighbors</span><span class="p">,</span> <span class="n">grid_x</span><span class="o">=</span><span class="n">grid_x</span><span class="p">,</span> <span class="n">grid_y</span><span class="o">=</span><span class="n">grid_y</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">faceRec</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">face</span><span class="o">.</span><span class="n">createFisherFaceRecognizer</span><span class="p">(</span><span class="n">num_components</span><span class="o">=</span><span class="n">numComponents</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">faceRec</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">face</span><span class="o">.</span><span class="n">createLBPHFaceRecognizer</span><span class="p">(</span><span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span> <span class="n">neighbors</span><span class="o">=</span><span class="n">neighbors</span><span class="p">,</span> <span class="n">grid_x</span><span class="o">=</span><span class="n">grid_x</span><span class="p">,</span> <span class="n">grid_y</span><span class="o">=</span><span class="n">grid_y</span><span class="p">)</span> <span class="c1"># threshold=DBL_MAX</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">faceRec</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">face</span><span class="o">.</span><span class="n">createFisherFaceRecognizer</span><span class="p">(</span><span class="n">num_components</span><span class="o">=</span><span class="n">numComponents</span><span class="p">)</span> <span class="c1"># threshold=DBL_MAX</span>
             
         <span class="bp">self</span><span class="o">.</span><span class="n">algorithmTrained</span> <span class="o">=</span> <span class="kc">False</span>
 
-<div class="viewcode-block" id="LBPH.getAlgorithmName"><a class="viewcode-back" href="../../algorithms.html#algorithms.lbph.LBPH.getAlgorithmName">[docs]</a>    <span class="k">def</span> <span class="nf">getAlgorithmName</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;Local Binary Patterns Histogram (LBPH)&quot;</span></div>
+<div class="viewcode-block" id="Fisherfaces.getAlgorithmName"><a class="viewcode-back" href="../../algorithms.html#algorithms.fisherfaces.Fisherfaces.getAlgorithmName">[docs]</a>    <span class="k">def</span> <span class="nf">getAlgorithmName</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Fisherfaces&quot;</span></div>
 
-<div class="viewcode-block" id="LBPH.train"><a class="viewcode-back" href="../../algorithms.html#algorithms.lbph.LBPH.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">images</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+<div class="viewcode-block" id="Fisherfaces.train"><a class="viewcode-back" href="../../algorithms.html#algorithms.fisherfaces.Fisherfaces.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">images</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Train the face recognition algorithm</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">faceRec</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">labels</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">algorithmTrained</span> <span class="o">=</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="LBPH.predict"><a class="viewcode-back" href="../../algorithms.html#algorithms.lbph.LBPH.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
+<div class="viewcode-block" id="Fisherfaces.predict"><a class="viewcode-back" href="../../algorithms.html#algorithms.fisherfaces.Fisherfaces.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Predict the image</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -250,15 +242,15 @@
             SOURCELINK_SUFFIX: '.txt'
         };
     </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="../../static/jquery.js"></script>
+      <script type="text/javascript" src="../../static/underscore.js"></script>
+      <script type="text/javascript" src="../../static/doctools.js"></script>
 
   
 
   
   
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+    <script type="text/javascript" src="../../static/js/theme.js"></script>
   
 
   
