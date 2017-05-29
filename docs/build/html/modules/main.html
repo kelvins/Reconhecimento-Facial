@@ -186,82 +186,112 @@
 <span class="sd">resultsPath = dirPath + &quot;/results/&quot;</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="n">algNames</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Eigenfaces&quot;</span><span class="p">,</span> <span class="s2">&quot;Fisherfaces&quot;</span><span class="p">,</span> <span class="s2">&quot;LBPH&quot;</span><span class="p">,</span> <span class="s2">&quot;SIFT&quot;</span><span class="p">,</span> <span class="s2">&quot;SURF&quot;</span><span class="p">]</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">initialThreshold = [1200,  400,  20,  2,  2]</span>
-<span class="sd">finalThreshold   = [1800, 1000, 140, 80, 80]</span>
-<span class="sd">stepThreshold    = [   5,    5,   2,  2,  2]</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="n">trainPath</span> <span class="o">=</span> <span class="s2">&quot;/home/kelvins/Desktop/Reconhecimento-Facial/Python/Dataset/Train/BASE&quot;</span>
-<span class="n">testPath</span>  <span class="o">=</span> <span class="s2">&quot;/home/kelvins/Desktop/Reconhecimento-Facial/Python/Dataset/Test/VIDEO&quot;</span>
-<span class="n">resultsPath</span> <span class="o">=</span> <span class="s2">&quot;/home/kelvins/Desktop/Reconhecimento-Facial/Python/Dataset/Results/2017052501_Ensembles2&quot;</span>
+<span class="n">algNames</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Eigenfaces&quot;</span><span class="p">,</span> <span class="s2">&quot;LBPH&quot;</span><span class="p">,</span> <span class="s2">&quot;Fisherfaces&quot;</span><span class="p">,</span> <span class="s2">&quot;SIFT&quot;</span><span class="p">,</span> <span class="s2">&quot;SURF&quot;</span><span class="p">]</span>
 
-<span class="c1">#LBPH 20 - 140 - 1</span>
-<span class="c1">#EIGENFACES 1200 - 1800 - 5</span>
-<span class="c1">#FISHERFACES 400 - 1000 - 5</span>
+<span class="n">initialThreshold</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1000</span><span class="p">,</span>  <span class="mi">60</span><span class="p">,</span>  <span class="mi">500</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">]</span>
+<span class="n">finalThreshold</span>   <span class="o">=</span> <span class="p">[</span><span class="mi">5001</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="mi">4001</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">101</span><span class="p">]</span>
+<span class="n">stepThreshold</span>    <span class="o">=</span> <span class="p">[</span>  <span class="mi">50</span><span class="p">,</span>   <span class="mi">2</span><span class="p">,</span>   <span class="mi">50</span><span class="p">,</span>   <span class="mi">2</span><span class="p">,</span>   <span class="mi">2</span><span class="p">]</span>
+
+<span class="n">trainPath</span> <span class="o">=</span> <span class="s2">&quot;/home/kelvins/Desktop/Reconhecimento-Facial/Dataset/Train/BASE&quot;</span>
+<span class="n">testPath</span>  <span class="o">=</span> <span class="s2">&quot;/home/kelvins/Desktop/Reconhecimento-Facial/Dataset/Test/VIDEO&quot;</span>
+<span class="n">resultsPath</span> <span class="o">=</span> <span class="s2">&quot;/home/kelvins/Desktop/Reconhecimento-Facial/Dataset/Results/2017052701_FaceRec/&quot;</span>
+
+<span class="n">basetrain</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+<span class="n">basetest</span>  <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">11</span><span class="p">]</span>
 
 <div class="viewcode-block" id="faceFecognition"><a class="viewcode-back" href="../main.html#main.faceFecognition">[docs]</a><span class="k">def</span> <span class="nf">faceFecognition</span><span class="p">():</span>
 
-    <span class="k">global</span> <span class="n">trainPath</span><span class="p">,</span> <span class="n">testPath</span><span class="p">,</span> <span class="n">resultsPath</span>
+    <span class="k">global</span> <span class="n">trainPath</span><span class="p">,</span> <span class="n">testPath</span><span class="p">,</span> <span class="n">resultsPath</span><span class="p">,</span> <span class="n">initialThreshold</span><span class="p">,</span> <span class="n">finalThreshold</span><span class="p">,</span> <span class="n">stepThreshold</span><span class="p">,</span> <span class="n">algNames</span><span class="p">,</span> <span class="n">basestrain</span><span class="p">,</span> <span class="n">basestest</span>
 
-    <span class="c1"># Algorithms loop</span>
-    <span class="k">for</span> <span class="n">algsIndex</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>
-        <span class="c1"># Train folder loop</span>
-        <span class="k">for</span> <span class="n">trainIndex</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">):</span>
-            <span class="c1"># Test folder loop</span>
-            <span class="k">for</span> <span class="n">testIndex</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">13</span><span class="p">):</span>
-                <span class="c1"># For each threshold</span>
-                <span class="k">for</span> <span class="n">threshold</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">initialThreshold</span><span class="p">[</span><span class="n">algsIndex</span><span class="p">],</span> <span class="n">finalThreshold</span><span class="p">[</span><span class="n">algsIndex</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">stepThreshold</span><span class="p">[</span><span class="n">algsIndex</span><span class="p">]):</span>
+    <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">algNames</span><span class="p">)):</span>
 
-                    <span class="c1"># Create the auxiliary object</span>
-                    <span class="n">auxiliary</span> <span class="o">=</span> <span class="n">Auxiliary</span><span class="p">(</span><span class="n">sizeX</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">sizeY</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="n">cv2</span><span class="o">.</span><span class="n">INTER_CUBIC</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">indexTrain</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">basetrain</span><span class="p">)):</span>
 
-                    <span class="nb">print</span> <span class="n">algNames</span><span class="p">[</span><span class="n">algsIndex</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;: Train: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">trainIndex</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;: Test: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">testIndex</span><span class="p">)</span>
+            <span class="n">thresholds</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">recognizedBelowThreshold</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">unrecognizedBelowThreshold</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">nonFacesBelowThreshold</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">recognizedAboveThreshold</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">unrecognizedAboveThreshold</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">nonFacesAboveThreshold</span> <span class="o">=</span> <span class="p">[]</span>
 
-                    <span class="c1"># Create the algorithm object</span>
-                    <span class="k">if</span> <span class="n">algsIndex</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                        <span class="n">algorithm</span> <span class="o">=</span> <span class="n">Eigenfaces</span><span class="p">()</span>
-                    <span class="k">elif</span> <span class="n">algsIndex</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                        <span class="n">algorithm</span> <span class="o">=</span> <span class="n">Fisherfaces</span><span class="p">()</span>
-                    <span class="k">elif</span> <span class="n">algsIndex</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-                        <span class="n">algorithm</span> <span class="o">=</span> <span class="n">LBPH</span><span class="p">()</span>
-                    <span class="k">elif</span> <span class="n">algsIndex</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-                        <span class="n">algorithm</span> <span class="o">=</span> <span class="n">SIFT</span><span class="p">()</span>
-                    <span class="k">elif</span> <span class="n">algsIndex</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
-                        <span class="n">algorithm</span> <span class="o">=</span> <span class="n">SURF</span><span class="p">()</span>
-                    <span class="c1">#algorithm = Eigenfaces()</span>
-                    <span class="c1">#algorithm = Fisherfaces()</span>
-                    <span class="c1">#algorithm = LBPH()</span>
-                    <span class="c1">#algorithm = SIFT()</span>
-                    <span class="c1">#algorithm = SURF()</span>
+            <span class="c1"># For each threshold</span>
+            <span class="k">for</span> <span class="n">threshold</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">initialThreshold</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">finalThreshold</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">stepThreshold</span><span class="p">[</span><span class="n">index</span><span class="p">]):</span>
 
-                    <span class="c1"># Create the face recognition object</span>
-                    <span class="n">faceRecog</span> <span class="o">=</span> <span class="n">FaceRecognition</span><span class="p">(</span><span class="n">algorithm</span><span class="p">,</span> <span class="n">auxiliary</span><span class="p">,</span> <span class="n">threshold</span><span class="p">)</span>
+                <span class="c1"># Create the auxiliary object</span>
+                <span class="n">auxiliary</span> <span class="o">=</span> <span class="n">Auxiliary</span><span class="p">(</span><span class="n">sizeX</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">sizeY</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="n">cv2</span><span class="o">.</span><span class="n">INTER_CUBIC</span><span class="p">)</span>
 
-                    <span class="c1"># Train the algorithm</span>
-                    <span class="n">faceRecog</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">trainPath</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">trainIndex</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span>
+                <span class="c1"># Create the algorithm object</span>
+                <span class="c1">#algorithm = Eigenfaces()</span>
+                <span class="c1">#algorithm = Fisherfaces()</span>
+                <span class="c1">#algorithm = LBPH()</span>
+                <span class="c1">#algorithm = SIFT()</span>
+                <span class="c1">#algorithm = SURF()</span>
+                <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">algorithm</span> <span class="o">=</span> <span class="n">Eigenfaces</span><span class="p">()</span>
+                <span class="k">elif</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">algorithm</span> <span class="o">=</span> <span class="n">LBPH</span><span class="p">()</span>
+                <span class="k">elif</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="n">algorithm</span> <span class="o">=</span> <span class="n">Fisherfaces</span><span class="p">()</span>
+                <span class="k">elif</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="n">algorithm</span> <span class="o">=</span> <span class="n">SIFT</span><span class="p">()</span>
+                <span class="k">elif</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                    <span class="n">algorithm</span> <span class="o">=</span> <span class="n">SURF</span><span class="p">()</span>
 
-                    <span class="c1"># Try to recognize the faces</span>
-                    <span class="n">faceRecog</span><span class="o">.</span><span class="n">recognizeFaces</span><span class="p">(</span><span class="n">testPath</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">testIndex</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span>
+                <span class="c1"># Create the face recognition object</span>
+                <span class="n">faceRecog</span> <span class="o">=</span> <span class="n">FaceRecognition</span><span class="p">(</span><span class="n">algorithm</span><span class="p">,</span> <span class="n">auxiliary</span><span class="p">,</span> <span class="n">threshold</span><span class="p">)</span>
 
-                    <span class="c1"># Create the report object</span>
-                    <span class="n">report</span> <span class="o">=</span> <span class="n">Report</span><span class="p">(</span><span class="n">faceRecog</span><span class="p">)</span>
+                <span class="c1"># Train the algorithm</span>
+                <span class="n">faceRecog</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">trainPath</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">basetrain</span><span class="p">[</span><span class="n">indexTrain</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span>
 
-                    <span class="c1"># Print the results</span>
-                    <span class="c1">#report.printResults()</span>
+                <span class="c1"># Try to recognize the faces</span>
+                <span class="n">faceRecog</span><span class="o">.</span><span class="n">recognizeFaces</span><span class="p">(</span><span class="n">testPath</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">basetest</span><span class="p">[</span><span class="n">indexTrain</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span>
 
-                    <span class="c1"># Save the report (text file)</span>
-                    <span class="n">report</span><span class="o">.</span><span class="n">saveReport</span><span class="p">(</span><span class="n">resultsPath</span> <span class="o">+</span> <span class="n">algNames</span><span class="p">[</span><span class="n">algsIndex</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">trainIndex</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">testIndex</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span>
+                <span class="n">thresholds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">threshold</span> <span class="p">)</span>
+                <span class="n">recognizedBelowThreshold</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">faceRecog</span><span class="o">.</span><span class="n">getRecognizedBelowThreshold</span><span class="p">()</span> <span class="p">)</span>
+                <span class="n">unrecognizedBelowThreshold</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">faceRecog</span><span class="o">.</span><span class="n">getUnrecognizedBelowThreshold</span><span class="p">()</span> <span class="p">)</span>
+                <span class="n">nonFacesBelowThreshold</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">faceRecog</span><span class="o">.</span><span class="n">getNonFacesBelowThreshold</span><span class="p">()</span> <span class="p">)</span>
+                <span class="n">recognizedAboveThreshold</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">faceRecog</span><span class="o">.</span><span class="n">getRecognizedAboveThreshold</span><span class="p">()</span> <span class="p">)</span>
+                <span class="n">unrecognizedAboveThreshold</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">faceRecog</span><span class="o">.</span><span class="n">getUnrecognizedAboveThreshold</span><span class="p">()</span> <span class="p">)</span>
+                <span class="n">nonFacesAboveThreshold</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">faceRecog</span><span class="o">.</span><span class="n">getNonFacesAboveThreshold</span><span class="p">()</span> <span class="p">)</span>
 
-                    <span class="c1"># Save all results (summary, full report and images)</span>
-                    <span class="c1">#report.saveAllResults(resultsPath)</span>
+                <span class="c1"># Create the report object</span>
+                <span class="n">report</span> <span class="o">=</span> <span class="n">Report</span><span class="p">(</span><span class="n">faceRecog</span><span class="p">)</span>
 
-                    <span class="k">del</span> <span class="n">auxiliary</span>
-                    <span class="k">del</span> <span class="n">algorithm</span>
-                    <span class="k">del</span> <span class="n">faceRecog</span>
-                    <span class="k">del</span> <span class="n">report</span>
+                <span class="c1"># Print the results</span>
+                <span class="c1">#report.printResults()</span>
 
-                    <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span></div>
+                <span class="c1"># Save the report (text file)</span>
+                <span class="n">report</span><span class="o">.</span><span class="n">saveReport</span><span class="p">(</span><span class="n">resultsPath</span> <span class="o">+</span> <span class="n">algNames</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;/train_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">basetrain</span><span class="p">[</span><span class="n">indexTrain</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;_test_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">basetest</span><span class="p">[</span><span class="n">indexTrain</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span>
+
+                <span class="c1"># Save all results (summary, full report and images)</span>
+                <span class="c1">#report.saveAllResults(resultsPath)</span>
+
+                <span class="k">del</span> <span class="n">auxiliary</span>
+                <span class="k">del</span> <span class="n">algorithm</span>
+                <span class="k">del</span> <span class="n">faceRecog</span>
+                <span class="k">del</span> <span class="n">report</span>
+
+                <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+
+            <span class="nb">print</span> <span class="s2">&quot;Algorithm: &quot;</span> <span class="o">+</span> <span class="n">algNames</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+            <span class="nb">print</span> <span class="s2">&quot;Train: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">basetrain</span><span class="p">[</span><span class="n">indexTrain</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot; Test: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">basetest</span><span class="p">[</span><span class="n">indexTrain</span><span class="p">])</span>
+            <span class="nb">print</span> <span class="s2">&quot;thresholds = [&quot;</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">thresholds</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
+            <span class="nb">print</span> <span class="s2">&quot;recognizedBelowThreshold = [&quot;</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">recognizedBelowThreshold</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
+            <span class="nb">print</span> <span class="s2">&quot;unrecognizedBelowThreshold = [&quot;</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">unrecognizedBelowThreshold</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
+            <span class="nb">print</span> <span class="s2">&quot;nonFacesBelowThreshold = [&quot;</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">nonFacesBelowThreshold</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
+            <span class="nb">print</span> <span class="s2">&quot;recognizedAboveThreshold = [&quot;</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">recognizedAboveThreshold</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
+            <span class="nb">print</span> <span class="s2">&quot;unrecognizedAboveThreshold = [&quot;</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">unrecognizedAboveThreshold</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
+            <span class="nb">print</span> <span class="s2">&quot;nonFacesAboveThreshold = [&quot;</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">nonFacesAboveThreshold</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
+
+            <span class="k">del</span> <span class="n">thresholds</span>
+            <span class="k">del</span> <span class="n">recognizedBelowThreshold</span>
+            <span class="k">del</span> <span class="n">unrecognizedBelowThreshold</span>
+            <span class="k">del</span> <span class="n">nonFacesBelowThreshold</span>
+            <span class="k">del</span> <span class="n">recognizedAboveThreshold</span>
+            <span class="k">del</span> <span class="n">unrecognizedAboveThreshold</span>
+            <span class="k">del</span> <span class="n">nonFacesAboveThreshold</span>
+            <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ensemble"><a class="viewcode-back" href="../main.html#main.ensemble">[docs]</a><span class="k">def</span> <span class="nf">ensemble</span><span class="p">():</span>
 

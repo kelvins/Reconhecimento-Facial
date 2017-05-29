@@ -174,6 +174,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
 <div class="viewcode-block" id="FaceRecognition.reset"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reset all values, including train and test paths</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Reset all lists</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">trainImages</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">trainLabels</span> <span class="o">=</span> <span class="p">[]</span>
@@ -184,14 +187,25 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">resetResults</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="FaceRecognition.resetResults"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.resetResults">[docs]</a>    <span class="k">def</span> <span class="nf">resetResults</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reset all results</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Reset all results</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">recognized</span>   <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">unrecognized</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nonFaces</span>     <span class="o">=</span> <span class="mi">0</span>
 
+        <span class="c1"># Reset all results (using threshold)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recognizedBelowThreshold</span>   <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unrecognizedBelowThreshold</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nonFacesBelowThreshold</span>     <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recognizedAboveThreshold</span>   <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unrecognizedAboveThreshold</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nonFacesAboveThreshold</span>     <span class="o">=</span> <span class="mi">0</span>
+
         <span class="c1"># Reset the report</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">predictSubjectIds</span>   <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">predictConfidence</span>   <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">predictSubjectIds</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">predictConfidence</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Reset test results</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">testImages</span> <span class="o">=</span> <span class="p">[]</span>
@@ -252,6 +266,24 @@
 <div class="viewcode-block" id="FaceRecognition.getTestPath"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.getTestPath">[docs]</a>    <span class="k">def</span> <span class="nf">getTestPath</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">testPath</span></div>
 
+<div class="viewcode-block" id="FaceRecognition.getRecognizedBelowThreshold"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.getRecognizedBelowThreshold">[docs]</a>    <span class="k">def</span> <span class="nf">getRecognizedBelowThreshold</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">recognizedBelowThreshold</span></div>
+
+<div class="viewcode-block" id="FaceRecognition.getUnrecognizedBelowThreshold"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.getUnrecognizedBelowThreshold">[docs]</a>    <span class="k">def</span> <span class="nf">getUnrecognizedBelowThreshold</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">unrecognizedBelowThreshold</span></div>
+
+<div class="viewcode-block" id="FaceRecognition.getNonFacesBelowThreshold"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.getNonFacesBelowThreshold">[docs]</a>    <span class="k">def</span> <span class="nf">getNonFacesBelowThreshold</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nonFacesBelowThreshold</span></div>
+
+<div class="viewcode-block" id="FaceRecognition.getRecognizedAboveThreshold"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.getRecognizedAboveThreshold">[docs]</a>    <span class="k">def</span> <span class="nf">getRecognizedAboveThreshold</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">recognizedAboveThreshold</span></div>
+
+<div class="viewcode-block" id="FaceRecognition.getUnrecognizedAboveThreshold"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.getUnrecognizedAboveThreshold">[docs]</a>    <span class="k">def</span> <span class="nf">getUnrecognizedAboveThreshold</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">unrecognizedAboveThreshold</span></div>
+
+<div class="viewcode-block" id="FaceRecognition.getNonFacesAboveThreshold"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.getNonFacesAboveThreshold">[docs]</a>    <span class="k">def</span> <span class="nf">getNonFacesAboveThreshold</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nonFacesAboveThreshold</span></div>
+
 <div class="viewcode-block" id="FaceRecognition.train"><a class="viewcode-back" href="../../classes.html#classes.face_recognition.FaceRecognition.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trainPath</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Function responsible for train the face recognition algorithm based on the image files from the trainPath.</span>
@@ -305,12 +337,26 @@
                         <span class="bp">self</span><span class="o">.</span><span class="n">unrecognized</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">nonFaces</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="c1"># Approach using threshold (don&#39;t know what is nonface)</span>
+            <span class="c1"># Approach using threshold</span>
             <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Compute results below threshold</span>
                 <span class="k">if</span> <span class="n">confidence</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">recognized</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">testLabels</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">subjectID</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">testLabels</span><span class="p">[</span><span class="n">index</span><span class="p">]:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">recognizedBelowThreshold</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">unrecognizedBelowThreshold</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">nonFacesBelowThreshold</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="c1"># Compute results above threshold</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">unrecognized</span> <span class="o">+=</span> <span class="mi">1</span></div></div>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">testLabels</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">subjectID</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">testLabels</span><span class="p">[</span><span class="n">index</span><span class="p">]:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">recognizedAboveThreshold</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">unrecognizedAboveThreshold</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">nonFacesAboveThreshold</span> <span class="o">+=</span> <span class="mi">1</span></div></div>
 </pre></div>
 
            </div>

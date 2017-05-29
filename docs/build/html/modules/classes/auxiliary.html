@@ -227,6 +227,16 @@
             <span class="k">return</span> <span class="s2">&quot;cv2.INTER_NEAREST&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
 
+<div class="viewcode-block" id="Auxiliary.calcAccuracy"><a class="viewcode-back" href="../../classes.html#classes.auxiliary.Auxiliary.calcAccuracy">[docs]</a>    <span class="k">def</span> <span class="nf">calcAccuracy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">totalFaceImages</span><span class="p">,</span> <span class="n">recognizedImages</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the accuracy (percentage)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Avoid division by zero</span>
+        <span class="k">if</span> <span class="n">totalFaceImages</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">recognizedImages</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">totalFaceImages</span><span class="p">))</span> <span class="o">*</span> <span class="mf">100.0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span></div>
+
 <div class="viewcode-block" id="Auxiliary.writeTextFile"><a class="viewcode-back" href="../../classes.html#classes.auxiliary.Auxiliary.writeTextFile">[docs]</a>    <span class="k">def</span> <span class="nf">writeTextFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="n">fileName</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Write the content to a text file based on the file name</span>
