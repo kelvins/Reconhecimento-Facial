@@ -72,7 +72,7 @@ class Auxiliary:
             return "cv2.INTER_NEAREST"
         return ""
 
-    def calcAccuracy(self, totalFaceImages, recognizedImages):
+    def calcAccuracy(self, recognizedImages, totalFaceImages):
         """
         Calculates the accuracy (percentage)
         """
