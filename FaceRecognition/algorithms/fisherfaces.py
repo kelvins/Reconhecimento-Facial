@@ -4,6 +4,7 @@ import cv2
 import os
 import numpy as np
 
+
 class Fisherfaces:
     """
     Class that provides easy access to the Fisherfaces algorithm
@@ -18,10 +19,12 @@ class Fisherfaces:
 
         # Creates the fisherfaces object passing a threshold variable by parameter
         if threshold >= 0:
-            self.faceRec = cv2.face.createFisherFaceRecognizer(num_components=numComponents, threshold=threshold)
+            self.faceRec = cv2.face.createFisherFaceRecognizer(
+                num_components=numComponents, threshold=threshold)
         else:
-            self.faceRec = cv2.face.createFisherFaceRecognizer(num_components=numComponents) # threshold=DBL_MAX
-            
+            self.faceRec = cv2.face.createFisherFaceRecognizer(
+                num_components=numComponents)  # threshold=DBL_MAX
+
         self.algorithmTrained = False
 
     def getAlgorithmName(self):
@@ -43,4 +46,4 @@ class Fisherfaces:
             sys.exit()
 
         # Return the subject ID (label) and the confidence
-        return self.faceRec.predict( image ) 
+        return self.faceRec.predict(image)

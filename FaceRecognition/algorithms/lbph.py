@@ -4,6 +4,7 @@ import cv2
 import os
 import numpy as np
 
+
 class LBPH:
     """
     Class that provides easy access to the LBPH algorithm
@@ -13,7 +14,7 @@ class LBPH:
         """
         Set the default values
         """
-        
+
         # If the parameter is invalid get its default value
         if radius < 1:
             radius = 1
@@ -26,10 +27,12 @@ class LBPH:
 
         # Creates the LBPH object passing a threshold variable by parameter
         if threshold >= 0:
-            self.faceRec = cv2.face.createLBPHFaceRecognizer(radius=radius, neighbors=neighbors, grid_x=grid_x, grid_y=grid_y, threshold=threshold)
+            self.faceRec = cv2.face.createLBPHFaceRecognizer(
+                radius=radius, neighbors=neighbors, grid_x=grid_x, grid_y=grid_y, threshold=threshold)
         else:
-            self.faceRec = cv2.face.createLBPHFaceRecognizer(radius=radius, neighbors=neighbors, grid_x=grid_x, grid_y=grid_y) # threshold=DBL_MAX
-            
+            self.faceRec = cv2.face.createLBPHFaceRecognizer(
+                radius=radius, neighbors=neighbors, grid_x=grid_x, grid_y=grid_y)  # threshold=DBL_MAX
+
         self.algorithmTrained = False
 
     def getAlgorithmName(self):
@@ -51,4 +54,4 @@ class LBPH:
             sys.exit()
 
         # Return the subject ID (label) and the confidence
-        return self.faceRec.predict( image ) 
+        return self.faceRec.predict(image)

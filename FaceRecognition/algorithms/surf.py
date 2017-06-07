@@ -4,6 +4,7 @@ import cv2
 import os
 import numpy as np
 
+
 class SURF:
     """
     Class that provides easy access to the SURF algorithm
@@ -23,7 +24,8 @@ class SURF:
             nOctaveLayers = 3
 
         # Creates the SURF object
-        self.faceRec = cv2.xfeatures2d.SURF_create(hessianThreshold=hessianThreshold, nOctaves=nOctaves, nOctaveLayers=nOctaveLayers, extended=extended, upright=upright)
+        self.faceRec = cv2.xfeatures2d.SURF_create(
+            hessianThreshold=hessianThreshold, nOctaves=nOctaves, nOctaveLayers=nOctaveLayers, extended=extended, upright=upright)
 
         # Creates the matcher object
         self.matcher = cv2.BFMatcher(distance, crossCheck=crossCheck)
@@ -70,10 +72,10 @@ class SURF:
         matches = self.matcher.match(descriptors)
 
         # Order by distance
-        matches = sorted(matches, key = lambda x:x.distance)
+        matches = sorted(matches, key=lambda x: x.distance)
 
         # Creates a results vector to store the number of similar points for each image on the training set
-        results = [0]*len(self.labels)
+        results = [0] * len(self.labels)
 
         # Based on the matches vector we create the results vector that represents how many points this test image are similar to each image in the training set
         for match in matches:
@@ -90,7 +92,8 @@ class SURF:
         # The confidence range is: 0 - 100
         # The closer to zero higher is the confidence
         if len(matches) > 0:
-            confidence = 100.0 - ((float(max(results)) * 100.0) / float(len(matches)))
+            confidence = 100.0 - \
+                ((float(max(results)) * 100.0) / float(len(matches)))
         else:
             confidence = 0.0
 

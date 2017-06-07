@@ -68,7 +68,7 @@ class Voting:
         if len(subjects) == 0:
             return -1
 
-        subjectVoted  = []
+        subjectVoted = []
         numberOfVotes = []
 
         # Count votes

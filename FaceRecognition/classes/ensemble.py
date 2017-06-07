@@ -8,6 +8,7 @@ import numpy as np
 from voting import Voting
 from auxiliary import Auxiliary
 
+
 class Ensemble:
     """
     Class that provides an interface for the Ensemble
@@ -28,7 +29,7 @@ class Ensemble:
         self.trainLabels = []
         # Reset the paths
         self.trainPath = ""
-        self.testPath  = ""
+        self.testPath = ""
         # Reset the results
         self.resetResults()
 
@@ -38,9 +39,9 @@ class Ensemble:
         It is used to reset only the results of the tests
         """
         # Reset all results
-        self.recognized   = 0
+        self.recognized = 0
         self.unrecognized = 0
-        self.nonFaces     = 0
+        self.nonFaces = 0
 
         # Reset the predicted results
         self.predictSubjectIds = []
@@ -120,7 +121,8 @@ class Ensemble:
             sys.exit()
 
         # Load all imagens and labels
-        self.trainImages, self.trainLabels, _ = self.auxiliary.loadAllImagesForTrain(trainPath)
+        self.trainImages, self.trainLabels, _ = self.auxiliary.loadAllImagesForTrain(
+            trainPath)
 
         # Train all the algorithms
         for index in xrange(0, len(self.fralgorithms)):
@@ -141,16 +143,18 @@ class Ensemble:
             sys.exit()
 
         # Load all imagens and labels
-        self.testImages, self.testLabels, self.testFileNames = self.auxiliary.loadAllImagesForTest(testPath)
+        self.testImages, self.testLabels, self.testFileNames = self.auxiliary.loadAllImagesForTest(
+            testPath)
 
         # For each image
         for index in xrange(0, len(self.testImages)):
-            subjectID  = []
+            subjectID = []
             confidence = []
 
             # Predict
             for i in xrange(0, len(self.fralgorithms)):
-                subID, conf = self.fralgorithms[i].predict(self.testImages[index])
+                subID, conf = self.fralgorithms[i].predict(
+                    self.testImages[index])
                 subjectID.append(subID)
                 confidence.append(conf)
 
@@ -158,11 +162,11 @@ class Ensemble:
             result = self.voting.vote(subjectID)
 
             # Store the predicted results to be used in the report
-            self.predictSubjectIds.append( result )
+            self.predictSubjectIds.append(result)
 
             # As we don't work with confidences in ensemble
             # We can store the subjectID list to check which algorithm has predicted which subject
-            self.predictConfidence.append( subjectID )
+            self.predictConfidence.append(subjectID)
 
             # Approach not using threshold (face images manually classified)
             if self.testLabels[index] >= 0:

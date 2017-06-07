@@ -7,13 +7,14 @@ import numpy as np
 
 from auxiliary import Auxiliary
 
+
 class FaceRecognition:
     """
     Class that provides an interface to the face recognition algorithms
     """
 
     def __init__(self, algorithm, auxiliary=Auxiliary(), threshold=-1):
-    	self.algorithm = algorithm
+        self.algorithm = algorithm
         self.auxiliary = auxiliary
         self.threshold = threshold
         self.reset()
@@ -27,7 +28,7 @@ class FaceRecognition:
         self.trainLabels = []
         # Reset the paths
         self.trainPath = ""
-        self.testPath  = ""
+        self.testPath = ""
         # Reset the results
         self.resetResults()
 
@@ -36,17 +37,17 @@ class FaceRecognition:
         Reset all results
         """
         # Reset all results
-        self.recognized   = 0
+        self.recognized = 0
         self.unrecognized = 0
-        self.nonFaces     = 0
+        self.nonFaces = 0
 
         # Reset all results (using threshold)
-        self.recognizedBelowThreshold   = 0
+        self.recognizedBelowThreshold = 0
         self.unrecognizedBelowThreshold = 0
-        self.nonFacesBelowThreshold     = 0
-        self.recognizedAboveThreshold   = 0
+        self.nonFacesBelowThreshold = 0
+        self.recognizedAboveThreshold = 0
         self.unrecognizedAboveThreshold = 0
-        self.nonFacesAboveThreshold     = 0
+        self.nonFacesAboveThreshold = 0
 
         # Reset the report
         self.predictSubjectIds = []
@@ -143,7 +144,8 @@ class FaceRecognition:
             sys.exit()
 
         # Load all imagens and labels
-        self.trainImages, self.trainLabels, _ = self.auxiliary.loadAllImagesForTrain(trainPath)
+        self.trainImages, self.trainLabels, _ = self.auxiliary.loadAllImagesForTrain(
+            trainPath)
 
         # Train the algorithm
         self.algorithm.train(self.trainImages, self.trainLabels)
@@ -162,16 +164,18 @@ class FaceRecognition:
             sys.exit()
 
         # Load all imagens and labels
-        self.testImages, self.testLabels, self.testFileNames = self.auxiliary.loadAllImagesForTest(testPath)
+        self.testImages, self.testLabels, self.testFileNames = self.auxiliary.loadAllImagesForTest(
+            testPath)
 
         # For each image
         for index in xrange(0, len(self.testImages)):
             # Predict
-            subjectID, confidence = self.algorithm.predict(self.testImages[index])
+            subjectID, confidence = self.algorithm.predict(
+                self.testImages[index])
 
             # Store the predicted results to be used in the report
-            self.predictSubjectIds.append( subjectID )
-            self.predictConfidence.append( confidence )
+            self.predictSubjectIds.append(subjectID)
+            self.predictConfidence.append(confidence)
 
             # Approach not using threshold (face images manually classified)
             if self.threshold == -1:

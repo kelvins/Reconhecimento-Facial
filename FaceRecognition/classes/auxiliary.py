@@ -6,6 +6,7 @@ import time
 from PIL import Image
 import numpy as np
 
+
 class Auxiliary:
     """
     Class that provides some auxiliary functions
@@ -98,7 +99,7 @@ class Auxiliary:
         if len(image.shape) <= 2:
             return True
 
-        h, w = image.shape[:2] # rows, cols, channels
+        h, w = image.shape[:2]  # rows, cols, channels
         for i in range(w):
             for j in range(h):
                 p = image[i, j]
@@ -139,7 +140,8 @@ class Auxiliary:
         # Convert to grayscale
         image = self.toGrayscale(image)
         # Resize the image
-        image = self.resizeImage(image, self.sizeX, self.sizeY, self.interpolation)
+        image = self.resizeImage(
+            image, self.sizeX, self.sizeY, self.interpolation)
         # Return the processed image
         return image
 
@@ -155,14 +157,14 @@ class Auxiliary:
         """
         paths = []
 
-         # In the path folder search for all files in all directories
+        # In the path folder search for all files in all directories
         for dirname, dirnames, filenames in os.walk(path):
             # For each file found
             for filename in filenames:
                 # Check if it is a valid image file
                 if filename.split(".")[1] in self.supportedFiles:
                     # Creates the filePath joining the directory name and the file name
-                    paths.append( os.path.join(dirname, filename) )
+                    paths.append(os.path.join(dirname, filename))
 
         return paths
 
@@ -172,12 +174,12 @@ class Auxiliary:
         """
         paths = []
 
-         # In the path folder search for all files in all directories
+        # In the path folder search for all files in all directories
         for dirname, dirnames, filenames in os.walk(path):
             # For each file found
             for filename in filenames:
                 # Creates the filePath joining the directory name and the file name
-                paths.append( os.path.join(dirname, filename) )
+                paths.append(os.path.join(dirname, filename))
 
         return paths
 
@@ -185,25 +187,25 @@ class Auxiliary:
         """
         Load all images for train
         """
-        images   = []
-        labels   = []
+        images = []
+        labels = []
         fileName = []
 
         paths = self.extractImagesPaths(trainPath)
 
-         # For each file path
+        # For each file path
         for filePath in paths:
             # Check if it is a valid image file
             if filePath.split(".")[1] in self.supportedFiles:
 
                 # Get the subject id (label) based on the format: subjectID_imageNumber.png
                 pathSplit = filePath.split("/")
-                tempName  = pathSplit[len(pathSplit)-1]
+                tempName = pathSplit[len(pathSplit) - 1]
                 subjectID = int(tempName.split("_")[0])
 
-                images.append( self.preprocessImage(filePath) )
-                labels.append( subjectID )
-                fileName.append( tempName.split(".")[0] )
+                images.append(self.preprocessImage(filePath))
+                labels.append(subjectID)
+                fileName.append(tempName.split(".")[0])
 
         return images, labels, fileName
 
@@ -211,13 +213,13 @@ class Auxiliary:
         """
         Load all images for test
         """
-        images   = []
-        labels   = []
+        images = []
+        labels = []
         fileName = []
 
         paths = self.extractImagesPaths(testPath)
 
-         # For each file path
+        # For each file path
         for filePath in paths:
 
             # Check if it is a valid image file
@@ -227,12 +229,12 @@ class Auxiliary:
                 # IMPORTANT: it follows the patter: imageNumber_subjectID.png
                 # It is different from the pattern on the training set
                 pathSplit = filePath.split("/")
-                tempName  = pathSplit[len(pathSplit)-1]
+                tempName = pathSplit[len(pathSplit) - 1]
                 subjectID = tempName.split("_")[1]
                 subjectID = int(subjectID.split(".")[0])
 
-                images.append( self.preprocessImage(filePath) )
-                labels.append( subjectID )
-                fileName.append( tempName.split(".")[0] )
+                images.append(self.preprocessImage(filePath))
+                labels.append(subjectID)
+                fileName.append(tempName.split(".")[0])
 
         return images, labels, fileName

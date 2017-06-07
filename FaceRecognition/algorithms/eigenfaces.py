@@ -4,6 +4,7 @@ import cv2
 import os
 import numpy as np
 
+
 class Eigenfaces:
     """
     Class that provides easy access to the Eigenfaces algorithm
@@ -18,9 +19,11 @@ class Eigenfaces:
 
         # Creates the eigenface object passing a threshold variable by parameter
         if threshold >= 0:
-            self.faceRec = cv2.face.createEigenFaceRecognizer(num_components=numComponents, threshold=threshold)
+            self.faceRec = cv2.face.createEigenFaceRecognizer(
+                num_components=numComponents, threshold=threshold)
         else:
-            self.faceRec = cv2.face.createEigenFaceRecognizer(num_components=numComponents) # threshold=DBL_MAX
+            self.faceRec = cv2.face.createEigenFaceRecognizer(
+                num_components=numComponents)  # threshold=DBL_MAX
 
         self.algorithmTrained = False
 
@@ -43,4 +46,4 @@ class Eigenfaces:
             sys.exit()
 
         # Return the subject ID (label) and the confidence
-        return self.faceRec.predict( image )
+        return self.faceRec.predict(image)

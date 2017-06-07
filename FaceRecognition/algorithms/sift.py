@@ -4,6 +4,7 @@ import cv2
 import os
 import numpy as np
 
+
 class SIFT:
     """
     Class that provides easy access to the SIFT algorithm
@@ -27,7 +28,8 @@ class SIFT:
             sigma = 1.6
 
         # Creates the SIFT object
-        self.faceRec = cv2.xfeatures2d.SIFT_create(nfeatures=nfeatures, nOctaveLayers=nOctaveLayers, contrastThreshold=contrastThreshold, edgeThreshold=edgeThreshold, sigma=sigma)
+        self.faceRec = cv2.xfeatures2d.SIFT_create(
+            nfeatures=nfeatures, nOctaveLayers=nOctaveLayers, contrastThreshold=contrastThreshold, edgeThreshold=edgeThreshold, sigma=sigma)
 
         # Creates the matcher object
         self.matcher = cv2.BFMatcher(distance, crossCheck=crossCheck)
@@ -74,10 +76,10 @@ class SIFT:
         matches = self.matcher.match(descriptors)
 
         # Order by distance
-        matches = sorted(matches, key = lambda x:x.distance)
+        matches = sorted(matches, key=lambda x: x.distance)
 
         # Creates a results vector to store the number of similar points for each image on the training set
-        results = [0]*len(self.labels)
+        results = [0] * len(self.labels)
 
         # Based on the matches vector we create the results vector that represents how many points this test image are similar to each image in the training set
         for match in matches:
@@ -94,7 +96,8 @@ class SIFT:
         # The confidence range is: 0 - 100
         # The closer to zero higher is the confidence
         if len(matches) > 0:
-            confidence = 100.0 - ((float(max(results)) * 100.0) / float(len(matches)))
+            confidence = 100.0 - \
+                ((float(max(results)) * 100.0) / float(len(matches)))
         else:
             confidence = 0.0
 

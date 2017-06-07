@@ -13,10 +13,11 @@ from algorithms.lbph import LBPH
 from algorithms.sift import SIFT
 from algorithms.surf import SURF
 
-dirPath     = "/home/kelvins/Desktop/Reconhecimento-Facial/Dataset"
-trainPath   = dirPath + "/Train/BASE1/"
-testPath    = dirPath + "/Test/VIDEO1/"
+dirPath = "/home/kelvins/Desktop/Reconhecimento-Facial/Dataset"
+trainPath = dirPath + "/Train/BASE1/"
+testPath = dirPath + "/Test/VIDEO1/"
 resultsPath = dirPath + "/Results/"
+
 
 def faceFecognition():
     global trainPath, testPath, resultsPath
@@ -50,7 +51,8 @@ def faceFecognition():
     report.saveReport(resultsPath)
 
     # Save all results (summary, full report and images)
-    #report.saveAllResults(resultsPath)
+    # report.saveAllResults(resultsPath)
+
 
 def ensemble():
     global trainPath, testPath, resultsPath
@@ -60,11 +62,11 @@ def ensemble():
 
     # Create and add all algorithms for the ensemble
     algorithms = []
-    algorithms.append( Eigenfaces() )
-    algorithms.append( LBPH() )
-    algorithms.append( Fisherfaces() )
-    algorithms.append( SIFT() )
-    algorithms.append( SURF() )
+    algorithms.append(Eigenfaces())
+    algorithms.append(LBPH())
+    algorithms.append(Fisherfaces())
+    algorithms.append(SIFT())
+    algorithms.append(SURF())
 
     # Create the voting object (Majority or Weighted)
     #voting = Voting()
@@ -89,7 +91,8 @@ def ensemble():
     report.saveReport(resultsPath)
 
     # Save all results (summary, full report and images)
-    #report.saveAllResults(resultsPath)
+    # report.saveAllResults(resultsPath)
+
 
 if __name__ == "__main__":
     faceFecognition()
