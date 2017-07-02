@@ -69,7 +69,8 @@ class Report:
             if self.object.getThreshold() >= 0:
                 totalFaceImages = self.object.getRecognizedBelowThreshold(
                 ) + self.object.getUnrecognizedBelowThreshold()
-                # Calculate the accuracy using only the results below the threshold
+                # Calculate the accuracy using only the results below the
+                # threshold
                 accuracy2 = self.auxiliary.calcAccuracy(
                     self.object.getRecognizedBelowThreshold(), totalFaceImages)
 
@@ -144,7 +145,8 @@ class Report:
 
         # Create each line based on the predicted subject IDs
         for index in xrange(0, len(predictSubjectIds)):
-            # Format: 1: Expected subject: 3: Classified as subject: 2: With confidence: 4123.123123: File name: 1_3
+            # Format: 1: Expected subject: 3: Classified as subject: 2: With
+            # confidence: 4123.123123: File name: 1_3
             content += str(index + 1)
             content += ": Expected subject: " + str(testLabels[index])
             content += ": Classified as subject: " + \
@@ -261,7 +263,8 @@ class Report:
 
             label += ".png"
 
-            # Find the image that matches based on the trainLabel and predictedSubjectIDs
+            # Find the image that matches based on the trainLabel and
+            # predictedSubjectIDs
             image1 = testImages[index]
             image2 = None
             for i in xrange(0, len(trainLabels)):

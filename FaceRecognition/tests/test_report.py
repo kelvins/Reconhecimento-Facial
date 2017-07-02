@@ -11,11 +11,13 @@ from eigenfaces import Eigenfaces
 auxiliary = Auxiliary()
 algorithm = Eigenfaces()
 faceRecog = FaceRecognition(algorithm, auxiliary)
-report    = Report(faceRecog)
+report = Report(faceRecog)
+
 
 class ReportSummaryTest(unittest.TestCase):
     def test1(self):
         self.assertEqual(report.generateReportSummary(), "")
+
 
 if __name__ == '__main__':
     unittest.main()

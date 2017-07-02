@@ -9,15 +9,20 @@ auxiliary = Auxiliary()
 
 class GetInterpolationMethodNameTest(unittest.TestCase):
     def test1(self):
-        self.assertEqual(auxiliary.getInterpolationMethodName(), "cv2.INTER_CUBIC")
+        self.assertEqual(
+            auxiliary.getInterpolationMethodName(),
+            "cv2.INTER_CUBIC")
 
     def test2(self):
-    	auxiliary.setInterpolation(cv2.INTER_LANCZOS4)
-        self.assertEqual(auxiliary.getInterpolationMethodName(), "cv2.INTER_LANCZOS4")
+        auxiliary.setInterpolation(cv2.INTER_LANCZOS4)
+        self.assertEqual(
+            auxiliary.getInterpolationMethodName(),
+            "cv2.INTER_LANCZOS4")
 
     def test2(self):
-    	auxiliary.setInterpolation(123)
+        auxiliary.setInterpolation(123)
         self.assertEqual(auxiliary.getInterpolationMethodName(), "")
+
 
 class GetSupportedFilesTest(unittest.TestCase):
     def test1(self):
@@ -25,7 +30,10 @@ class GetSupportedFilesTest(unittest.TestCase):
 
     def test2(self):
         auxiliary.setSupportedFiles(["png", "jpg", "jpeg", "gif"])
-        self.assertEqual(auxiliary.getSupportedFiles(), ["png", "jpg", "jpeg", "gif"])
+        self.assertEqual(
+            auxiliary.getSupportedFiles(), [
+                "png", "jpg", "jpeg", "gif"])
+
 
 class GetDefaultSizeTest(unittest.TestCase):
     def test1(self):
@@ -47,6 +55,7 @@ class GetDefaultSizeTest(unittest.TestCase):
         auxiliary.setDefaultSize(50, -5)
         self.assertEqual(auxiliary.getDefaultSize(), (50, 100))
 
+
 class GrayscaleTest(unittest.TestCase):
     def test1(self):
         img = auxiliary.loadImage("images/python.png")
@@ -62,6 +71,7 @@ class GrayscaleTest(unittest.TestCase):
         img = auxiliary.loadImage("images/python_gray.png")
         self.assertEqual(auxiliary.isGrayscale(img), True)
 
+
 class PreprocessImageTest(unittest.TestCase):
     def test1(self):
         img = auxiliary.loadImage("images/python.png")
@@ -69,11 +79,12 @@ class PreprocessImageTest(unittest.TestCase):
         self.assertEqual(img.shape[:2], (400, 400))
 
     def test2(self):
-    	auxiliary.setDefaultSize(100, 100)
-    	auxiliary.setInterpolation(cv2.INTER_CUBIC)
+        auxiliary.setDefaultSize(100, 100)
+        auxiliary.setInterpolation(cv2.INTER_CUBIC)
         img = auxiliary.preprocessImage("images/python.png")
         self.assertEqual(img.shape[:2], (100, 100))
         self.assertEqual(auxiliary.isGrayscale(img), True)
+
 
 class ConcatenateImagesTest(unittest.TestCase):
     def test1(self):
@@ -89,19 +100,22 @@ class ConcatenateImagesTest(unittest.TestCase):
         img = auxiliary.loadImage("images/python_concatenated.png")
         self.assertEqual(img.shape[:2], (100, 200))
 
+
 class ExtractPathsTest(unittest.TestCase):
     def test1(self):
         paths = auxiliary.extractImagesPaths("images/")
         self.assertEqual(len(paths), 3)
 
+
 class WriteTextFileTest(unittest.TestCase):
     def test1(self):
-        content  = "WriteTextFileTest"
+        content = "WriteTextFileTest"
         fileName = "images/WriteTextFileTest.txt"
         auxiliary.writeTextFile(content, fileName)
 
         paths = auxiliary.extractFilesPaths("images/")
         self.assertEqual(len(paths), 4)
+
 
 if __name__ == '__main__':
     unittest.main()

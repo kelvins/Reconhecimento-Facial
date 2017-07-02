@@ -14,7 +14,8 @@ class Ensemble:
     Class that provides an interface for the Ensemble
     """
 
-    def __init__(self, fralgorithms=[], auxiliary=Auxiliary(), voting=Voting()):
+    def __init__(self, fralgorithms=[],
+                 auxiliary=Auxiliary(), voting=Voting()):
         self.fralgorithms = fralgorithms
         self.auxiliary = auxiliary
         self.voting = voting
@@ -158,14 +159,16 @@ class Ensemble:
                 subjectID.append(subID)
                 confidence.append(conf)
 
-            # If using weighted voting the subjectID length should be equal to the weights length
+            # If using weighted voting the subjectID length should be equal to
+            # the weights length
             result = self.voting.vote(subjectID)
 
             # Store the predicted results to be used in the report
             self.predictSubjectIds.append(result)
 
             # As we don't work with confidences in ensemble
-            # We can store the subjectID list to check which algorithm has predicted which subject
+            # We can store the subjectID list to check which algorithm has
+            # predicted which subject
             self.predictConfidence.append(subjectID)
 
             # Approach not using threshold (face images manually classified)
