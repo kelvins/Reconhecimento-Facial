@@ -9,24 +9,29 @@ import numpy as np
 
 class Auxiliary:
     """
-    Class that provides some auxiliary functions
+    Class that provides some auxiliary functions.
     """
 
     def __init__(self, sizeX=100, sizeY=100, interpolation=cv2.INTER_CUBIC):
         """
-        Set the default values
+        Set the default values for the image size and the interpolation method.
+        Available interpolation methods provided by OpenCV: INTER_CUBIC, INTER_AREA, INTER_LANCZOS4, INTER_LINEAR, INTER_NEAREST
+        :param sizeX: Set the default image width (default = 100).
+        :param sizeY: Set the default image height (default = 100).
+        :param interpolation: Set the default interpolation method (default cv2.INTER_CUBIC).
         """
         self.sizeX = sizeX
         self.sizeY = sizeY
         self.interpolation = interpolation
-        # INTER_CUBIC, INTER_AREA, INTER_LANCZOS4, INTER_LINEAR, INTER_NEAREST
 
         # Declare all supported files
         self.supportedFiles = ["png", "jpg", "jpeg"]
 
     def setDefaultSize(self, sizeX, sizeY):
         """
-        Set the default size for the imagens (default is 100x100)
+        Set the default size.
+        :param sizeX: Image width.
+        :param sizeY: Image height.
         """
         if sizeX > 0:
             self.sizeX = sizeX
@@ -35,31 +40,35 @@ class Auxiliary:
 
     def getDefaultSize(self):
         """
-        Get the default size defined (default is 100x100)
+        Get the default image size defined (default is 100x100).
         """
         return self.sizeX, self.sizeY
 
     def setSupportedFiles(self, supportedFiles):
         """
-        Set the default supportedFiles list (default is ["png", "jpg", "jpeg"])
+        Set the default supportedFiles list (default is ["png", "jpg", "jpeg"]).
+        :param supportedFiles: A list of strings.
         """
         self.supportedFiles = supportedFiles
 
     def getSupportedFiles(self):
         """
-        Set the supportedFiles list (default is ["png", "jpg", "jpeg"])
+        Get the supportedFiles list (default is ["png", "jpg", "jpeg"]).
+        :return: A list of strings.
         """
         return self.supportedFiles
 
     def setInterpolation(self, interpolation):
         """
-        Set the default interpolation method (default is cv2.INTER_CUBIC)
+        Set the default interpolation method (default is cv2.INTER_CUBIC).
+        :param interpolation: Set the interpolation method.
         """
         self.interpolation = interpolation
 
     def getInterpolationMethodName(self):
         """
-        Get the selected interpolation method
+        Get the selected interpolation method name.
+        :return: A string containing the interpolation method name.
         """
         if self.interpolation == cv2.INTER_CUBIC:
             return "cv2.INTER_CUBIC"
@@ -75,7 +84,11 @@ class Auxiliary:
 
     def calcAccuracy(self, recognizedImages, totalFaceImages):
         """
-        Calculates the accuracy (percentage)
+        Calculates the accuracy (percentage) using the formula:
+        acc = recognizedImages / totalFaceImages * 100
+        :param recognizedImages: The number of recognized face images.
+        :param totalFaceImages: The number of total face images.
+        :return: The accuracy.
         """
         # Avoid division by zero
         if totalFaceImages > 0:
@@ -85,7 +98,9 @@ class Auxiliary:
 
     def writeTextFile(self, content, fileName):
         """
-        Write the content to a text file based on the file name
+        Write the content to a text file based on the file name.
+        :param content: The content as a string.
+        :param fileName: The file name (e.g. home/user/test.txt)
         """
         # Save the text file
         textFile = open(fileName, "w")
@@ -94,7 +109,9 @@ class Auxiliary:
 
     def isGrayscale(self, image):
         """
-        Check if an image is in grayscale
+        Check if an image is in grayscale.
+        :param image: The image.
+        :return: True if the image is in grayscale.
         """
         if len(image.shape) <= 2:
             return True
@@ -110,30 +127,44 @@ class Auxiliary:
     def toGrayscale(self, image):
         """
         Convert an image to grayscale
+        :param image: The image.
+        :return: The image in grayscale.
         """
         return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     def loadImage(self, path):
         """
-        Load an image based on the path passed by parameter
+        Load an image based on the path passed by parameter.
+        :param path: The path to the image file.
+        :return: The image object.
         """
         return cv2.imread(path)
 
     def saveImage(self, fileName, image):
         """
-        Save an image based on the fileName passed by parameter
+        Save an image based on the fileName passed by parameter.
+        :param fileName: The file name.
+        :param image: The image.
         """
         cv2.imwrite(fileName, image)
 
     def resizeImage(self, image, sizeX, sizeY, interpolationMethod):
         """
-        Convert an image to grayscale
+        Resize an image.
+        :param image: The image object.
+        :param sizeX: The image width.
+        :param sizeY: The image height.
+        :param interpolationMethod: The interpolation method.
+        :return: The resized image.
         """
-        return cv2.resize(image, (sizeX, sizeY), interpolation=interpolationMethod)
+        return cv2.resize(image, (sizeX, sizeY),
+                          interpolation=interpolationMethod)
 
     def preprocessImage(self, path):
         """
-        Preprocess an image
+        Preprocess an image. Load an image, convert to grayscale and resize it.
+        :param path: The image path.
+        :return: The preprocessed image.
         """
         # Load the image
         image = self.loadImage(path)
@@ -147,13 +178,18 @@ class Auxiliary:
 
     def concatenateImages(self, leftImage, rightImage):
         """
-        Concatenate two images side by side (horizontally) and returns a new one
+        Concatenate two images side by side (horizontally) and returns a new one.
+        :param leftImage: The image that should be put to the left.
+        :param rightImage: The image that should be put to the right.
+        :return: The new concatenated image.
         """
         return np.concatenate((leftImage, rightImage), axis=1)
 
     def extractImagesPaths(self, path):
         """
-        Extract all paths for each image
+        Extract all paths for each image in a directory.
+        :param path: The directory path.
+        :return: A list with all file paths.
         """
         paths = []
 
@@ -163,14 +199,17 @@ class Auxiliary:
             for filename in filenames:
                 # Check if it is a valid image file
                 if filename.split(".")[1] in self.supportedFiles:
-                    # Creates the filePath joining the directory name and the file name
+                    # Creates the filePath joining the directory name and the
+                    # file name
                     paths.append(os.path.join(dirname, filename))
 
         return paths
 
     def extractFilesPaths(self, path):
         """
-        Extract all paths for all files type
+        Extract all paths for all files type.
+        :param path: The directory path.
+        :return: A list with all paths for all files.
         """
         paths = []
 
@@ -178,14 +217,17 @@ class Auxiliary:
         for dirname, dirnames, filenames in os.walk(path):
             # For each file found
             for filename in filenames:
-                # Creates the filePath joining the directory name and the file name
+                # Creates the filePath joining the directory name and the file
+                # name
                 paths.append(os.path.join(dirname, filename))
 
         return paths
 
     def loadAllImagesForTrain(self, trainPath):
         """
-        Load all images for train
+        Load all images for training.
+        :param trainPath: The train path.
+        :return: Three lists with the images, labels and file names.
         """
         images = []
         labels = []
@@ -198,7 +240,8 @@ class Auxiliary:
             # Check if it is a valid image file
             if filePath.split(".")[1] in self.supportedFiles:
 
-                # Get the subject id (label) based on the format: subjectID_imageNumber.png
+                # Get the subject id (label) based on the format:
+                # subjectID_imageNumber.png
                 pathSplit = filePath.split("/")
                 tempName = pathSplit[len(pathSplit) - 1]
                 subjectID = int(tempName.split("_")[0])
@@ -211,7 +254,9 @@ class Auxiliary:
 
     def loadAllImagesForTest(self, testPath):
         """
-        Load all images for test
+        Load all images for test.
+        :param testPath: The test path.
+        :return: Three lists with the images, labels and file names.
         """
         images = []
         labels = []
