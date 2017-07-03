@@ -33,8 +33,8 @@ class Report:
             content = "Ensemble (multiple algorithms)"
 
         content += "\n\nDate/Time: " + time.strftime("%d/%m/%Y %H:%M:%S")
-        content += "\nTrain Path: " + self.object.getTrainPath()
-        content += "\nTest Path: " + self.object.getTestPath() + "\n"
+        content += "\nTrain Path: " + self.object.trainPath
+        content += "\nTest Path: " + self.object.testPath + "\n"
 
         # For the face recognition class get only the name of the algorithm
         if isinstance(self.object, FaceRecognition):
@@ -60,7 +60,7 @@ class Report:
                         content += " - Weight: " + str(weights[index])
 
         content += "\n\nTotal Images Analyzed: " + \
-            str(len(self.object.getTestFileNames()))
+            str(len(self.object.testFileNames))
 
         totalFaceImages = 0.0
         accuracy2 = 0.0
@@ -92,14 +92,14 @@ class Report:
                     str(self.object.nonFacesAboveThreshold)
             else:
                 totalFaceImages = float(
-                    self.object.getRecognized() + self.object.getUnrecognized())
+                    self.object.recognized + self.object.unrecognized)
                 accuracy = self.auxiliary.calcAccuracy(
-                    self.object.getRecognized(), totalFaceImages)
+                    self.object.recognized, totalFaceImages)
                 content += "\nRecognized Faces: " + \
-                    str(self.object.getRecognized())
+                    str(self.object.recognized)
                 content += "\nUnrecognized Faces: " + \
-                    str(self.object.getUnrecognized())
-                content += "\nNon Faces: " + str(self.object.getNonFaces())
+                    str(self.object.unrecognized)
+                content += "\nNon Faces: " + str(self.object.nonFaces)
         else:
             totalFaceImages = float(
                 self.object.recognized + self.object.unrecognized)
