@@ -1,3 +1,4 @@
 *.pyc
 /Dataset/*
 *.idea
+Thumbs.db
