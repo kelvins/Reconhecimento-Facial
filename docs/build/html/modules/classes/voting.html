@@ -169,30 +169,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">votingScheme</span> <span class="o">=</span> <span class="n">votingScheme</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span>
 
-<div class="viewcode-block" id="Voting.setWeights"><a class="viewcode-back" href="../../classes.html#classes.voting.Voting.setWeights">[docs]</a>    <span class="k">def</span> <span class="nf">setWeights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set the weights</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span></div>
-
-<div class="viewcode-block" id="Voting.getWeights"><a class="viewcode-back" href="../../classes.html#classes.voting.Voting.getWeights">[docs]</a>    <span class="k">def</span> <span class="nf">getWeights</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the weights</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span></div>
-
-<div class="viewcode-block" id="Voting.setVotingScheme"><a class="viewcode-back" href="../../classes.html#classes.voting.Voting.setVotingScheme">[docs]</a>    <span class="k">def</span> <span class="nf">setVotingScheme</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">votingScheme</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set the selected voting scheme</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">votingScheme</span> <span class="o">=</span> <span class="n">votingScheme</span></div>
-
-<div class="viewcode-block" id="Voting.getVotingScheme"><a class="viewcode-back" href="../../classes.html#classes.voting.Voting.getVotingScheme">[docs]</a>    <span class="k">def</span> <span class="nf">getVotingScheme</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the selected voting scheme</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">votingScheme</span></div>
-
 <div class="viewcode-block" id="Voting.getVotingSchemeName"><a class="viewcode-back" href="../../classes.html#classes.voting.Voting.getVotingSchemeName">[docs]</a>    <span class="k">def</span> <span class="nf">getVotingSchemeName</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the name of the selected voting scheme to be used in the report.</span>
@@ -223,7 +199,7 @@
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">subjects</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
 
-        <span class="n">subjectVoted</span>  <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">subjectVoted</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">numberOfVotes</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Count votes</span>

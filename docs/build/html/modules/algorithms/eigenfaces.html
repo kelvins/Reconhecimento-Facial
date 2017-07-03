@@ -159,46 +159,62 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
+
 <div class="viewcode-block" id="Eigenfaces"><a class="viewcode-back" href="../../algorithms.html#algorithms.eigenfaces.Eigenfaces">[docs]</a><span class="k">class</span> <span class="nc">Eigenfaces</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Class that provides easy access to the Eigenfaces algorithm</span>
+<span class="sd">    Class that provides easy access to the Eigenfaces algorithm.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numComponents</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set the default values</span>
+<span class="sd">        Set the default values.</span>
+<span class="sd">        :param numComponents: The number of components (default 0).</span>
+<span class="sd">        :param threshold: The threshold (default -1).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">if</span> <span class="n">numComponents</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">numComponents</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="c1"># Creates the eigenface object passing a threshold variable by parameter</span>
+        <span class="c1"># Creates the eigenface object passing a threshold variable by</span>
+        <span class="c1"># parameter</span>
         <span class="k">if</span> <span class="n">threshold</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">faceRec</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">face</span><span class="o">.</span><span class="n">createEigenFaceRecognizer</span><span class="p">(</span><span class="n">num_components</span><span class="o">=</span><span class="n">numComponents</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">faceRec</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">face</span><span class="o">.</span><span class="n">createEigenFaceRecognizer</span><span class="p">(</span>
+                <span class="n">num_components</span><span class="o">=</span><span class="n">numComponents</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">faceRec</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">face</span><span class="o">.</span><span class="n">createEigenFaceRecognizer</span><span class="p">(</span><span class="n">num_components</span><span class="o">=</span><span class="n">numComponents</span><span class="p">)</span> <span class="c1"># threshold=DBL_MAX</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">faceRec</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">face</span><span class="o">.</span><span class="n">createEigenFaceRecognizer</span><span class="p">(</span>
+                <span class="n">num_components</span><span class="o">=</span><span class="n">numComponents</span><span class="p">)</span>  <span class="c1"># threshold=DBL_MAX</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">algorithmTrained</span> <span class="o">=</span> <span class="kc">False</span>
 
 <div class="viewcode-block" id="Eigenfaces.getAlgorithmName"><a class="viewcode-back" href="../../algorithms.html#algorithms.eigenfaces.Eigenfaces.getAlgorithmName">[docs]</a>    <span class="k">def</span> <span class="nf">getAlgorithmName</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the algorithm name.</span>
+<span class="sd">        :return: The algorithm name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;Eigenfaces&quot;</span></div>
 
 <div class="viewcode-block" id="Eigenfaces.train"><a class="viewcode-back" href="../../algorithms.html#algorithms.eigenfaces.Eigenfaces.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">images</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Train the face recognition algorithm</span>
+<span class="sd">        :param images: A slice with all images for training.</span>
+<span class="sd">        :param labels: A slice with all labels corresponding to the images.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">faceRec</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">labels</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">algorithmTrained</span> <span class="o">=</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="Eigenfaces.predict"><a class="viewcode-back" href="../../algorithms.html#algorithms.eigenfaces.Eigenfaces.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Predict the image</span>
+<span class="sd">        Predict the image. Given a new image this function will make the prediction.</span>
+<span class="sd">        :param image: The image we want to predict.</span>
+<span class="sd">        :return: The subject ID (label) and the confidence.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Check if the algorithm was trained</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">algorithmTrained</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
             <span class="nb">print</span> <span class="s2">&quot;The face recognition algorithm was not trained.&quot;</span>
             <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
 
         <span class="c1"># Return the subject ID (label) and the confidence</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">faceRec</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span> <span class="n">image</span> <span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">faceRec</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">image</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

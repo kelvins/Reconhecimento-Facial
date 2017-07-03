@@ -163,16 +163,38 @@
 <span class="kn">from</span> <span class="nn">voting</span> <span class="k">import</span> <span class="n">Voting</span>
 <span class="kn">from</span> <span class="nn">auxiliary</span> <span class="k">import</span> <span class="n">Auxiliary</span>
 
+
 <div class="viewcode-block" id="Ensemble"><a class="viewcode-back" href="../../classes.html#classes.ensemble.Ensemble">[docs]</a><span class="k">class</span> <span class="nc">Ensemble</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class that provides an interface for the Ensemble</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fralgorithms</span><span class="o">=</span><span class="p">[],</span> <span class="n">auxiliary</span><span class="o">=</span><span class="n">Auxiliary</span><span class="p">(),</span> <span class="n">voting</span><span class="o">=</span><span class="n">Voting</span><span class="p">()):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fralgorithms</span><span class="o">=</span><span class="p">[],</span>
+                 <span class="n">auxiliary</span><span class="o">=</span><span class="n">Auxiliary</span><span class="p">(),</span> <span class="n">voting</span><span class="o">=</span><span class="n">Voting</span><span class="p">()):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fralgorithms</span> <span class="o">=</span> <span class="n">fralgorithms</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">auxiliary</span> <span class="o">=</span> <span class="n">auxiliary</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">voting</span> <span class="o">=</span> <span class="n">voting</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">trainImages</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trainLabels</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Reset the paths</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trainPath</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">testPath</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="c1"># Reset all results</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recognized</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unrecognized</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nonFaces</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># Reset the predicted results</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">predictSubjectIds</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">predictConfidence</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Reset test results</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">testImages</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">testLabels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">testFileNames</span> <span class="o">=</span> <span class="p">[]</span>
 
 <div class="viewcode-block" id="Ensemble.reset"><a class="viewcode-back" href="../../classes.html#classes.ensemble.Ensemble.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -183,7 +205,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">trainLabels</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="c1"># Reset the paths</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">trainPath</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">testPath</span>  <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">testPath</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="c1"># Reset the results</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">resetResults</span><span class="p">()</span></div>
 
@@ -193,9 +215,9 @@
 <span class="sd">        It is used to reset only the results of the tests</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Reset all results</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">recognized</span>   <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recognized</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">unrecognized</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nonFaces</span>     <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nonFaces</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="c1"># Reset the predicted results</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">predictSubjectIds</span> <span class="o">=</span> <span class="p">[]</span>
@@ -205,60 +227,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">testImages</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">testLabels</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">testFileNames</span> <span class="o">=</span> <span class="p">[]</span></div>
-
-<div class="viewcode-block" id="Ensemble.setFRAlgorithms"><a class="viewcode-back" href="../../classes.html#classes.ensemble.Ensemble.setFRAlgorithms">[docs]</a>    <span class="k">def</span> <span class="nf">setFRAlgorithms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fralgorithms</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fralgorithms</span> <span class="o">=</span> <span class="n">fralgorithms</span></div>
-
-<div class="viewcode-block" id="Ensemble.getFRAlgorithms"><a class="viewcode-back" href="../../classes.html#classes.ensemble.Ensemble.getFRAlgorithms">[docs]</a>    <span class="k">def</span> <span class="nf">getFRAlgorithms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fralgorithms</span></div>
-
-<div class="viewcode-block" id="Ensemble.setAuxiliary"><a class="viewcode-back" href="../../classes.html#classes.ensemble.Ensemble.setAuxiliary">[docs]</a>    <span class="k">def</span> <span class="nf">setAuxiliary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">auxiliary</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">auxiliary</span> <span class="o">=</span> <span class="n">auxiliary</span></div>
-
-<div class="viewcode-block" id="Ensemble.getAuxiliary"><a class="viewcode-back" href="../../classes.html#classes.ensemble.Ensemble.getAuxiliary">[docs]</a>    <span class="k">def</span> <span class="nf">getAuxiliary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">auxiliary</span></div>
-
-<div class="viewcode-block" id="Ensemble.setVoting"><a class="viewcode-back" href="../../classes.html#classes.ensemble.Ensemble.setVoting">[docs]</a>    <span class="k">def</span> <span class="nf">setVoting</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">voting</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">voting</span> <span class="o">=</span> <span class="n">voting</span></div>
-
-<div class="viewcode-block" id="Ensemble.getVoting"><a class="viewcode-back" href="../../classes.html#classes.ensemble.Ensemble.getVoting">[docs]</a>    <span class="k">def</span> <span class="nf">getVoting</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">voting</span></div>
-
-<div class="viewcode-block" id="Ensemble.getPredictedSubjectIds"><a class="viewcode-back" href="../../classes.html#classes.ensemble.Ensemble.getPredictedSubjectIds">[docs]</a>    <span class="k">def</span> <span class="nf">getPredictedSubjectIds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">predictSubjectIds</span></div>
-
-<div class="viewcode-block" id="Ensemble.getPredictedConfidence"><a class="viewcode-back" href="../../classes.html#classes.ensemble.Ensemble.getPredictedConfidence">[docs]</a>    <span class="k">def</span> <span class="nf">getPredictedConfidence</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">predictConfidence</span></div>
-
-<div class="viewcode-block" id="Ensemble.getTestImages"><a class="viewcode-back" href="../../classes.html#classes.ensemble.Ensemble.getTestImages">[docs]</a>    <span class="k">def</span> <span class="nf">getTestImages</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">testImages</span></div>
-
-<div class="viewcode-block" id="Ensemble.getTestLabels"><a class="viewcode-back" href="../../classes.html#classes.ensemble.Ensemble.getTestLabels">[docs]</a>    <span class="k">def</span> <span class="nf">getTestLabels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">testLabels</span></div>
-
-<div class="viewcode-block" id="Ensemble.getTestFileNames"><a class="viewcode-back" href="../../classes.html#classes.ensemble.Ensemble.getTestFileNames">[docs]</a>    <span class="k">def</span> <span class="nf">getTestFileNames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">testFileNames</span></div>
-
-<div class="viewcode-block" id="Ensemble.getTrainImages"><a class="viewcode-back" href="../../classes.html#classes.ensemble.Ensemble.getTrainImages">[docs]</a>    <span class="k">def</span> <span class="nf">getTrainImages</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainImages</span></div>
-
-<div class="viewcode-block" id="Ensemble.getTrainLabels"><a class="viewcode-back" href="../../classes.html#classes.ensemble.Ensemble.getTrainLabels">[docs]</a>    <span class="k">def</span> <span class="nf">getTrainLabels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainLabels</span></div>
-
-<div class="viewcode-block" id="Ensemble.getRecognized"><a class="viewcode-back" href="../../classes.html#classes.ensemble.Ensemble.getRecognized">[docs]</a>    <span class="k">def</span> <span class="nf">getRecognized</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">recognized</span></div>
-
-<div class="viewcode-block" id="Ensemble.getUnrecognized"><a class="viewcode-back" href="../../classes.html#classes.ensemble.Ensemble.getUnrecognized">[docs]</a>    <span class="k">def</span> <span class="nf">getUnrecognized</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">unrecognized</span></div>
-
-<div class="viewcode-block" id="Ensemble.getNonFaces"><a class="viewcode-back" href="../../classes.html#classes.ensemble.Ensemble.getNonFaces">[docs]</a>    <span class="k">def</span> <span class="nf">getNonFaces</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nonFaces</span></div>
-
-<div class="viewcode-block" id="Ensemble.getTrainPath"><a class="viewcode-back" href="../../classes.html#classes.ensemble.Ensemble.getTrainPath">[docs]</a>    <span class="k">def</span> <span class="nf">getTrainPath</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainPath</span></div>
-
-<div class="viewcode-block" id="Ensemble.getTestPath"><a class="viewcode-back" href="../../classes.html#classes.ensemble.Ensemble.getTestPath">[docs]</a>    <span class="k">def</span> <span class="nf">getTestPath</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">testPath</span></div>
 
 <div class="viewcode-block" id="Ensemble.train"><a class="viewcode-back" href="../../classes.html#classes.ensemble.Ensemble.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trainPath</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -275,7 +243,8 @@
             <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
 
         <span class="c1"># Load all imagens and labels</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">trainImages</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainLabels</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">auxiliary</span><span class="o">.</span><span class="n">loadAllImagesForTrain</span><span class="p">(</span><span class="n">trainPath</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trainImages</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainLabels</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">auxiliary</span><span class="o">.</span><span class="n">loadAllImagesForTrain</span><span class="p">(</span>
+            <span class="n">trainPath</span><span class="p">)</span>
 
         <span class="c1"># Train all the algorithms</span>
         <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fralgorithms</span><span class="p">)):</span>
@@ -296,28 +265,32 @@
             <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
 
         <span class="c1"># Load all imagens and labels</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">testImages</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">testLabels</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">testFileNames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">auxiliary</span><span class="o">.</span><span class="n">loadAllImagesForTest</span><span class="p">(</span><span class="n">testPath</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">testImages</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">testLabels</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">testFileNames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">auxiliary</span><span class="o">.</span><span class="n">loadAllImagesForTest</span><span class="p">(</span>
+            <span class="n">testPath</span><span class="p">)</span>
 
         <span class="c1"># For each image</span>
         <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">testImages</span><span class="p">)):</span>
-            <span class="n">subjectID</span>  <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">subjectID</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">confidence</span> <span class="o">=</span> <span class="p">[]</span>
 
             <span class="c1"># Predict</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fralgorithms</span><span class="p">)):</span>
-                <span class="n">subID</span><span class="p">,</span> <span class="n">conf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fralgorithms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">testImages</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+                <span class="n">subID</span><span class="p">,</span> <span class="n">conf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fralgorithms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">testImages</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
                 <span class="n">subjectID</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">subID</span><span class="p">)</span>
                 <span class="n">confidence</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conf</span><span class="p">)</span>
 
-            <span class="c1"># If using weighted voting the subjectID length should be equal to the weights length</span>
+            <span class="c1"># If using weighted voting the subjectID length should be equal to</span>
+            <span class="c1"># the weights length</span>
             <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">voting</span><span class="o">.</span><span class="n">vote</span><span class="p">(</span><span class="n">subjectID</span><span class="p">)</span>
 
             <span class="c1"># Store the predicted results to be used in the report</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">predictSubjectIds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">result</span> <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">predictSubjectIds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
             <span class="c1"># As we don&#39;t work with confidences in ensemble</span>
-            <span class="c1"># We can store the subjectID list to check which algorithm has predicted which subject</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">predictConfidence</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">subjectID</span> <span class="p">)</span>
+            <span class="c1"># We can store the subjectID list to check which algorithm has</span>
+            <span class="c1"># predicted which subject</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">predictConfidence</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">subjectID</span><span class="p">)</span>
 
             <span class="c1"># Approach not using threshold (face images manually classified)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">testLabels</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>

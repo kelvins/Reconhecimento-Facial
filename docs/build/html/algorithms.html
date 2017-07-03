@@ -173,22 +173,28 @@
 <dl class="class">
 <dt id="algorithms.eigenfaces.Eigenfaces">
 <em class="property">class </em><code class="descclassname">algorithms.eigenfaces.</code><code class="descname">Eigenfaces</code><span class="sig-paren">(</span><em>numComponents=0</em>, <em>threshold=-1</em><span class="sig-paren">)</span><a class="reference internal" href="modules/algorithms/eigenfaces.html#Eigenfaces"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.eigenfaces.Eigenfaces" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class that provides easy access to the Eigenfaces algorithm</p>
+<dd><p>Class that provides easy access to the Eigenfaces algorithm.</p>
 <dl class="method">
 <dt id="algorithms.eigenfaces.Eigenfaces.getAlgorithmName">
 <code class="descname">getAlgorithmName</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="modules/algorithms/eigenfaces.html#Eigenfaces.getAlgorithmName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.eigenfaces.Eigenfaces.getAlgorithmName" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Get the algorithm name.
+:return: The algorithm name.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="algorithms.eigenfaces.Eigenfaces.predict">
 <code class="descname">predict</code><span class="sig-paren">(</span><em>image</em><span class="sig-paren">)</span><a class="reference internal" href="modules/algorithms/eigenfaces.html#Eigenfaces.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.eigenfaces.Eigenfaces.predict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Predict the image</p>
+<dd><p>Predict the image. Given a new image this function will make the prediction.
+:param image: The image we want to predict.
+:return: The subject ID (label) and the confidence.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="algorithms.eigenfaces.Eigenfaces.train">
 <code class="descname">train</code><span class="sig-paren">(</span><em>images</em>, <em>labels</em><span class="sig-paren">)</span><a class="reference internal" href="modules/algorithms/eigenfaces.html#Eigenfaces.train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.eigenfaces.Eigenfaces.train" title="Permalink to this definition">¶</a></dt>
-<dd><p>Train the face recognition algorithm</p>
+<dd><p>Train the face recognition algorithm
+:param images: A slice with all images for training.
+:param labels: A slice with all labels corresponding to the images.</p>
 </dd></dl>
 
 </dd></dl>
@@ -199,22 +205,28 @@
 <dl class="class">
 <dt id="algorithms.fisherfaces.Fisherfaces">
 <em class="property">class </em><code class="descclassname">algorithms.fisherfaces.</code><code class="descname">Fisherfaces</code><span class="sig-paren">(</span><em>numComponents=0</em>, <em>threshold=-1</em><span class="sig-paren">)</span><a class="reference internal" href="modules/algorithms/fisherfaces.html#Fisherfaces"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.fisherfaces.Fisherfaces" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class that provides easy access to the Fisherfaces algorithm</p>
+<dd><p>Class that provides easy access to the Fisherfaces algorithm.</p>
 <dl class="method">
 <dt id="algorithms.fisherfaces.Fisherfaces.getAlgorithmName">
 <code class="descname">getAlgorithmName</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="modules/algorithms/fisherfaces.html#Fisherfaces.getAlgorithmName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.fisherfaces.Fisherfaces.getAlgorithmName" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Get the algorithm name.
+:return: The algorithm name.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="algorithms.fisherfaces.Fisherfaces.predict">
 <code class="descname">predict</code><span class="sig-paren">(</span><em>image</em><span class="sig-paren">)</span><a class="reference internal" href="modules/algorithms/fisherfaces.html#Fisherfaces.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.fisherfaces.Fisherfaces.predict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Predict the image</p>
+<dd><p>Predict the image. Given a new image this function will make the prediction.
+:param image: The image we want to predict.
+:return: The subject ID (label) and the confidence.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="algorithms.fisherfaces.Fisherfaces.train">
 <code class="descname">train</code><span class="sig-paren">(</span><em>images</em>, <em>labels</em><span class="sig-paren">)</span><a class="reference internal" href="modules/algorithms/fisherfaces.html#Fisherfaces.train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.fisherfaces.Fisherfaces.train" title="Permalink to this definition">¶</a></dt>
-<dd><p>Train the face recognition algorithm</p>
+<dd><p>Train the face recognition algorithm
+:param images: A slice with all images for training.
+:param labels: A slice with all labels corresponding to the images.</p>
 </dd></dl>
 
 </dd></dl>
@@ -225,22 +237,28 @@
 <dl class="class">
 <dt id="algorithms.lbph.LBPH">
 <em class="property">class </em><code class="descclassname">algorithms.lbph.</code><code class="descname">LBPH</code><span class="sig-paren">(</span><em>radius=1</em>, <em>neighbors=8</em>, <em>grid_x=8</em>, <em>grid_y=8</em>, <em>threshold=-1</em><span class="sig-paren">)</span><a class="reference internal" href="modules/algorithms/lbph.html#LBPH"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.lbph.LBPH" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class that provides easy access to the LBPH algorithm</p>
+<dd><p>Class that provides easy access to the LBPH algorithm.</p>
 <dl class="method">
 <dt id="algorithms.lbph.LBPH.getAlgorithmName">
 <code class="descname">getAlgorithmName</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="modules/algorithms/lbph.html#LBPH.getAlgorithmName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.lbph.LBPH.getAlgorithmName" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Get the algorithm name.
+:return: The algorithm name.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="algorithms.lbph.LBPH.predict">
 <code class="descname">predict</code><span class="sig-paren">(</span><em>image</em><span class="sig-paren">)</span><a class="reference internal" href="modules/algorithms/lbph.html#LBPH.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.lbph.LBPH.predict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Predict the image</p>
+<dd><p>Predict the image. Given a new image this function will make the prediction.
+:param image: The image we want to predict.
+:return: The subject ID (label) and the confidence.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="algorithms.lbph.LBPH.train">
 <code class="descname">train</code><span class="sig-paren">(</span><em>images</em>, <em>labels</em><span class="sig-paren">)</span><a class="reference internal" href="modules/algorithms/lbph.html#LBPH.train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.lbph.LBPH.train" title="Permalink to this definition">¶</a></dt>
-<dd><p>Train the face recognition algorithm</p>
+<dd><p>Train the face recognition algorithm
+:param images: A slice with all images for training.
+:param labels: A slice with all labels corresponding to the images.</p>
 </dd></dl>
 
 </dd></dl>
@@ -251,22 +269,28 @@
 <dl class="class">
 <dt id="algorithms.sift.SIFT">
 <em class="property">class </em><code class="descclassname">algorithms.sift.</code><code class="descname">SIFT</code><span class="sig-paren">(</span><em>nfeatures=0</em>, <em>nOctaveLayers=3</em>, <em>contrastThreshold=0.04</em>, <em>edgeThreshold=10</em>, <em>sigma=1.6</em>, <em>distance=4</em>, <em>crossCheck=False</em><span class="sig-paren">)</span><a class="reference internal" href="modules/algorithms/sift.html#SIFT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.sift.SIFT" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class that provides easy access to the SIFT algorithm</p>
+<dd><p>Class that provides easy access to the SIFT algorithm.</p>
 <dl class="method">
 <dt id="algorithms.sift.SIFT.getAlgorithmName">
 <code class="descname">getAlgorithmName</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="modules/algorithms/sift.html#SIFT.getAlgorithmName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.sift.SIFT.getAlgorithmName" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Get the algorithm name.
+:return: The algorithm name.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="algorithms.sift.SIFT.predict">
 <code class="descname">predict</code><span class="sig-paren">(</span><em>image</em><span class="sig-paren">)</span><a class="reference internal" href="modules/algorithms/sift.html#SIFT.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.sift.SIFT.predict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Predict the image</p>
+<dd><p>Predict the image. Given a new image this function will make the prediction.
+:param image: The image we want to predict.
+:return: The subject ID (label) and the confidence.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="algorithms.sift.SIFT.train">
 <code class="descname">train</code><span class="sig-paren">(</span><em>images</em>, <em>labels</em><span class="sig-paren">)</span><a class="reference internal" href="modules/algorithms/sift.html#SIFT.train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.sift.SIFT.train" title="Permalink to this definition">¶</a></dt>
-<dd><p>Train the face recognition algorithm</p>
+<dd><p>Train the face recognition algorithm
+:param images: A slice with all images for training.
+:param labels: A slice with all labels corresponding to the images.</p>
 </dd></dl>
 
 </dd></dl>
@@ -277,22 +301,28 @@
 <dl class="class">
 <dt id="algorithms.surf.SURF">
 <em class="property">class </em><code class="descclassname">algorithms.surf.</code><code class="descname">SURF</code><span class="sig-paren">(</span><em>hessianThreshold=100</em>, <em>nOctaves=4</em>, <em>nOctaveLayers=3</em>, <em>extended=False</em>, <em>upright=False</em>, <em>distance=4</em>, <em>crossCheck=False</em><span class="sig-paren">)</span><a class="reference internal" href="modules/algorithms/surf.html#SURF"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.surf.SURF" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class that provides easy access to the SURF algorithm</p>
+<dd><p>Class that provides easy access to the SURF algorithm.</p>
 <dl class="method">
 <dt id="algorithms.surf.SURF.getAlgorithmName">
 <code class="descname">getAlgorithmName</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="modules/algorithms/surf.html#SURF.getAlgorithmName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.surf.SURF.getAlgorithmName" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Get the algorithm name.
+:return: The algorithm name.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="algorithms.surf.SURF.predict">
 <code class="descname">predict</code><span class="sig-paren">(</span><em>image</em><span class="sig-paren">)</span><a class="reference internal" href="modules/algorithms/surf.html#SURF.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.surf.SURF.predict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Predict the image</p>
+<dd><p>Predict the image. Given a new image this function will make the prediction.
+:param image: The image we want to predict.
+:return: The subject ID (label) and the confidence.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="algorithms.surf.SURF.train">
 <code class="descname">train</code><span class="sig-paren">(</span><em>images</em>, <em>labels</em><span class="sig-paren">)</span><a class="reference internal" href="modules/algorithms/surf.html#SURF.train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.surf.SURF.train" title="Permalink to this definition">¶</a></dt>
-<dd><p>Train the face recognition algorithm</p>
+<dd><p>Train the face recognition algorithm
+:param images: A slice with all images for training.
+:param labels: A slice with all labels corresponding to the images.</p>
 </dd></dl>
 
 </dd></dl>
