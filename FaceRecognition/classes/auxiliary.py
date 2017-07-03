@@ -69,10 +69,9 @@ class Auxiliary:
         :param totalFaceImages: The number of total face images.
         :return: The accuracy.
         """
-        # Avoid division by zero
-        if totalFaceImages > 0:
+        try:
             return (float(recognizedImages) / float(totalFaceImages)) * 100.0
-        else:
+        except ZeroDivisionError:
             return 0.0
 
     def writeTextFile(self, content, fileName):
@@ -109,7 +108,9 @@ class Auxiliary:
         :param image: The image.
         :return: The image in grayscale.
         """
-        return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        if image is not None:
+            return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        return None
 
     def loadImage(self, path):
         """
@@ -250,7 +251,7 @@ class Auxiliary:
             if filePath.split(".")[1] in self.supportedFiles:
 
                 # Get the subject id (label)
-                # IMPORTANT: it follows the patter: imageNumber_subjectID.png
+                # IMPORTANT: it follows the pattern: imageNumber_subjectID.png
                 # It is different from the pattern on the training set
                 pathSplit = filePath.split("/")
                 tempName = pathSplit[len(pathSplit) - 1]
