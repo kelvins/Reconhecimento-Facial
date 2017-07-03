@@ -38,23 +38,23 @@ class Report:
 
         # For the face recognition class get only the name of the algorithm
         if isinstance(self.object, FaceRecognition):
-            content += "\nAlgorithm: " + self.object.getAlgorithm().getAlgorithmName()
-            if self.object.getThreshold() >= 0:
+            content += "\nAlgorithm: " + self.object.algorithm.getAlgorithmName()
+            if self.object.threshold >= 0:
                 content += "\nThreshold Used: " + \
-                    str(self.object.getThreshold())
+                    str(self.object.threshold)
             else:
                 content += "\nThreshold Not Used."
 
         # For the Ensemble class get the name of all algorithms
         elif isinstance(self.object, Ensemble):
-            content += "\nVoting Scheme: " + self.object.getVoting().getVotingSchemeName()
-            weights = self.object.getVoting().getWeights()
+            content += "\nVoting Scheme: " + self.object.voting.getVotingSchemeName()
+            weights = self.object.voting.weights
 
-            for index in xrange(0, len(self.object.getFRAlgorithms())):
+            for index in xrange(0, len(self.object.fralgorithms)):
                 content += "\nAlgorithm: " + \
-                    self.object.getFRAlgorithms()[index].getAlgorithmName()
+                    self.object.fralgorithms[index].getAlgorithmName()
                 # If it is using the WEIGHTED voting scheme
-                if self.object.getVoting().getVotingScheme() == Voting.WEIGHTED:
+                if self.object.voting.getVotingScheme() == Voting.WEIGHTED:
                     # If the index is valid for the weights list
                     if index < len(weights):
                         content += " - Weight: " + str(weights[index])
@@ -66,32 +66,30 @@ class Report:
         accuracy2 = 0.0
 
         if isinstance(self.object, FaceRecognition):
-            if self.object.getThreshold() >= 0:
-                totalFaceImages = self.object.getRecognizedBelowThreshold(
-                ) + self.object.getUnrecognizedBelowThreshold()
+            if self.object.threshold >= 0:
+                totalFaceImages = self.object.recognizedBelowThreshold + self.object.unrecognizedBelowThreshold
                 # Calculate the accuracy using only the results below the
                 # threshold
                 accuracy2 = self.auxiliary.calcAccuracy(
-                    self.object.getRecognizedBelowThreshold(), totalFaceImages)
+                    self.object.recognizedBelowThreshold, totalFaceImages)
 
-                totalFaceImages += self.object.getRecognizedAboveThreshold() + \
-                    self.object.getUnrecognizedAboveThreshold()
+                totalFaceImages += self.object.recognizedAboveThreshold + self.object.unrecognizedAboveThreshold
                 # Calculate the accuracy using the total number of face images
                 accuracy = self.auxiliary.calcAccuracy(
-                    self.object.getRecognizedBelowThreshold(), totalFaceImages)
+                    self.object.recognizedBelowThreshold, totalFaceImages)
 
                 content += "\nRecognized Faces Below Threshold: " + \
-                    str(self.object.getRecognizedBelowThreshold())
+                    str(self.object.recognizedBelowThreshold)
                 content += "\nUnrecognized Faces Below Threshold: " + \
-                    str(self.object.getUnrecognizedBelowThreshold())
+                    str(self.object.unrecognizedBelowThreshold)
                 content += "\nNon Faces Below Threshold: " + \
-                    str(self.object.getNonFacesBelowThreshold())
+                    str(self.object.nonFacesBelowThreshold)
                 content += "\nRecognized Faces Above Threshold: " + \
-                    str(self.object.getRecognizedAboveThreshold())
+                    str(self.object.recognizedAboveThreshold)
                 content += "\nUnrecognized Faces Above Threshold: " + \
-                    str(self.object.getUnrecognizedAboveThreshold())
+                    str(self.object.unrecognizedAboveThreshold)
                 content += "\nNon Faces Above Threshold: " + \
-                    str(self.object.getNonFacesAboveThreshold())
+                    str(self.object.nonFacesAboveThreshold)
             else:
                 totalFaceImages = float(
                     self.object.getRecognized() + self.object.getUnrecognized())
@@ -104,29 +102,29 @@ class Report:
                 content += "\nNon Faces: " + str(self.object.getNonFaces())
         else:
             totalFaceImages = float(
-                self.object.getRecognized() + self.object.getUnrecognized())
+                self.object.recognized + self.object.unrecognized)
             accuracy = self.auxiliary.calcAccuracy(
-                self.object.getRecognized(), totalFaceImages)
+                self.object.recognized, totalFaceImages)
             content += "\nRecognized Faces: " + \
-                str(self.object.getRecognized())
+                str(self.object.recognized)
             content += "\nUnrecognized Faces: " + \
-                str(self.object.getUnrecognized())
-            content += "\nNon Faces: " + str(self.object.getNonFaces())
+                str(self.object.unrecognized)
+            content += "\nNon Faces: " + str(self.object.nonFaces)
 
         content += "\nRecognition Rate - Recognized / Total Face Images"
         content += "\nAccuracy: " + str(accuracy) + " %"
 
         if isinstance(self.object, FaceRecognition):
-            if self.object.getThreshold() >= 0:
+            if self.object.threshold >= 0:
                 content += "\nAccuracy Only Below Threshold: " + \
                     str(accuracy2) + " %"
 
-        sizeX, sizeY = self.object.getAuxiliary().getDefaultSize()
+        sizeX, sizeY = self.object.auxiliary.getDefaultSize()
         content += "\n\nDefault Size Images: " + str(sizeX) + "x" + str(sizeY)
         content += "\nInterpolation Method: " + \
-            self.object.getAuxiliary().getInterpolationMethodName()
+            self.object.auxiliary.getInterpolationMethodName()
         content += "\nSupported Files: " + \
-            ', '.join(self.object.getAuxiliary().getSupportedFiles())
+            ', '.join(self.object.auxiliary.supportedFiles)
         return content
 
     def generateFullReport(self):
@@ -135,11 +133,11 @@ class Report:
         Return the content containing the information about each predicted image.
         """
         # Get the predicted results
-        predictSubjectIds = self.object.getPredictedSubjectIds()
-        predictConfidence = self.object.getPredictedConfidence()
+        predictSubjectIds = self.object.predictedSubjectIds
+        predictConfidence = self.object.predictedConfidence
         # Get the test information (labels and filenames)
-        testLabels = self.object.getTestLabels()
-        testFileNames = self.object.getTestFileNames()
+        testLabels = self.object.testLabels
+        testFileNames = self.object.testFileNames
 
         content = ""
 
@@ -236,15 +234,15 @@ class Report:
         os.makedirs(nonfacesFolder)
 
         # The predicted results
-        predictSubjectIds = self.object.getPredictedSubjectIds()
-        predictConfidence = self.object.getPredictedConfidence()
+        predictSubjectIds = self.object.predictedSubjectIds
+        predictConfidence = self.object.predictedConfidence
         # The tests information
-        testImages = self.object.getTestImages()
-        testLabels = self.object.getTestLabels()
-        testFileNames = self.object.getTestFileNames()
+        testImages = self.object.testImages
+        testLabels = self.object.testLabels
+        testFileNames = self.object.testFileNames
         # The training information
-        trainImages = self.object.getTrainImages()
-        trainLabels = self.object.getTrainLabels()
+        trainImages = self.object.trainImages
+        trainLabels = self.object.trainLabels
 
         delimiter = "_"
 
@@ -259,7 +257,7 @@ class Report:
                 label += "Confidence" + delimiter + \
                     str(predictConfidence[index])
             elif isinstance(self.object, Ensemble):
-                label += "Voting" + delimiter + self.object.getVoting().getVotingSchemeName()
+                label += "Voting" + delimiter + self.object.voting.getVotingSchemeName()
 
             label += ".png"
 

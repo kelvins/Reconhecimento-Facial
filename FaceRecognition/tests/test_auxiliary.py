@@ -14,7 +14,7 @@ class GetInterpolationMethodNameTest(unittest.TestCase):
             "cv2.INTER_CUBIC")
 
     def test2(self):
-        auxiliary.setInterpolation(cv2.INTER_LANCZOS4)
+        auxiliary.interpolation = cv2.INTER_LANCZOS4
         self.assertEqual(
             auxiliary.getInterpolationMethodName(),
             "cv2.INTER_LANCZOS4")
@@ -26,13 +26,12 @@ class GetInterpolationMethodNameTest(unittest.TestCase):
 
 class GetSupportedFilesTest(unittest.TestCase):
     def test1(self):
-        self.assertEqual(auxiliary.getSupportedFiles(), ["png", "jpg", "jpeg"])
+        self.assertEqual(auxiliary.supportedFiles, ["png", "jpg", "jpeg"])
 
     def test2(self):
-        auxiliary.setSupportedFiles(["png", "jpg", "jpeg", "gif"])
+        auxiliary.supportedFiles = ["png", "jpg", "jpeg", "gif"]
         self.assertEqual(
-            auxiliary.getSupportedFiles(), [
-                "png", "jpg", "jpeg", "gif"])
+            auxiliary.supportedFiles, ["png", "jpg", "jpeg", "gif"])
 
 
 class GetDefaultSizeTest(unittest.TestCase):
@@ -80,7 +79,7 @@ class PreprocessImageTest(unittest.TestCase):
 
     def test2(self):
         auxiliary.setDefaultSize(100, 100)
-        auxiliary.setInterpolation(cv2.INTER_CUBIC)
+        auxiliary.interpolation = cv2.INTER_CUBIC
         img = auxiliary.preprocessImage("images/python.png")
         self.assertEqual(img.shape[:2], (100, 100))
         self.assertEqual(auxiliary.isGrayscale(img), True)

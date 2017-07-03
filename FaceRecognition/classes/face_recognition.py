@@ -17,7 +17,35 @@ class FaceRecognition:
         self.algorithm = algorithm
         self.auxiliary = auxiliary
         self.threshold = threshold
-        self.reset()
+
+        # Reset all lists
+        self.trainImages = []
+        self.trainLabels = []
+        # Reset the paths
+        self.trainPath = ""
+        self.testPath = ""
+
+        # Reset all results
+        self.recognized = 0
+        self.unrecognized = 0
+        self.nonFaces = 0
+
+        # Reset all results (using threshold)
+        self.recognizedBelowThreshold = 0
+        self.unrecognizedBelowThreshold = 0
+        self.nonFacesBelowThreshold = 0
+        self.recognizedAboveThreshold = 0
+        self.unrecognizedAboveThreshold = 0
+        self.nonFacesAboveThreshold = 0
+
+        # Reset the report
+        self.predictSubjectIds = []
+        self.predictConfidence = []
+
+        # Reset test results
+        self.testImages = []
+        self.testLabels = []
+        self.testFileNames = []
 
     def reset(self):
         """
@@ -57,78 +85,6 @@ class FaceRecognition:
         self.testImages = []
         self.testLabels = []
         self.testFileNames = []
-
-    def setAuxiliary(self, auxiliary):
-        self.auxiliary = auxiliary
-
-    def getAuxiliary(self):
-        return self.auxiliary
-
-    def setAlgorithm(self, algorithm):
-        self.algorithm = algorithm
-
-    def getAlgorithm(self):
-        return self.algorithm
-
-    def setThreshold(self, threshold):
-        self.threshold = threshold
-
-    def getThreshold(self):
-        return self.threshold
-
-    def getPredictedSubjectIds(self):
-        return self.predictSubjectIds
-
-    def getPredictedConfidence(self):
-        return self.predictConfidence
-
-    def getTestImages(self):
-        return self.testImages
-
-    def getTestLabels(self):
-        return self.testLabels
-
-    def getTestFileNames(self):
-        return self.testFileNames
-
-    def getTrainImages(self):
-        return self.trainImages
-
-    def getTrainLabels(self):
-        return self.trainLabels
-
-    def getRecognized(self):
-        return self.recognized
-
-    def getUnrecognized(self):
-        return self.unrecognized
-
-    def getNonFaces(self):
-        return self.nonFaces
-
-    def getTrainPath(self):
-        return self.trainPath
-
-    def getTestPath(self):
-        return self.testPath
-
-    def getRecognizedBelowThreshold(self):
-        return self.recognizedBelowThreshold
-
-    def getUnrecognizedBelowThreshold(self):
-        return self.unrecognizedBelowThreshold
-
-    def getNonFacesBelowThreshold(self):
-        return self.nonFacesBelowThreshold
-
-    def getRecognizedAboveThreshold(self):
-        return self.recognizedAboveThreshold
-
-    def getUnrecognizedAboveThreshold(self):
-        return self.unrecognizedAboveThreshold
-
-    def getNonFacesAboveThreshold(self):
-        return self.nonFacesAboveThreshold
 
     def train(self, trainPath):
         """

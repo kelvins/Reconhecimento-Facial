@@ -14,30 +14,6 @@ class Voting:
         self.votingScheme = votingScheme
         self.weights = weights
 
-    def setWeights(self, weights):
-        """
-        Set the weights
-        """
-        self.weights = weights
-
-    def getWeights(self):
-        """
-        Get the weights
-        """
-        return self.weights
-
-    def setVotingScheme(self, votingScheme):
-        """
-        Set the selected voting scheme
-        """
-        self.votingScheme = votingScheme
-
-    def getVotingScheme(self):
-        """
-        Get the selected voting scheme
-        """
-        return self.votingScheme
-
     def getVotingSchemeName(self):
         """
         Get the name of the selected voting scheme to be used in the report.

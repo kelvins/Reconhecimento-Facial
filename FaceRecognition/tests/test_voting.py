@@ -112,38 +112,38 @@ class VoteTest(unittest.TestCase):
     def test1(self):
         subjects = []
         weights = []
-        voting.setVotingScheme(voting.MAJORITY)
+        voting.votingScheme = voting.MAJORITY
         self.assertEqual(voting.vote(subjects, weights), -1)
 
     def test2(self):
         subjects = []
         weights = []
-        voting.setVotingScheme(voting.WEIGHTED)
+        voting.votingScheme = voting.WEIGHTED
         self.assertEqual(voting.vote(subjects, weights), -1)
 
     def test3(self):
         subjects = [3, 5, 2, 1, 1]
         weights = [25, 80, 10, 15, 20]
-        voting.setVotingScheme(voting.MAJORITY)
+        voting.votingScheme = voting.MAJORITY
         self.assertEqual(voting.vote(subjects, weights), 1)
 
     def test4(self):
         subjects = [4, 4, 3, 3, 3]
         weights = []
-        voting.setVotingScheme(voting.WEIGHTED)
+        voting.votingScheme = voting.WEIGHTED
         self.assertEqual(voting.vote(subjects, weights), -1)
 
     def test5(self):
         subjects = [1, 4, 5, 2, 2]
         weights = [25, 80, 10, 15, 20]
-        voting.setVotingScheme(voting.WEIGHTED)
+        voting.votingScheme = voting.WEIGHTED
         self.assertEqual(voting.vote(subjects, weights), 4)
 
     def test6(self):
         subjects = [2, 3, 5, 4, 5]
         weights = [25, 30, 10, 15, 20]
-        voting.setWeights(weights)
-        voting.setVotingScheme(voting.WEIGHTED)
+        voting.weights = weights
+        voting.votingScheme = voting.WEIGHTED
         self.assertEqual(voting.vote(subjects), 5)
 
 

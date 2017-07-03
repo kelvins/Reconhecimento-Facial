@@ -44,27 +44,6 @@ class Auxiliary:
         """
         return self.sizeX, self.sizeY
 
-    def setSupportedFiles(self, supportedFiles):
-        """
-        Set the default supportedFiles list (default is ["png", "jpg", "jpeg"]).
-        :param supportedFiles: A list of strings.
-        """
-        self.supportedFiles = supportedFiles
-
-    def getSupportedFiles(self):
-        """
-        Get the supportedFiles list (default is ["png", "jpg", "jpeg"]).
-        :return: A list of strings.
-        """
-        return self.supportedFiles
-
-    def setInterpolation(self, interpolation):
-        """
-        Set the default interpolation method (default is cv2.INTER_CUBIC).
-        :param interpolation: Set the interpolation method.
-        """
-        self.interpolation = interpolation
-
     def getInterpolationMethodName(self):
         """
         Get the selected interpolation method name.

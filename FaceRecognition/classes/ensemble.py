@@ -19,7 +19,27 @@ class Ensemble:
         self.fralgorithms = fralgorithms
         self.auxiliary = auxiliary
         self.voting = voting
-        self.reset()
+
+        self.trainImages = []
+        self.trainLabels = []
+
+        # Reset the paths
+        self.trainPath = ""
+        self.testPath = ""
+
+        # Reset all results
+        self.recognized = 0
+        self.unrecognized = 0
+        self.nonFaces = 0
+
+        # Reset the predicted results
+        self.predictSubjectIds = []
+        self.predictConfidence = []
+
+        # Reset test results
+        self.testImages = []
+        self.testLabels = []
+        self.testFileNames = []
 
     def reset(self):
         """
@@ -52,60 +72,6 @@ class Ensemble:
         self.testImages = []
         self.testLabels = []
         self.testFileNames = []
-
-    def setFRAlgorithms(self, fralgorithms):
-        self.fralgorithms = fralgorithms
-
-    def getFRAlgorithms(self):
-        return self.fralgorithms
-
-    def setAuxiliary(self, auxiliary):
-        self.auxiliary = auxiliary
-
-    def getAuxiliary(self):
-        return self.auxiliary
-
-    def setVoting(self, voting):
-        self.voting = voting
-
-    def getVoting(self):
-        return self.voting
-
-    def getPredictedSubjectIds(self):
-        return self.predictSubjectIds
-
-    def getPredictedConfidence(self):
-        return self.predictConfidence
-
-    def getTestImages(self):
-        return self.testImages
-
-    def getTestLabels(self):
-        return self.testLabels
-
-    def getTestFileNames(self):
-        return self.testFileNames
-
-    def getTrainImages(self):
-        return self.trainImages
-
-    def getTrainLabels(self):
-        return self.trainLabels
-
-    def getRecognized(self):
-        return self.recognized
-
-    def getUnrecognized(self):
-        return self.unrecognized
-
-    def getNonFaces(self):
-        return self.nonFaces
-
-    def getTrainPath(self):
-        return self.trainPath
-
-    def getTestPath(self):
-        return self.testPath
 
     def train(self, trainPath):
         """
