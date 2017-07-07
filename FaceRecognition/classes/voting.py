@@ -6,21 +6,21 @@ class Voting:
 
     MAJORITY, WEIGHTED = range(2)
 
-    def __init__(self, votingScheme=MAJORITY, weights=[]):
+    def __init__(self, voting_scheme=MAJORITY, weights=[]):
         """
         Define the selected voting scheme (default is majoritary)
         Set the weights (default is an empty list)
         """
-        self.votingScheme = votingScheme
+        self.voting_scheme = voting_scheme
         self.weights = weights
 
     def getVotingSchemeName(self):
         """
         Get the name of the selected voting scheme to be used in the report.
         """
-        if self.votingScheme == self.MAJORITY:
+        if self.voting_scheme == self.MAJORITY:
             return "Majority Voting"
-        elif self.votingScheme == self.WEIGHTED:
+        elif self.voting_scheme == self.WEIGHTED:
             return "Weighted Voting"
         return ""
 
@@ -28,7 +28,7 @@ class Voting:
         """
         Call the selected voting scheme
         """
-        if self.votingScheme == self.WEIGHTED:
+        if self.voting_scheme == self.WEIGHTED:
             if not weights:
                 weights = self.weights
             return self.weightedVoting(subjects, weights)
@@ -44,20 +44,20 @@ class Voting:
         if len(subjects) == 0:
             return -1
 
-        subjectVoted = []
-        numberOfVotes = []
+        subject_voted = []
+        number_of_votes = []
 
         # Count votes
         for i in range(0, len(subjects)):
-            if subjects[i] in subjectVoted:
-                index = subjectVoted.index(subjects[i])
-                numberOfVotes[index] = numberOfVotes[index] + 1
+            if subjects[i] in subject_voted:
+                index = subject_voted.index(subjects[i])
+                number_of_votes[index] = number_of_votes[index] + 1
             else:
-                subjectVoted.append(subjects[i])
-                numberOfVotes.append(1)
+                subject_voted.append(subjects[i])
+                number_of_votes.append(1)
 
-        indexMaxVoted = numberOfVotes.index(max(numberOfVotes))
-        return subjectVoted[indexMaxVoted]
+        index_max_voted = number_of_votes.index(max(number_of_votes))
+        return subject_voted[index_max_voted]
 
     def weightedVoting(self, subjects, weights):
         """
@@ -70,35 +70,35 @@ class Voting:
         if len(subjects) != len(weights):
             return -1
 
-        subjectVoted = []
-        valueOfVotes = []
+        subject_voted = []
+        value_of_votes = []
 
         # Count votes
         for i in range(0, len(subjects)):
-            if subjects[i] in subjectVoted:
-                index = subjectVoted.index(subjects[i])
-                valueOfVotes[index] = valueOfVotes[index] + weights[i]
+            if subjects[i] in subject_voted:
+                index = subject_voted.index(subjects[i])
+                value_of_votes[index] = value_of_votes[index] + weights[i]
             else:
-                subjectVoted.append(subjects[i])
-                valueOfVotes.append(weights[i])
+                subject_voted.append(subjects[i])
+                value_of_votes.append(weights[i])
 
-        maxValue = max(valueOfVotes)
+        max_value = max(value_of_votes)
 
         # If we have duplicate values then we have a tie
-        if len(valueOfVotes) != len(set(valueOfVotes)):
-            mostVoted = []
+        if len(value_of_votes) != len(set(value_of_votes)):
+            most_voted = []
             # Create a list of the subjects that have more votes
-            for i in range(0, len(subjectVoted)):
-                if valueOfVotes[i] == maxValue:
-                    mostVoted.append(subjectVoted[i])
+            for i in range(0, len(subject_voted)):
+                if value_of_votes[i] == max_value:
+                    most_voted.append(subject_voted[i])
 
-            tempSubjects = []
+            temp_subjects = []
             # Create a new list of the subjects
             for i in range(0, len(subjects)):
-                if subjects[i] in mostVoted:
-                    tempSubjects.append(subjects[i])
+                if subjects[i] in most_voted:
+                    temp_subjects.append(subjects[i])
 
-            return self.majorityVoting(tempSubjects)
+            return self.majorityVoting(temp_subjects)
         else:
-            indexMaxVoted = valueOfVotes.index(maxValue)
-            return subjectVoted[indexMaxVoted]
+            index_max_voted = value_of_votes.index(max_value)
+            return subject_voted[index_max_voted]
