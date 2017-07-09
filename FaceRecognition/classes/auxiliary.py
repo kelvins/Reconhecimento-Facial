@@ -5,7 +5,7 @@ import os
 import numpy as np
 
 
-class Auxiliary(object):
+class Auxiliary:
     """
     Class that provides some auxiliary functions.
     """

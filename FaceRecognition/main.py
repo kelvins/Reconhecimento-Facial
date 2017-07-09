@@ -1,5 +1,4 @@
 import cv2
-import sys
 
 from classes.auxiliary import Auxiliary
 from classes.face_recognition import FaceRecognition
@@ -27,10 +26,10 @@ def face_recognition():
 
     # Create the algorithm object
     algorithm = Eigenfaces()
-    #algorithm = Fisherfaces()
-    #algorithm = LBPH()
-    #algorithm = SIFT()
-    #algorithm = SURF()
+    # algorithm = Fisherfaces()
+    # algorithm = LBPH()
+    # algorithm = SIFT()
+    # algorithm = SURF()
 
     # Create the face recognition object
     face_recog = FaceRecognition(algorithm, auxiliary)
@@ -39,7 +38,7 @@ def face_recognition():
     face_recog.train(train_path)
 
     # Try to recognize the faces
-    face_recog.recognizeFaces(test_path)
+    face_recog.recognize_faces(test_path)
 
     # Create the report object
     report = Report(face_recog)
@@ -48,10 +47,10 @@ def face_recognition():
     report.printResults()
 
     # Save the report (text file)
-    report.saveReport(results_path)
+    report.save_report(results_path)
 
     # Save all results (summary, full report and images)
-    # report.saveAllResults(results_path)
+    # report.save_all_results(results_path)
 
 
 def ensemble():
@@ -61,7 +60,7 @@ def ensemble():
     auxiliary = Auxiliary(size_x=100, size_y=100, interpolation=cv2.INTER_CUBIC)
 
     # Create and add all algorithms for the ensemble
-    algorithms = []
+    algorithms = list()
     algorithms.append(Eigenfaces())
     algorithms.append(LBPH())
     algorithms.append(Fisherfaces())
@@ -69,7 +68,7 @@ def ensemble():
     algorithms.append(SURF())
 
     # Create the voting object (Majority or Weighted)
-    #voting = Voting()
+    # voting = Voting()
     voting = Voting(Voting.WEIGHTED, [10, 20, 30, 30, 40])
 
     # Create the ensemble object
@@ -79,19 +78,19 @@ def ensemble():
     ensemble.train(train_path)
 
     # Try to recognize the faces
-    ensemble.recognizeFaces(test_path)
+    ensemble.recognize_faces(test_path)
 
     # Create the report object
     report = Report(ensemble)
 
     # Print the results
-    report.printResults()
+    report.print_results()
 
     # Save the report (text file)
-    report.saveReport(results_path)
+    report.save_report(results_path)
 
     # Save all results (summary, full report and images)
-    # report.saveAllResults(results_path)
+    # report.save_all_results(results_path)
 
 
 if __name__ == "__main__":

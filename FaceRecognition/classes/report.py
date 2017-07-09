@@ -1,7 +1,6 @@
 
 # Import the libraries
 import os
-import sys
 import time
 
 from voting import Voting
@@ -15,177 +14,178 @@ class Report:
     Class that provides an interface to generate reports
     """
 
-    def __init__(self, object):
+    def __init__(self, class_object):
         """
         Get the object (FaceRecognition or Ensemble)
         """
-        self.object = object
-        self.auxiliary = Auxiliary()
+        self.class_object = class_object
 
-    def generateReportSummary(self):
+    def generate_report_summary(self):
         """
         Generate a report summary with informations about the test.
         Return the content as a string.
         """
-        if isinstance(self.object, FaceRecognition):
+        if isinstance(self.class_object, FaceRecognition):
             content = "Face Recognition (single algorithm)"
-        elif isinstance(self.object, Ensemble):
+        elif isinstance(self.class_object, Ensemble):
             content = "Ensemble (multiple algorithms)"
+        else:
+            content = "No class object defined"
 
         content += "\n\nDate/Time: " + time.strftime("%d/%m/%Y %H:%M:%S")
-        content += "\nTrain Path: " + self.object.trainPath
-        content += "\nTest Path: " + self.object.testPath + "\n"
+        content += "\nTrain Path: " + self.class_object.trainPath
+        content += "\nTest Path: " + self.class_object.testPath + "\n"
 
         # For the face recognition class get only the name of the algorithm
-        if isinstance(self.object, FaceRecognition):
-            content += "\nAlgorithm: " + self.object.algorithm.getAlgorithmName()
-            if self.object.threshold >= 0:
+        if isinstance(self.class_object, FaceRecognition):
+            content += "\nAlgorithm: " + self.class_object.algorithm.ALGORITHM_NAME
+            if self.class_object.threshold >= 0:
                 content += "\nThreshold Used: " + \
-                    str(self.object.threshold)
+                    str(self.class_object.threshold)
             else:
                 content += "\nThreshold Not Used."
 
         # For the Ensemble class get the name of all algorithms
-        elif isinstance(self.object, Ensemble):
-            content += "\nVoting Scheme: " + self.object.voting.getVotingSchemeName()
-            weights = self.object.voting.weights
+        elif isinstance(self.class_object, Ensemble):
+            content += "\nVoting Scheme: " + self.class_object.voting.get_voting_scheme_name()
+            weights = self.class_object.voting.weights
 
-            for index in xrange(0, len(self.object.fralgorithms)):
+            for index in xrange(0, len(self.class_object.fr_algorithms)):
                 content += "\nAlgorithm: " + \
-                    self.object.fralgorithms[index].getAlgorithmName()
+                    self.class_object.fr_algorithms[index].ALGORITHM_NAME
                 # If it is using the WEIGHTED voting scheme
-                if self.object.voting.getVotingScheme() == Voting.WEIGHTED:
+                if self.class_object.voting.voting_scheme == Voting.WEIGHTED:
                     # If the index is valid for the weights list
                     if index < len(weights):
                         content += " - Weight: " + str(weights[index])
 
         content += "\n\nTotal Images Analyzed: " + \
-            str(len(self.object.testFileNames))
+            str(len(self.class_object.test_file_names))
 
-        totalFaceImages = 0.0
+        total_face_images = 0.0
         accuracy2 = 0.0
 
-        if isinstance(self.object, FaceRecognition):
-            if self.object.threshold >= 0:
-                totalFaceImages = self.object.recognizedBelowThreshold + self.object.unrecognizedBelowThreshold
+        if isinstance(self.class_object, FaceRecognition):
+            if self.class_object.threshold >= 0:
+                total_face_images = self.class_object.recognized_below_threshold + self.class_object.unrecognized_below_threshold
                 # Calculate the accuracy using only the results below the
                 # threshold
-                accuracy2 = self.auxiliary.calcAccuracy(
-                    self.object.recognizedBelowThreshold, totalFaceImages)
+                accuracy2 = Auxiliary.calc_accuracy(
+                    self.class_object.recognized_below_threshold, total_face_images)
 
-                totalFaceImages += self.object.recognizedAboveThreshold + self.object.unrecognizedAboveThreshold
+                total_face_images += self.class_object.recognized_above_threshold + self.class_object.unrecognized_above_threshold
                 # Calculate the accuracy using the total number of face images
-                accuracy = self.auxiliary.calcAccuracy(
-                    self.object.recognizedBelowThreshold, totalFaceImages)
+                accuracy = Auxiliary.calc_accuracy(
+                    self.class_object.recognized_below_threshold, total_face_images)
 
                 content += "\nRecognized Faces Below Threshold: " + \
-                    str(self.object.recognizedBelowThreshold)
+                    str(self.class_object.recognized_below_threshold)
                 content += "\nUnrecognized Faces Below Threshold: " + \
-                    str(self.object.unrecognizedBelowThreshold)
+                    str(self.class_object.unrecognized_below_threshold)
                 content += "\nNon Faces Below Threshold: " + \
-                    str(self.object.nonFacesBelowThreshold)
+                    str(self.class_object.non_faces_below_threshold)
                 content += "\nRecognized Faces Above Threshold: " + \
-                    str(self.object.recognizedAboveThreshold)
+                    str(self.class_object.recognized_above_threshold)
                 content += "\nUnrecognized Faces Above Threshold: " + \
-                    str(self.object.unrecognizedAboveThreshold)
+                    str(self.class_object.unrecognized_above_threshold)
                 content += "\nNon Faces Above Threshold: " + \
-                    str(self.object.nonFacesAboveThreshold)
+                    str(self.class_object.non_faces_above_threshold)
             else:
-                totalFaceImages = float(
-                    self.object.recognized + self.object.unrecognized)
-                accuracy = self.auxiliary.calcAccuracy(
-                    self.object.recognized, totalFaceImages)
+                total_face_images = float(
+                    self.class_object.recognized + self.class_object.unrecognized)
+                accuracy = Auxiliary.calc_accuracy(
+                    self.class_object.recognized, total_face_images)
                 content += "\nRecognized Faces: " + \
-                    str(self.object.recognized)
+                    str(self.class_object.recognized)
                 content += "\nUnrecognized Faces: " + \
-                    str(self.object.unrecognized)
-                content += "\nNon Faces: " + str(self.object.nonFaces)
+                    str(self.class_object.unrecognized)
+                content += "\nNon Faces: " + str(self.class_object.non_faces)
         else:
-            totalFaceImages = float(
-                self.object.recognized + self.object.unrecognized)
-            accuracy = self.auxiliary.calcAccuracy(
-                self.object.recognized, totalFaceImages)
+            total_face_images = float(
+                self.class_object.recognized + self.class_object.unrecognized)
+            accuracy = Auxiliary.calc_accuracy(
+                self.class_object.recognized, total_face_images)
             content += "\nRecognized Faces: " + \
-                str(self.object.recognized)
+                str(self.class_object.recognized)
             content += "\nUnrecognized Faces: " + \
-                str(self.object.unrecognized)
-            content += "\nNon Faces: " + str(self.object.nonFaces)
+                str(self.class_object.unrecognized)
+            content += "\nNon Faces: " + str(self.class_object.non_faces)
 
         content += "\nRecognition Rate - Recognized / Total Face Images"
         content += "\nAccuracy: " + str(accuracy) + " %"
 
-        if isinstance(self.object, FaceRecognition):
-            if self.object.threshold >= 0:
+        if isinstance(self.class_object, FaceRecognition):
+            if self.class_object.threshold >= 0:
                 content += "\nAccuracy Only Below Threshold: " + \
                     str(accuracy2) + " %"
 
-        sizeX, sizeY = self.object.auxiliary.getDefaultSize()
-        content += "\n\nDefault Size Images: " + str(sizeX) + "x" + str(sizeY)
+        size_x, size_y = self.class_object.auxiliary.get_default_size()
+        content += "\n\nDefault Size Images: " + str(size_x) + "x" + str(size_y)
         content += "\nInterpolation Method: " + \
-            self.object.auxiliary.getInterpolationMethodName()
+            self.class_object.auxiliary.get_interpolation_method_name()
         content += "\nSupported Files: " + \
-            ', '.join(self.object.auxiliary.supportedFiles)
+            ', '.join(self.class_object.auxiliary.supported_files)
         return content
 
-    def generateFullReport(self):
+    def generate_full_report(self):
         """
         Generate the full report.
         Return the content containing the information about each predicted image.
         """
         # Get the predicted results
-        predictSubjectIds = self.object.predictedSubjectIds
-        predictConfidence = self.object.predictedConfidence
+        predict_subject_ids = self.class_object.predicted_subject_ids
+        predict_confidence = self.class_object.predicted_confidence
         # Get the test information (labels and filenames)
-        testLabels = self.object.testLabels
-        testFileNames = self.object.testFileNames
+        test_labels = self.class_object.test_labels
+        test_file_names = self.class_object.test_file_names
 
         content = ""
 
         # Create each line based on the predicted subject IDs
-        for index in xrange(0, len(predictSubjectIds)):
+        for index in xrange(0, len(predict_subject_ids)):
             # Format: 1: Expected subject: 3: Classified as subject: 2: With
             # confidence: 4123.123123: File name: 1_3
             content += str(index + 1)
-            content += ": Expected subject: " + str(testLabels[index])
+            content += ": Expected subject: " + str(test_labels[index])
             content += ": Classified as subject: " + \
-                str(predictSubjectIds[index])
+                str(predict_subject_ids[index])
 
-            if isinstance(self.object, FaceRecognition):
+            if isinstance(self.class_object, FaceRecognition):
                 content += ": With confidence: " + \
-                    str(predictConfidence[index])
-            elif isinstance(self.object, Ensemble):
+                    str(predict_confidence[index])
+            elif isinstance(self.class_object, Ensemble):
                 content += ": Predicted Subjects: " + \
-                    ', '.join(map(str, predictConfidence[index]))
+                    ', '.join(map(str, predict_confidence[index]))
 
-            content += ": File name: " + testFileNames[index]
+            content += ": File name: " + test_file_names[index]
             content += "\n"
 
         return content
 
-    def printResults(self):
+    def print_results(self):
         """
         Function used to show the results
         """
         print "========================= Results ========================="
-        print self.generateReportSummary()
+        print self.generate_report_summary()
         print "==========================================================="
 
-    def saveReport(self, path=""):
+    def save_report(self, path=""):
         """
         Function used to automatically save the report in a defined folder.
         Save only the text report not the images.
         """
 
         # Generate the report content
-        content = self.generateReportSummary()
+        content = self.generate_report_summary()
         content += "\n===========================================================\n"
-        content += self.generateFullReport()
+        content += self.generate_full_report()
 
         # Make sure that none folder will have the same name
         time.sleep(1)
 
         # If the parameters were set include it in the folder name
-        fileName = time.strftime("%Y_%m_%d_%H_%M_%S") + ".txt"
+        file_name = time.strftime("%Y_%m_%d_%H_%M_%S") + ".txt"
 
         # If the path is not empty use it in the filename
         if path != "":
@@ -194,16 +194,16 @@ class Report:
                 os.makedirs(path)
 
             if path.endswith(".txt"):
-                fileName = path
+                file_name = path
             elif path.endswith("/"):
-                fileName = path + fileName
+                file_name = path + file_name
             else:
-                fileName = path + "/" + fileName
+                file_name = path + "/" + file_name
 
         # Save the text file
-        self.auxiliary.writeTextFile(content, fileName)
+        Auxiliary.write_text_file(content, file_name)
 
-    def saveAllResults(self, path=""):
+    def save_all_results(self, path=""):
         """
         Function used to automatically save the report in a defined folder.
         Save the entire results, including the summary report, full report and all images.
@@ -222,66 +222,65 @@ class Report:
             os.makedirs(path)
 
         # Save the report
-        self.saveReport(path)
+        self.save_report(path)
 
         # Create 3 new folders
-        recognizedFolder = path + "Recognized/"
-        unrecognizedFolder = path + "Unrecognized/"
-        nonfacesFolder = path + "NonFaces/"
+        recognized_folder = path + "Recognized/"
+        unrecognized_folder = path + "Unrecognized/"
+        non_faces_folder = path + "NonFaces/"
 
-        os.makedirs(recognizedFolder)
-        os.makedirs(unrecognizedFolder)
-        os.makedirs(nonfacesFolder)
+        os.makedirs(recognized_folder)
+        os.makedirs(unrecognized_folder)
+        os.makedirs(non_faces_folder)
 
         # The predicted results
-        predictSubjectIds = self.object.predictedSubjectIds
-        predictConfidence = self.object.predictedConfidence
+        predict_subject_ids = self.class_object.predictedSubjectIds
+        predict_confidence = self.class_object.predictedConfidence
         # The tests information
-        testImages = self.object.testImages
-        testLabels = self.object.testLabels
-        testFileNames = self.object.testFileNames
+        test_images = self.class_object.testImages
+        test_labels = self.class_object.testLabels
+        # test_file_names = self.class_object.testFileNames
         # The training information
-        trainImages = self.object.trainImages
-        trainLabels = self.object.trainLabels
+        train_images = self.class_object.trainImages
+        train_labels = self.class_object.trainLabels
 
         delimiter = "_"
 
-        for index in xrange(0, len(predictSubjectIds)):
+        for index in xrange(0, len(predict_subject_ids)):
             # Patter: 1_Expected_2_Classified_2_Confidence_40192.12938291.png
             label = str(index) + delimiter + "Expected" + \
-                delimiter + str(testLabels[index]) + delimiter
+                delimiter + str(test_labels[index]) + delimiter
             label += "Classified" + delimiter + \
-                str(predictSubjectIds[index]) + delimiter
+                str(predict_subject_ids[index]) + delimiter
 
-            if isinstance(self.object, FaceRecognition):
+            if isinstance(self.class_object, FaceRecognition):
                 label += "Confidence" + delimiter + \
-                    str(predictConfidence[index])
-            elif isinstance(self.object, Ensemble):
-                label += "Voting" + delimiter + self.object.voting.getVotingSchemeName()
+                    str(predict_confidence[index])
+            elif isinstance(self.class_object, Ensemble):
+                label += "Voting" + delimiter + self.class_object.voting.getVotingSchemeName()
 
             label += ".png"
 
             # Find the image that matches based on the trainLabel and
             # predictedSubjectIDs
-            image1 = testImages[index]
+            image1 = test_images[index]
             image2 = None
-            for i in xrange(0, len(trainLabels)):
-                if str(trainLabels[i]) == str(predictSubjectIds[index]):
-                    image2 = trainImages[i]
+            for i in xrange(0, len(train_labels)):
+                if str(train_labels[i]) == str(predict_subject_ids[index]):
+                    image2 = train_images[i]
 
             # Concatenate the images
-            image = self.auxiliary.concatenateImages(image1, image2)
+            image = Auxiliary.concatenate_images(image1, image2)
 
             # Get the correct fileName
-            fileName = ""
-            if str(testLabels[index]) == "-1":
-                fileName = nonfacesFolder
-            elif str(testLabels[index]) == str(predictSubjectIds[index]):
-                fileName = recognizedFolder
+            if str(test_labels[index]) == "-1":
+                file_name = non_faces_folder
+            elif str(test_labels[index]) == str(predict_subject_ids[index]):
+                file_name = recognized_folder
             else:
-                fileName = unrecognizedFolder
+                file_name = unrecognized_folder
 
-            fileName += label
+                file_name += label
 
             # Save the concatenated image in the correct folder
-            self.auxiliary.saveImage(fileName, image)
+            Auxiliary.save_image(file_name, image)
