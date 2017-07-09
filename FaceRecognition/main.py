@@ -14,16 +14,16 @@ from algorithms.sift import SIFT
 from algorithms.surf import SURF
 
 dirPath = "/home/kelvins/Desktop/Reconhecimento-Facial/Dataset"
-trainPath = dirPath + "/Train/BASE1/"
-testPath = dirPath + "/Test/VIDEO1/"
-resultsPath = dirPath + "/Results/"
+train_path = dirPath + "/Train/BASE1/"
+test_path = dirPath + "/Test/VIDEO1/"
+results_path = dirPath + "/Results/"
 
 
-def faceFecognition():
-    global trainPath, testPath, resultsPath
+def face_recognition():
+    global train_path, test_path, results_path
 
     # Create the auxiliary object
-    auxiliary = Auxiliary(sizeX=100, sizeY=100, interpolation=cv2.INTER_CUBIC)
+    auxiliary = Auxiliary(size_x=100, size_y=100, interpolation=cv2.INTER_CUBIC)
 
     # Create the algorithm object
     algorithm = Eigenfaces()
@@ -33,32 +33,32 @@ def faceFecognition():
     #algorithm = SURF()
 
     # Create the face recognition object
-    faceRecog = FaceRecognition(algorithm, auxiliary)
+    face_recog = FaceRecognition(algorithm, auxiliary)
 
     # Train the algorithm
-    faceRecog.train(trainPath)
+    face_recog.train(train_path)
 
     # Try to recognize the faces
-    faceRecog.recognizeFaces(testPath)
+    face_recog.recognizeFaces(test_path)
 
     # Create the report object
-    report = Report(faceRecog)
+    report = Report(face_recog)
 
     # Print the results
     report.printResults()
 
     # Save the report (text file)
-    report.saveReport(resultsPath)
+    report.saveReport(results_path)
 
     # Save all results (summary, full report and images)
-    # report.saveAllResults(resultsPath)
+    # report.saveAllResults(results_path)
 
 
 def ensemble():
-    global trainPath, testPath, resultsPath
+    global train_path, test_path, results_path
 
     # Create the auxiliary object
-    auxiliary = Auxiliary(sizeX=100, sizeY=100, interpolation=cv2.INTER_CUBIC)
+    auxiliary = Auxiliary(size_x=100, size_y=100, interpolation=cv2.INTER_CUBIC)
 
     # Create and add all algorithms for the ensemble
     algorithms = []
@@ -76,10 +76,10 @@ def ensemble():
     ensemble = Ensemble(algorithms, auxiliary, voting)
 
     # Train the algorithm
-    ensemble.train(trainPath)
+    ensemble.train(train_path)
 
     # Try to recognize the faces
-    ensemble.recognizeFaces(testPath)
+    ensemble.recognizeFaces(test_path)
 
     # Create the report object
     report = Report(ensemble)
@@ -88,12 +88,12 @@ def ensemble():
     report.printResults()
 
     # Save the report (text file)
-    report.saveReport(resultsPath)
+    report.saveReport(results_path)
 
     # Save all results (summary, full report and images)
-    # report.saveAllResults(resultsPath)
+    # report.saveAllResults(results_path)
 
 
 if __name__ == "__main__":
-    faceFecognition()
+    face_recognition()
     ensemble()
