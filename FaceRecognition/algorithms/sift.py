@@ -10,51 +10,46 @@ class SIFT:
     Class that provides easy access to the SIFT algorithm.
     """
 
-    def __init__(self, nfeatures=0, nOctaveLayers=3, contrastThreshold=0.04,
-                 edgeThreshold=10, sigma=1.6, distance=cv2.NORM_L2, crossCheck=False):
+    ALGORITHM_NAME = "Scale-Invariant Feature Transform (SIFT)"
+
+    def __init__(self, n_features=0, n_octave_layers=3, contrast_threshold=0.04,
+                 edge_threshold=10, sigma=1.6, distance=cv2.NORM_L2, cross_check=False):
         """
         Set the default values.
-        :param nfeatures: The number of features (default 0).
-        :param nOctaveLayers: The number of octave layers (default 3).
-        :param contrastThreshold: The contrast threshold (default 0.04).
-        :param edgeThreshold: The edge threshold (default 10).
+        :param n_features: The number of features (default 0).
+        :param n_octave_layers: The number of octave layers (default 3).
+        :param contrast_threshold: The contrast threshold (default 0.04).
+        :param edge_threshold: The edge threshold (default 10).
         :param sigma: The sigma value (default 1.6).
         :param distance: The distance (default cv2.NORM_L2 - euclidean distance).
-        :param crossCheck: The cross check parameter (default false).
+        :param cross_check: The cross check parameter (default false).
         """
 
         # If the parameter is invalid get its default value
-        if nfeatures < 0:
-            nfeatures = 0
-        if nOctaveLayers < 0:
-            nOctaveLayers = 3
-        if contrastThreshold < 0.0:
-            contrastThreshold = 0.04
-        if edgeThreshold < 0:
-            edgeThreshold = 10
+        if n_features < 0:
+            n_features = 0
+        if n_octave_layers < 0:
+            n_octave_layers = 3
+        if contrast_threshold < 0.0:
+            contrast_threshold = 0.04
+        if edge_threshold < 0:
+            edge_threshold = 10
         if sigma < 0.0:
             sigma = 1.6
 
         # Creates the SIFT object
         self.faceRec = cv2.xfeatures2d.SIFT_create(
-            nfeatures=nfeatures,
-            nOctaveLayers=nOctaveLayers,
-            contrastThreshold=contrastThreshold,
-            edgeThreshold=edgeThreshold,
+            nfeatures=n_features,
+            nOctaveLayers=n_octave_layers,
+            contrastThreshold=contrast_threshold,
+            edgeThreshold=edge_threshold,
             sigma=sigma)
 
         # Creates the matcher object
-        self.matcher = cv2.BFMatcher(distance, crossCheck=crossCheck)
+        self.matcher = cv2.BFMatcher(distance, crossCheck=cross_check)
 
         self.labels = []
-        self.algorithmTrained = False
-
-    def getAlgorithmName(self):
-        """
-        Get the algorithm name.
-        :return: The algorithm name.
-        """
-        return "Scale-Invariant Feature Transform (SIFT)"
+        self.trained = False
 
     def train(self, images, labels):
         """
@@ -78,7 +73,7 @@ class SIFT:
 
         # Train: Does nothing for BruteForceMatcher though
         self.matcher.train()
-        self.algorithmTrained = True
+        self.trained = True
 
     def predict(self, image):
         """
@@ -86,8 +81,10 @@ class SIFT:
         :param image: The image we want to predict.
         :return: The subject ID (label) and the confidence.
         """
-        if self.algorithmTrained is False:
-            print "The face recognition algorithm was not trained."
+        global ALGORITHM_NAME
+
+        if self.trained is False:
+            print "The %s algorithm was not trained." % ALGORITHM_NAME
             sys.exit()
 
         # Detects and computes the keypoints and descriptors using the sift

@@ -10,47 +10,42 @@ class SURF:
     Class that provides easy access to the SURF algorithm.
     """
 
-    def __init__(self, hessianThreshold=100, nOctaves=4, nOctaveLayers=3,
-                 extended=False, upright=False, distance=cv2.NORM_L2, crossCheck=False):
+    ALGORITHM_NAME = "Speeded Up Robust Features (SURF)"
+
+    def __init__(self, hessian_threshold=100, n_octaves=4, n_octave_layers=3,
+                 extended=False, upright=False, distance=cv2.NORM_L2, cross_check=False):
         """
         Set the default values.
-        :param hessianThreshold: The hessian threshold (default 100).
-        :param nOctaves: The number of octaves (default 4).
-        :param nOctaveLayers: The number of octave layers (default 3).
+        :param hessian_threshold: The hessian threshold (default 100).
+        :param n_octaves: The number of octaves (default 4).
+        :param n_octave_layers: The number of octave layers (default 3).
         :param extended: The extended parameter (default false).
         :param upright: The upright parameter (default false).
         :param distance: The distance parameter (default cv2.NORM_L2 - euclidean distance).
-        :param crossCheck: The cross check parameter (default false).
+        :param cross_check: The cross check parameter (default false).
         """
 
         # If the parameter is invalid get its default value
-        if hessianThreshold < 0:
-            hessianThreshold = 100
-        if nOctaves < 0:
-            nOctaves = 4
-        if nOctaveLayers < 0:
-            nOctaveLayers = 3
+        if hessian_threshold < 0:
+            hessian_threshold = 100
+        if n_octaves < 0:
+            n_octaves = 4
+        if n_octave_layers < 0:
+            n_octave_layers = 3
 
         # Creates the SURF object
         self.faceRec = cv2.xfeatures2d.SURF_create(
-            hessianThreshold=hessianThreshold,
-            nOctaves=nOctaves,
-            nOctaveLayers=nOctaveLayers,
+            hessianThreshold=hessian_threshold,
+            nOctaves=n_octaves,
+            nOctaveLayers=n_octave_layers,
             extended=extended,
             upright=upright)
 
         # Creates the matcher object
-        self.matcher = cv2.BFMatcher(distance, crossCheck=crossCheck)
+        self.matcher = cv2.BFMatcher(distance, crossCheck=cross_check)
 
         self.labels = []
-        self.algorithmTrained = False
-
-    def getAlgorithmName(self):
-        """
-        Get the algorithm name.
-        :return: The algorithm name.
-        """
-        return "Speeded Up Robust Features (SURF)"
+        self.trained = False
 
     def train(self, images, labels):
         """
@@ -74,7 +69,7 @@ class SURF:
 
         # Train: Does nothing for BruteForceMatcher though
         self.matcher.train()
-        self.algorithmTrained = True
+        self.trained = True
 
     def predict(self, image):
         """
@@ -82,8 +77,10 @@ class SURF:
         :param image: The image we want to predict.
         :return: The subject ID (label) and the confidence.
         """
-        if self.algorithmTrained is False:
-            print "The face recognition algorithm was not trained."
+        global ALGORITHM_NAME
+
+        if self.trained is False:
+            print "The %s algorithm was not trained." % ALGORITHM_NAME
             sys.exit()
 
         # Detects and computes the keypoints and descriptors using the SURF

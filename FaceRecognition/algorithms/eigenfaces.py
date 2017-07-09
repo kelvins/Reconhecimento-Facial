@@ -10,33 +10,28 @@ class Eigenfaces:
     Class that provides easy access to the Eigenfaces algorithm.
     """
 
-    def __init__(self, numComponents=0, threshold=-1):
+    ALGORITHM_NAME = "Eigenfaces"
+
+    def __init__(self, num_components=0, threshold=-1):
         """
         Set the default values.
-        :param numComponents: The number of components (default 0).
+        :param num_components: The number of components (default 0).
         :param threshold: The threshold (default -1).
         """
 
-        if numComponents < 0:
-            numComponents = 0
+        if num_components < 0:
+            num_components = 0
 
         # Creates the eigenface object passing a threshold variable by
         # parameter
         if threshold >= 0:
             self.faceRec = cv2.face.createEigenFaceRecognizer(
-                num_components=numComponents, threshold=threshold)
+                num_components=num_components, threshold=threshold)
         else:
             self.faceRec = cv2.face.createEigenFaceRecognizer(
-                num_components=numComponents)  # threshold=DBL_MAX
+                num_components=num_components)  # threshold=DBL_MAX
 
-        self.algorithmTrained = False
-
-    def getAlgorithmName(self):
-        """
-        Get the algorithm name.
-        :return: The algorithm name.
-        """
-        return "Eigenfaces"
+        self.trained = False
 
     def train(self, images, labels):
         """
@@ -45,7 +40,7 @@ class Eigenfaces:
         :param labels: A slice with all labels corresponding to the images.
         """
         self.faceRec.train(images, np.array(labels))
-        self.algorithmTrained = True
+        self.trained = True
 
     def predict(self, image):
         """
@@ -53,9 +48,11 @@ class Eigenfaces:
         :param image: The image we want to predict.
         :return: The subject ID (label) and the confidence.
         """
+        global ALGORITHM_NAME
+
         # Check if the algorithm was trained
-        if self.algorithmTrained is False:
-            print "The face recognition algorithm was not trained."
+        if self.trained is False:
+            print "The %s algorithm was not trained." % ALGORITHM_NAME
             sys.exit()
 
         # Return the subject ID (label) and the confidence

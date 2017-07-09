@@ -10,6 +10,8 @@ class LBPH:
     Class that provides easy access to the LBPH algorithm.
     """
 
+    ALGORITHM_NAME = "Local Binary Patterns Histogram (LBPH)"
+
     def __init__(self, radius=1, neighbors=8,
                  grid_x=8, grid_y=8, threshold=-1):
         """
@@ -46,14 +48,7 @@ class LBPH:
                 grid_x=grid_x,
                 grid_y=grid_y)  # threshold=DBL_MAX
 
-        self.algorithmTrained = False
-
-    def getAlgorithmName(self):
-        """
-        Get the algorithm name.
-        :return: The algorithm name.
-        """
-        return "Local Binary Patterns Histogram (LBPH)"
+        self.trained = False
 
     def train(self, images, labels):
         """
@@ -62,7 +57,7 @@ class LBPH:
         :param labels: A slice with all labels corresponding to the images.
         """
         self.faceRec.train(images, np.array(labels))
-        self.algorithmTrained = True
+        self.trained = True
 
     def predict(self, image):
         """
@@ -70,9 +65,11 @@ class LBPH:
         :param image: The image we want to predict.
         :return: The subject ID (label) and the confidence.
         """
+        global ALGORITHM_NAME
+
         # Check if the algorithm was trained
-        if self.algorithmTrained is False:
-            print "The face recognition algorithm was not trained."
+        if self.trained is False:
+            print "The %s algorithm was not trained." % ALGORITHM_NAME
             sys.exit()
 
         # Return the subject ID (label) and the confidence
