@@ -2,49 +2,47 @@
 # Import the libraries
 import cv2
 import os
-import time
-from PIL import Image
 import numpy as np
 
 
-class Auxiliary:
+class Auxiliary(object):
     """
     Class that provides some auxiliary functions.
     """
 
-    def __init__(self, sizeX=100, sizeY=100, interpolation=cv2.INTER_CUBIC):
+    def __init__(self, size_x=100, size_y=100, interpolation=cv2.INTER_CUBIC):
         """
         Set the default values for the image size and the interpolation method.
         Available interpolation methods provided by OpenCV: INTER_CUBIC, INTER_AREA, INTER_LANCZOS4, INTER_LINEAR, INTER_NEAREST
-        :param sizeX: Set the default image width (default = 100).
-        :param sizeY: Set the default image height (default = 100).
+        :param size_x: Set the default image width (default = 100).
+        :param size_y: Set the default image height (default = 100).
         :param interpolation: Set the default interpolation method (default cv2.INTER_CUBIC).
         """
-        self.sizeX = sizeX
-        self.sizeY = sizeY
+        self.size_x = size_x
+        self.size_y = size_y
         self.interpolation = interpolation
 
         # Declare all supported files
-        self.supportedFiles = ["png", "jpg", "jpeg"]
+        self.supported_files = ["png", "jpg", "jpeg"]
 
-    def setDefaultSize(self, sizeX, sizeY):
+    def set_default_size(self, size_x, size_y):
         """
         Set the default size.
-        :param sizeX: Image width.
-        :param sizeY: Image height.
+        :param size_x: Image width.
+        :param size_y: Image height.
         """
-        if sizeX > 0:
-            self.sizeX = sizeX
-        if sizeY > 0:
-            self.sizeY = sizeY
+        if size_x > 0:
+            self.size_x = size_x
+        if size_y > 0:
+            self.size_y = size_y
 
-    def getDefaultSize(self):
+    def get_default_size(self):
         """
         Get the default image size defined (default is 100x100).
         """
-        return self.sizeX, self.sizeY
+        return self.size_x, self.size_y
 
-    def getInterpolationMethodName(self):
+    def get_interpolation_method_name(self):
         """
         Get the selected interpolation method name.
         :return: A string containing the interpolation method name.
@@ -61,31 +59,34 @@ class Auxiliary:
             return "cv2.INTER_NEAREST"
         return ""
 
-    def calcAccuracy(self, recognizedImages, totalFaceImages):
+    @staticmethod
+    def calc_accuracy(recognized_images, total_face_images):
         """
         Calculates the accuracy (percentage) using the formula:
-        acc = recognizedImages / totalFaceImages * 100
-        :param recognizedImages: The number of recognized face images.
-        :param totalFaceImages: The number of total face images.
+        acc = (recognized_images / total_face_images) * 100
+        :param recognized_images: The number of recognized face images.
+        :param total_face_images: The number of total face images.
         :return: The accuracy.
         """
         try:
-            return (float(recognizedImages) / float(totalFaceImages)) * 100.0
+            return (float(recognized_images) / float(total_face_images)) * 100.0
         except ZeroDivisionError:
             return 0.0
 
-    def writeTextFile(self, content, fileName):
+    @staticmethod
+    def write_text_file(content, file_name):
         """
         Write the content to a text file based on the file name.
         :param content: The content as a string.
-        :param fileName: The file name (e.g. home/user/test.txt)
+        :param file_name: The file name (e.g. home/user/test.txt)
         """
         # Save the text file
-        textFile = open(fileName, "w")
-        textFile.write(content)
-        textFile.close()
+        text_file = open(file_name, "w")
+        text_file.write(content)
+        text_file.close()
 
-    def isGrayscale(self, image):
+    @staticmethod
+    def is_grayscale(image):
         """
         Check if an image is in grayscale.
         :param image: The image.
@@ -102,7 +103,8 @@ class Auxiliary:
                     return False
         return True
 
-    def toGrayscale(self, image):
+    @staticmethod
+    def to_grayscale(image):
         """
         Convert an image to grayscale
         :param image: The image.
@@ -112,7 +114,8 @@ class Auxiliary:
             return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         return None
 
-    def loadImage(self, path):
+    @staticmethod
+    def load_image(path):
         """
         Load an image based on the path passed by parameter.
         :param path: The path to the image file.
@@ -120,52 +123,55 @@ class Auxiliary:
         """
         return cv2.imread(path)
 
-    def saveImage(self, fileName, image):
+    @staticmethod
+    def save_image(file_name, image):
         """
         Save an image based on the fileName passed by parameter.
-        :param fileName: The file name.
+        :param file_name: The file name.
         :param image: The image.
         """
-        cv2.imwrite(fileName, image)
+        cv2.imwrite(file_name, image)
 
-    def resizeImage(self, image, sizeX, sizeY, interpolationMethod):
+    @staticmethod
+    def resize_image(image, size_x, size_y, interpolation_method):
         """
         Resize an image.
         :param image: The image object.
-        :param sizeX: The image width.
-        :param sizeY: The image height.
-        :param interpolationMethod: The interpolation method.
+        :param size_x: The image width.
+        :param size_y: The image height.
+        :param interpolation_method: The interpolation method.
         :return: The resized image.
         """
-        return cv2.resize(image, (sizeX, sizeY),
-                          interpolation=interpolationMethod)
+        return cv2.resize(image, (size_x, size_y),
+                          interpolation=interpolation_method)
 
-    def preprocessImage(self, path):
+    def preprocess_image(self, path):
         """
         Preprocess an image. Load an image, convert to grayscale and resize it.
         :param path: The image path.
         :return: The preprocessed image.
         """
         # Load the image
-        image = self.loadImage(path)
+        image = self.load_image(path)
         # Convert to grayscale
-        image = self.toGrayscale(image)
+        image = self.to_grayscale(image)
         # Resize the image
-        image = self.resizeImage(
-            image, self.sizeX, self.sizeY, self.interpolation)
+        image = self.resize_image(
+            image, self.size_x, self.size_y, self.interpolation)
         # Return the processed image
         return image
 
-    def concatenateImages(self, leftImage, rightImage):
+    @staticmethod
+    def concatenate_images(left_image, right_image):
         """
         Concatenate two images side by side (horizontally) and returns a new one.
-        :param leftImage: The image that should be put to the left.
-        :param rightImage: The image that should be put to the right.
+        :param left_image: The image that should be put to the left.
+        :param right_image: The image that should be put to the right.
         :return: The new concatenated image.
         """
-        return np.concatenate((leftImage, rightImage), axis=1)
+        return np.concatenate((left_image, right_image), axis=1)
 
-    def extractImagesPaths(self, path):
+    def extract_images_paths(self, path):
         """
         Extract all paths for each image in a directory.
         :param path: The directory path.
@@ -174,18 +180,19 @@ class Auxiliary:
         paths = []
 
         # In the path folder search for all files in all directories
-        for dirname, dirnames, filenames in os.walk(path):
+        for dir_name, dir_names, file_names in os.walk(path):
             # For each file found
-            for filename in filenames:
+            for file_name in file_names:
                 # Check if it is a valid image file
-                if filename.split(".")[1] in self.supportedFiles:
+                if file_name.split(".")[1] in self.supported_files:
                     # Creates the filePath joining the directory name and the
                     # file name
-                    paths.append(os.path.join(dirname, filename))
+                    paths.append(os.path.join(dir_name, file_name))
 
         return paths
 
-    def extractFilesPaths(self, path):
+    @staticmethod
+    def extract_files_paths(path):
         """
         Extract all paths for all files type.
         :param path: The directory path.
@@ -194,72 +201,72 @@ class Auxiliary:
         paths = []
 
         # In the path folder search for all files in all directories
-        for dirname, dirnames, filenames in os.walk(path):
+        for dir_name, dir_names, file_names in os.walk(path):
             # For each file found
-            for filename in filenames:
+            for file_name in file_names:
                 # Creates the filePath joining the directory name and the file
                 # name
-                paths.append(os.path.join(dirname, filename))
+                paths.append(os.path.join(dir_name, file_name))
 
         return paths
 
-    def loadAllImagesForTrain(self, trainPath):
+    def load_all_images_for_train(self, train_path):
         """
         Load all images for training.
-        :param trainPath: The train path.
+        :param train_path: The train path.
         :return: Three lists with the images, labels and file names.
         """
         images = []
         labels = []
-        fileName = []
+        file_name = []
 
-        paths = self.extractImagesPaths(trainPath)
+        paths = self.extract_images_paths(train_path)
 
         # For each file path
-        for filePath in paths:
+        for file_path in paths:
             # Check if it is a valid image file
-            if filePath.split(".")[1] in self.supportedFiles:
+            if file_path.split(".")[1] in self.supported_files:
 
                 # Get the subject id (label) based on the format:
                 # subjectID_imageNumber.png
-                pathSplit = filePath.split("/")
-                tempName = pathSplit[len(pathSplit) - 1]
-                subjectID = int(tempName.split("_")[0])
+                path_split = file_path.split("/")
+                temp_name = path_split[len(path_split) - 1]
+                subject_id = int(temp_name.split("_")[0])
 
-                images.append(self.preprocessImage(filePath))
-                labels.append(subjectID)
-                fileName.append(tempName.split(".")[0])
+                images.append(self.preprocess_image(file_path))
+                labels.append(subject_id)
+                file_name.append(temp_name.split(".")[0])
 
-        return images, labels, fileName
+        return images, labels, file_name
 
-    def loadAllImagesForTest(self, testPath):
+    def load_all_images_for_test(self, test_path):
         """
         Load all images for test.
-        :param testPath: The test path.
+        :param test_path: The test path.
         :return: Three lists with the images, labels and file names.
         """
         images = []
         labels = []
-        fileName = []
+        file_name = []
 
-        paths = self.extractImagesPaths(testPath)
+        paths = self.extract_images_paths(test_path)
 
         # For each file path
-        for filePath in paths:
+        for file_path in paths:
 
             # Check if it is a valid image file
-            if filePath.split(".")[1] in self.supportedFiles:
+            if file_path.split(".")[1] in self.supported_files:
 
                 # Get the subject id (label)
                 # IMPORTANT: it follows the pattern: imageNumber_subjectID.png
                 # It is different from the pattern on the training set
-                pathSplit = filePath.split("/")
-                tempName = pathSplit[len(pathSplit) - 1]
-                subjectID = tempName.split("_")[1]
-                subjectID = int(subjectID.split(".")[0])
+                path_split = file_path.split("/")
+                temp_name = path_split[len(path_split) - 1]
+                subject_id = temp_name.split("_")[1]
+                subject_id = int(subject_id.split(".")[0])
 
-                images.append(self.preprocessImage(filePath))
-                labels.append(subjectID)
-                fileName.append(tempName.split(".")[0])
+                images.append(self.preprocess_image(file_path))
+                labels.append(subject_id)
+                file_name.append(temp_name.split(".")[0])
 
-        return images, labels, fileName
+        return images, labels, file_name
