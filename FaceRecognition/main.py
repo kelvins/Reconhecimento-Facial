@@ -22,7 +22,10 @@ def face_recognition():
     global train_path, test_path, results_path
 
     # Create the auxiliary object
-    auxiliary = Auxiliary(size_x=100, size_y=100, interpolation=cv2.INTER_CUBIC)
+    auxiliary = Auxiliary(
+        size_x=100,
+        size_y=100,
+        interpolation=cv2.INTER_CUBIC)
 
     # Create the algorithm object
     algorithm = Eigenfaces()
@@ -57,7 +60,10 @@ def ensemble():
     global train_path, test_path, results_path
 
     # Create the auxiliary object
-    auxiliary = Auxiliary(size_x=100, size_y=100, interpolation=cv2.INTER_CUBIC)
+    auxiliary = Auxiliary(
+        size_x=100,
+        size_y=100,
+        interpolation=cv2.INTER_CUBIC)
 
     # Create and add all algorithms for the ensemble
     algorithms = list()

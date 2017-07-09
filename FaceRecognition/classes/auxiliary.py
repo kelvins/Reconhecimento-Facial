@@ -69,7 +69,8 @@ class Auxiliary:
         :return: The accuracy.
         """
         try:
-            return (float(recognized_images) / float(total_face_images)) * 100.0
+            return (float(recognized_images) /
+                    float(total_face_images)) * 100.0
         except ZeroDivisionError:
             return 0.0
 

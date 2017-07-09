@@ -93,7 +93,8 @@ class Ensemble:
 
         # Train all the algorithms
         for index in xrange(0, len(self.fr_algorithms)):
-            self.fr_algorithms[index].train(self.train_images, self.train_labels)
+            self.fr_algorithms[index].train(
+                self.train_images, self.train_labels)
 
     def recognize_faces(self, test_path):
         """

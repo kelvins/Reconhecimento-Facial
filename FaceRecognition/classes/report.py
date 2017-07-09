@@ -67,13 +67,15 @@ class Report:
 
         if isinstance(self.class_object, FaceRecognition):
             if self.class_object.threshold >= 0:
-                total_face_images = self.class_object.recognized_below_threshold + self.class_object.unrecognized_below_threshold
+                total_face_images = self.class_object.recognized_below_threshold + \
+                    self.class_object.unrecognized_below_threshold
                 # Calculate the accuracy using only the results below the
                 # threshold
                 accuracy2 = Auxiliary.calc_accuracy(
                     self.class_object.recognized_below_threshold, total_face_images)
 
-                total_face_images += self.class_object.recognized_above_threshold + self.class_object.unrecognized_above_threshold
+                total_face_images += self.class_object.recognized_above_threshold + \
+                    self.class_object.unrecognized_above_threshold
                 # Calculate the accuracy using the total number of face images
                 accuracy = Auxiliary.calc_accuracy(
                     self.class_object.recognized_below_threshold, total_face_images)
@@ -120,7 +122,8 @@ class Report:
                     str(accuracy2) + " %"
 
         size_x, size_y = self.class_object.auxiliary.get_default_size()
-        content += "\n\nDefault Size Images: " + str(size_x) + "x" + str(size_y)
+        content += "\n\nDefault Size Images: " + \
+            str(size_x) + "x" + str(size_y)
         content += "\nInterpolation Method: " + \
             self.class_object.auxiliary.get_interpolation_method_name()
         content += "\nSupported Files: " + \
