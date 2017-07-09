@@ -6,7 +6,7 @@ class Voting:
 
     MAJORITY, WEIGHTED = range(2)
 
-    def __init__(self, voting_scheme=MAJORITY, weights=[]):
+    def __init__(self, voting_scheme=MAJORITY, weights=list()):
         """
         Define the selected voting scheme (default is majoritary).
         Set the weights (default is an empty list).
@@ -26,7 +26,7 @@ class Voting:
             return "Weighted Voting"
         return ""
 
-    def vote(self, subjects, weights=[]):
+    def vote(self, subjects, weights=list()):
         """
         Call the selected voting scheme.
         :param subjects: The predicted subjects list.
@@ -36,11 +36,12 @@ class Voting:
         if self.voting_scheme == self.WEIGHTED:
             if not weights:
                 weights = self.weights
-            return self.weightedVoting(subjects, weights)
+            return Voting.weighted_voting(subjects, weights)
         else:
-            return self.majorityVoting(subjects)
+            return Voting.majority_voting(subjects)
 
-    def majority_voting(self, subjects):
+    @staticmethod
+    def majority_voting(subjects):
         """
         Vote using the majority scheme (it does not use the weights list).
         :param subjects: The predicted subjects list.
@@ -65,7 +66,8 @@ class Voting:
         index_max_voted = number_of_votes.index(max(number_of_votes))
         return subject_voted[index_max_voted]
 
-    def weighted_voting(self, subjects, weights):
+    @staticmethod
+    def weighted_voting(subjects, weights):
         """
         Vote using the weighted scheme.
         :param subjects: The predicted subjects list.
@@ -107,7 +109,7 @@ class Voting:
                 if subjects[i] in most_voted:
                     temp_subjects.append(subjects[i])
 
-            return self.majorityVoting(temp_subjects)
+            return Voting.majority_voting(temp_subjects)
         else:
             index_max_voted = value_of_votes.index(max_value)
             return subject_voted[index_max_voted]
