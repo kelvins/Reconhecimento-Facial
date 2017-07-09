@@ -8,13 +8,15 @@ class Voting:
 
     def __init__(self, voting_scheme=MAJORITY, weights=[]):
         """
-        Define the selected voting scheme (default is majoritary)
-        Set the weights (default is an empty list)
+        Define the selected voting scheme (default is majoritary).
+        Set the weights (default is an empty list).
+        :param voting_scheme: Define the voting scheme (MAJORITY or WEIGHTED).
+        :param weights: When using the WEIGHTED voting scheme, this is used to set the weights.
         """
         self.voting_scheme = voting_scheme
         self.weights = weights
 
-    def getVotingSchemeName(self):
+    def get_voting_scheme_name(self):
         """
         Get the name of the selected voting scheme to be used in the report.
         """
@@ -26,7 +28,10 @@ class Voting:
 
     def vote(self, subjects, weights=[]):
         """
-        Call the selected voting scheme
+        Call the selected voting scheme.
+        :param subjects: The predicted subjects list.
+        :param weights: The weights list.
+        :return: The subject voted by the voting scheme.
         """
         if self.voting_scheme == self.WEIGHTED:
             if not weights:
@@ -35,10 +40,11 @@ class Voting:
         else:
             return self.majorityVoting(subjects)
 
-    def majorityVoting(self, subjects):
+    def majority_voting(self, subjects):
         """
-        Majority voting.
-        Return -1 for empty list
+        Vote using the majority scheme (it does not use the weights list).
+        :param subjects: The predicted subjects list.
+        :return: The subject voted by the voting scheme.
         """
 
         if len(subjects) == 0:
@@ -59,9 +65,12 @@ class Voting:
         index_max_voted = number_of_votes.index(max(number_of_votes))
         return subject_voted[index_max_voted]
 
-    def weightedVoting(self, subjects, weights):
+    def weighted_voting(self, subjects, weights):
         """
-        Weighted voting.
+        Vote using the weighted scheme.
+        :param subjects: The predicted subjects list.
+        :param weights: The weights list.
+        :return: The subject voted by the voting scheme.
         """
 
         if len(subjects) == 0 or len(weights) == 0:
