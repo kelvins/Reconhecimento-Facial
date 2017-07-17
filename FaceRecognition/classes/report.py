@@ -22,7 +22,7 @@ class Report:
 
     def generate_report_summary(self):
         """
-        Generate a report summary with informations about the test.
+        Generate a report summary with information about the test.
         Return the content as a string.
         """
         if isinstance(self.class_object, FaceRecognition):
@@ -33,8 +33,8 @@ class Report:
             content = "No class object defined"
 
         content += "\n\nDate/Time: " + time.strftime("%d/%m/%Y %H:%M:%S")
-        content += "\nTrain Path: " + self.class_object.trainPath
-        content += "\nTest Path: " + self.class_object.testPath + "\n"
+        content += "\nTrain Path: " + self.class_object.train_path
+        content += "\nTest Path: " + self.class_object.test_path + "\n"
 
         # For the face recognition class get only the name of the algorithm
         if isinstance(self.class_object, FaceRecognition):
@@ -62,7 +62,6 @@ class Report:
         content += "\n\nTotal Images Analyzed: " + \
             str(len(self.class_object.test_file_names))
 
-        total_face_images = 0.0
         accuracy2 = 0.0
 
         if isinstance(self.class_object, FaceRecognition):

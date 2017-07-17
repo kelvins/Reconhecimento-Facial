@@ -47,10 +47,10 @@ def face_recognition():
     report = Report(face_recog)
 
     # Print the results
-    report.printResults()
+    report.print_results()
 
     # Save the report (text file)
-    report.save_report(results_path)
+    #report.save_report(results_path)
 
     # Save all results (summary, full report and images)
     # report.save_all_results(results_path)
@@ -93,7 +93,7 @@ def ensemble():
     report.print_results()
 
     # Save the report (text file)
-    report.save_report(results_path)
+    #report.save_report(results_path)
 
     # Save all results (summary, full report and images)
     # report.save_all_results(results_path)
