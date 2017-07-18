@@ -9,7 +9,7 @@ from ensemble import Ensemble
 from auxiliary import Auxiliary
 
 
-class Report:
+class Report(object):
     """
     Class that provides an interface to generate reports
     """

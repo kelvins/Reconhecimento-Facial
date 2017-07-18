@@ -5,7 +5,7 @@ import sys
 import numpy as np
 
 
-class Fisherfaces:
+class Fisherfaces(object):
     """
     Class that provides easy access to the Fisherfaces algorithm.
     """

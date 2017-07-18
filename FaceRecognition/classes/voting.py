@@ -1,5 +1,5 @@
 
-class Voting:
+class Voting(object):
     """
     Class the provides voting methods for the ensemble.
     """

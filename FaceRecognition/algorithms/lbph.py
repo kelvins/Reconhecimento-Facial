@@ -5,7 +5,7 @@ import sys
 import numpy as np
 
 
-class LBPH:
+class LBPH(object):
     """
     Class that provides easy access to the LBPH algorithm.
     """

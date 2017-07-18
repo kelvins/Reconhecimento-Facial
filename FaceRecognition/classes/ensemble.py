@@ -9,7 +9,7 @@ from voting import Voting
 from auxiliary import Auxiliary
 
 
-class Ensemble:
+class Ensemble(object):
     """
     Class that provides an interface for the Ensemble
     """

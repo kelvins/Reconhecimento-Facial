@@ -5,7 +5,7 @@ import sys
 from auxiliary import Auxiliary
 
 
-class FaceRecognition:
+class FaceRecognition(object):
     """
     Class that provides an interface to the face recognition algorithms
     """

@@ -5,7 +5,7 @@ import sys
 import numpy as np
 
 
-class Eigenfaces:
+class Eigenfaces(object):
     """
     Class that provides easy access to the Eigenfaces algorithm.
     """

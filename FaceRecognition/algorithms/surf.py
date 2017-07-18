@@ -5,7 +5,7 @@ import sys
 import numpy as np
 
 
-class SURF:
+class SURF(object):
     """
     Class that provides easy access to the SURF algorithm.
     """

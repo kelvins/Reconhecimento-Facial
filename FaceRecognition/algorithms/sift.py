@@ -5,7 +5,7 @@ import sys
 import numpy as np
 
 
-class SIFT:
+class SIFT(object):
     """
     Class that provides easy access to the SIFT algorithm.
     """
