@@ -4,9 +4,9 @@ class Voting(object):
     Class the provides voting methods for the ensemble.
     """
 
-    MAJORITY, WEIGHTED = range(2)
+    __majority, __weighted = range(2)
 
-    def __init__(self, voting_scheme=MAJORITY, weights=list()):
+    def __init__(self, voting_scheme=__majority, weights=list()):
         """
         Define the selected voting scheme (default is majoritary).
         Set the weights (default is an empty list).
@@ -16,13 +16,21 @@ class Voting(object):
         self.voting_scheme = voting_scheme
         self.weights = weights
 
+    @property
+    def majority(self):
+        return self.__majority
+
+    @property
+    def weighted(self):
+        return self.__weighted
+
     def get_voting_scheme_name(self):
         """
         Get the name of the selected voting scheme to be used in the report.
         """
-        if self.voting_scheme == self.MAJORITY:
+        if self.voting_scheme == self.__majority:
             return "Majority Voting"
-        elif self.voting_scheme == self.WEIGHTED:
+        elif self.voting_scheme == self.__weighted:
             return "Weighted Voting"
         return ""
 
@@ -33,12 +41,13 @@ class Voting(object):
         :param weights: The weights list.
         :return: The subject voted by the voting scheme.
         """
-        if self.voting_scheme == self.WEIGHTED:
+        if self.voting_scheme == self.__weighted:
             if not weights:
                 weights = self.weights
             return Voting.weighted_voting(subjects, weights)
-        else:
+        elif self.voting_scheme == self.__majority:
             return Voting.majority_voting(subjects)
+        return -1
 
     @staticmethod
     def majority_voting(subjects):

@@ -75,7 +75,7 @@ def ensemble():
 
     # Create the voting object (Majority or Weighted)
     # voting = Voting()
-    voting = Voting(Voting.WEIGHTED, [10, 20, 30, 30, 40])
+    voting = Voting(Voting.weighted, [10, 20, 30, 30, 40])
 
     # Create the ensemble object
     ensemble = Ensemble(algorithms, auxiliary, voting)
