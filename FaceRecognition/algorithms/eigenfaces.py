@@ -10,7 +10,7 @@ class Eigenfaces(object):
     Class that provides easy access to the Eigenfaces algorithm.
     """
 
-    ALGORITHM_NAME = "Eigenfaces"
+    __algorithm_name = "Eigenfaces"
 
     def __init__(self, num_components=0, threshold=-1):
         """
@@ -33,6 +33,13 @@ class Eigenfaces(object):
 
         self.trained = False
 
+    @property
+    def algorithm_name(self):
+        """
+        :return: __algorithm_name
+        """
+        return self.__algorithm_name
+
     def train(self, images, labels):
         """
         Train the face recognition algorithm
@@ -48,11 +55,9 @@ class Eigenfaces(object):
         :param image: The image we want to predict.
         :return: The subject ID (label) and the confidence.
         """
-        global ALGORITHM_NAME
-
         # Check if the algorithm was trained
         if self.trained is False:
-            print "The %s algorithm was not trained." % ALGORITHM_NAME
+            print "The {} algorithm was not trained.".format(self.__algorithm_name)
             sys.exit()
 
         # Return the subject ID (label) and the confidence

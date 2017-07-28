@@ -10,7 +10,7 @@ class SURF(object):
     Class that provides easy access to the SURF algorithm.
     """
 
-    ALGORITHM_NAME = "Speeded Up Robust Features (SURF)"
+    __algorithm_name = "Speeded Up Robust Features (SURF)"
 
     def __init__(self, hessian_threshold=100, n_octaves=4, n_octave_layers=3,
                  extended=False, upright=False, distance=cv2.NORM_L2, cross_check=False):
@@ -47,6 +47,13 @@ class SURF(object):
         self.labels = []
         self.trained = False
 
+    @property
+    def algorithm_name(self):
+        """
+        :return: __algorithm_name
+        """
+        return self.__algorithm_name
+
     def train(self, images, labels):
         """
         Train the face recognition algorithm
@@ -77,10 +84,8 @@ class SURF(object):
         :param image: The image we want to predict.
         :return: The subject ID (label) and the confidence.
         """
-        global ALGORITHM_NAME
-
         if self.trained is False:
-            print "The %s algorithm was not trained." % ALGORITHM_NAME
+            print "The {} algorithm was not trained.".format(self.__algorithm_name)
             sys.exit()
 
         # Detects and computes the keypoints and descriptors using the SURF

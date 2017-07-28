@@ -10,7 +10,7 @@ class SIFT(object):
     Class that provides easy access to the SIFT algorithm.
     """
 
-    ALGORITHM_NAME = "Scale-Invariant Feature Transform (SIFT)"
+    __algorithm_name = "Scale-Invariant Feature Transform (SIFT)"
 
     def __init__(self, n_features=0, n_octave_layers=3, contrast_threshold=0.04,
                  edge_threshold=10, sigma=1.6, distance=cv2.NORM_L2, cross_check=False):
@@ -51,6 +51,13 @@ class SIFT(object):
         self.labels = []
         self.trained = False
 
+    @property
+    def algorithm_name(self):
+        """
+        :return: __algorithm_name
+        """
+        return self.__algorithm_name
+
     def train(self, images, labels):
         """
         Train the face recognition algorithm
@@ -81,10 +88,8 @@ class SIFT(object):
         :param image: The image we want to predict.
         :return: The subject ID (label) and the confidence.
         """
-        global ALGORITHM_NAME
-
         if self.trained is False:
-            print "The %s algorithm was not trained." % ALGORITHM_NAME
+            print "The {} algorithm was not trained.".format(self.__algorithm_name)
             sys.exit()
 
         # Detects and computes the keypoints and descriptors using the sift

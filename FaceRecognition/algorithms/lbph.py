@@ -10,7 +10,7 @@ class LBPH(object):
     Class that provides easy access to the LBPH algorithm.
     """
 
-    ALGORITHM_NAME = "Local Binary Patterns Histogram (LBPH)"
+    __algorithm_name = "Local Binary Patterns Histogram (LBPH)"
 
     def __init__(self, radius=1, neighbors=8,
                  grid_x=8, grid_y=8, threshold=-1):
@@ -50,6 +50,13 @@ class LBPH(object):
 
         self.trained = False
 
+    @property
+    def algorithm_name(self):
+        """
+        :return: __algorithm_name
+        """
+        return self.__algorithm_name
+
     def train(self, images, labels):
         """
         Train the face recognition algorithm
@@ -65,11 +72,9 @@ class LBPH(object):
         :param image: The image we want to predict.
         :return: The subject ID (label) and the confidence.
         """
-        global ALGORITHM_NAME
-
         # Check if the algorithm was trained
         if self.trained is False:
-            print "The %s algorithm was not trained." % ALGORITHM_NAME
+            print "The {} algorithm was not trained.".format(self.__algorithm_name)
             sys.exit()
 
         # Return the subject ID (label) and the confidence

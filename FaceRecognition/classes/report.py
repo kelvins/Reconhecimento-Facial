@@ -38,7 +38,7 @@ class Report(object):
 
         # For the face recognition class get only the name of the algorithm
         if isinstance(self.class_object, FaceRecognition):
-            content += "\nAlgorithm: " + self.class_object.algorithm.ALGORITHM_NAME
+            content += "\nAlgorithm: " + self.class_object.algorithm.algorithm_name
             if self.class_object.threshold >= 0:
                 content += "\nThreshold Used: " + \
                     str(self.class_object.threshold)
@@ -52,7 +52,7 @@ class Report(object):
 
             for index in xrange(0, len(self.class_object.fr_algorithms)):
                 content += "\nAlgorithm: " + \
-                    self.class_object.fr_algorithms[index].ALGORITHM_NAME
+                    self.class_object.fr_algorithms[index].algorithm_name
                 # If it is using the WEIGHTED voting scheme
                 if self.class_object.voting.voting_scheme == Voting.WEIGHTED:
                     # If the index is valid for the weights list
