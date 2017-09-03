@@ -170,7 +170,10 @@ class Auxiliary(object):
         :param right_image: The image that should be put to the right.
         :return: The new concatenated image.
         """
-        return np.concatenate((left_image, right_image), axis=1)
+        try:
+            return np.concatenate((left_image, right_image), axis=1)
+        except ValueError:
+            return None
 
     def extract_images_paths(self, path):
         """
