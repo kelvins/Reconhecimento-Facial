@@ -135,8 +135,8 @@ class Report(object):
         Return the content containing the information about each predicted image.
         """
         # Get the predicted results
-        predict_subject_ids = self.class_object.predicted_subject_ids
-        predict_confidence = self.class_object.predicted_confidence
+        predict_subject_ids = self.class_object.predict_subject_ids
+        predict_confidence = self.class_object.predict_confidence
         # Get the test information (labels and filenames)
         test_labels = self.class_object.test_labels
         test_file_names = self.class_object.test_file_names
@@ -236,15 +236,15 @@ class Report(object):
         os.makedirs(non_faces_folder)
 
         # The predicted results
-        predict_subject_ids = self.class_object.predictedSubjectIds
-        predict_confidence = self.class_object.predictedConfidence
+        predict_subject_ids = self.class_object.predict_subject_ids
+        predict_confidence = self.class_object.predict_confidence
         # The tests information
-        test_images = self.class_object.testImages
-        test_labels = self.class_object.testLabels
+        test_images = self.class_object.test_images
+        test_labels = self.class_object.test_labels
         # test_file_names = self.class_object.testFileNames
         # The training information
-        train_images = self.class_object.trainImages
-        train_labels = self.class_object.trainLabels
+        train_images = self.class_object.train_images
+        train_labels = self.class_object.train_labels
 
         delimiter = "_"
 
@@ -259,7 +259,7 @@ class Report(object):
                 label += "Confidence" + delimiter + \
                     str(predict_confidence[index])
             elif isinstance(self.class_object, Ensemble):
-                label += "Voting" + delimiter + self.class_object.voting.getVotingSchemeName()
+                label += "Voting" + delimiter + self.class_object.voting.get_voting_scheme_name()
 
             label += ".png"
 
@@ -282,7 +282,7 @@ class Report(object):
             else:
                 file_name = unrecognized_folder
 
-                file_name += label
+            file_name += label
 
             # Save the concatenated image in the correct folder
             Auxiliary.save_image(file_name, image)
