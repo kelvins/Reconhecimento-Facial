@@ -16,7 +16,11 @@ report = Report(faceRecog)
 
 class ReportSummaryTest(unittest.TestCase):
     def test1(self):
-        self.assertEqual(report.generateReportSummary(), "")
+        wrong_report = Report(auxiliary)
+        self.assertEqual(wrong_report.generate_report_summary(), "")
+
+    def test2(self):
+        self.assertEqual(report.generate_report_summary(), "")
 
 
 if __name__ == '__main__':
