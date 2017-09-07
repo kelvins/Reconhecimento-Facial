@@ -30,7 +30,12 @@ class Report(object):
         elif isinstance(self.class_object, Ensemble):
             content = "Ensemble (multiple algorithms)"
         else:
-            content = "No class object defined"
+            # No class object defined
+            return ""
+
+        # No predictions found
+        if not self.class_object.predict_subject_ids:
+            return ""
 
         content += "\n\nDate/Time: " + time.strftime("%d/%m/%Y %H:%M:%S")
         content += "\nTrain Path: " + self.class_object.train_path
