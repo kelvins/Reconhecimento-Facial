@@ -89,7 +89,7 @@ class SIFT(object):
         :return: The subject ID (label) and the confidence.
         """
         if self.trained is False:
-            print "The {} algorithm was not trained.".format(self.__algorithm_name)
+            print("The {} algorithm was not trained.".format(self.__algorithm_name))
             sys.exit()
 
         # Detects and computes the keypoints and descriptors using the sift
@@ -113,7 +113,7 @@ class SIFT(object):
             if match.imgIdx >= 0 and match.imgIdx < len(results):
                 results[match.imgIdx] += 1
             else:
-                print "Error invalid index"
+                print("Error invalid index")
                 sys.exit()
 
         # Index receives the position of the maximum value in the results

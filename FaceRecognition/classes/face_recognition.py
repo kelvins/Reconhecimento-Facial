@@ -93,7 +93,7 @@ class FaceRecognition(object):
         self.train_path = train_path
 
         if train_path == "":
-            print "The train path is empty."
+            print("The train path is empty.")
             sys.exit()
 
         # Load all images and labels
@@ -113,7 +113,7 @@ class FaceRecognition(object):
         self.test_path = test_path
 
         if test_path == "":
-            print "The test path is empty."
+            print("The test path is empty.")
             sys.exit()
 
         # Load all images and labels

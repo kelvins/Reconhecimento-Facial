@@ -74,7 +74,7 @@ class LBPH(object):
         """
         # Check if the algorithm was trained
         if self.trained is False:
-            print "The {} algorithm was not trained.".format(self.__algorithm_name)
+            print("The {} algorithm was not trained.".format(self.__algorithm_name))
             sys.exit()
 
         # Return the subject ID (label) and the confidence

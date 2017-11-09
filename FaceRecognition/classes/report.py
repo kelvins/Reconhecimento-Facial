@@ -173,9 +173,9 @@ class Report(object):
         """
         Function used to show the results
         """
-        print "========================= Results ========================="
-        print self.generate_report_summary()
-        print "==========================================================="
+        print("========================= Results =========================")
+        print(self.generate_report_summary())
+        print("===========================================================")
 
     def save_report(self, path=""):
         """
