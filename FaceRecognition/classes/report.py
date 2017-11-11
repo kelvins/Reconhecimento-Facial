@@ -3,10 +3,10 @@
 import os
 import time
 
-from voting import Voting
-from face_recognition import FaceRecognition
-from ensemble import Ensemble
-from auxiliary import Auxiliary
+from .voting import Voting
+from .face_recognition import FaceRecognition
+from .ensemble import Ensemble
+from .auxiliary import Auxiliary
 
 
 class Report(object):
@@ -55,7 +55,7 @@ class Report(object):
             content += "\nVoting Scheme: " + self.class_object.voting.get_voting_scheme_name()
             weights = self.class_object.voting.weights
 
-            for index in xrange(0, len(self.class_object.fr_algorithms)):
+            for index in range(0, len(self.class_object.fr_algorithms)):
                 content += "\nAlgorithm: " + \
                     self.class_object.fr_algorithms[index].algorithm_name
                 # If it is using the WEIGHTED voting scheme
@@ -149,7 +149,7 @@ class Report(object):
         content = ""
 
         # Create each line based on the predicted subject IDs
-        for index in xrange(0, len(predict_subject_ids)):
+        for index in range(0, len(predict_subject_ids)):
             # Format: 1: Expected subject: 3: Classified as subject: 2: With
             # confidence: 4123.123123: File name: 1_3
             content += str(index + 1)
@@ -253,7 +253,7 @@ class Report(object):
 
         delimiter = "_"
 
-        for index in xrange(0, len(predict_subject_ids)):
+        for index in range(0, len(predict_subject_ids)):
             # Patter: 1_Expected_2_Classified_2_Confidence_40192.12938291.png
             label = str(index) + delimiter + "Expected" + \
                 delimiter + str(test_labels[index]) + delimiter
@@ -272,7 +272,7 @@ class Report(object):
             # predictedSubjectIDs
             image1 = test_images[index]
             image2 = None
-            for i in xrange(0, len(train_labels)):
+            for i in range(0, len(train_labels)):
                 if str(train_labels[i]) == str(predict_subject_ids[index]):
                     image2 = train_images[i]
 

@@ -111,9 +111,10 @@ class Auxiliary(object):
         :param image: The image.
         :return: The image in grayscale.
         """
-        if image is not None:
-            return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        return None
+        if image is None:
+            print("Invalid Image: Could not convert to grayscale")
+            return None
+        return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     @staticmethod
     def load_image(path):
@@ -143,6 +144,15 @@ class Auxiliary(object):
         :param interpolation_method: The interpolation method.
         :return: The resized image.
         """
+        if image is None:
+            print("Invalid Image: Could not be resized")
+            return -1
+
+        rows, cols = image.shape
+        if rows <= 0 or cols <= 0:
+            print("Invalid Image Sizes: Could not be resized")
+            return -1
+
         return cv2.resize(image, (size_x, size_y),
                           interpolation=interpolation_method)
 
@@ -154,6 +164,11 @@ class Auxiliary(object):
         """
         # Load the image
         image = self.load_image(path)
+
+        if image is None:
+            print("Could not load the image:", path)
+            return None
+
         # Convert to grayscale
         image = self.to_grayscale(image)
         # Resize the image
@@ -269,7 +284,12 @@ class Auxiliary(object):
                 subject_id = temp_name.split("_")[1]
                 subject_id = int(subject_id.split(".")[0])
 
-                images.append(self.preprocess_image(file_path))
+                image = self.preprocess_image(file_path)
+
+                if image is None:
+                    return None, None, None
+
+                images.append(image)
                 labels.append(subject_id)
                 file_name.append(temp_name.split(".")[0])
 

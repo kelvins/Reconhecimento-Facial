@@ -2,7 +2,7 @@
 # Import the libraries
 import sys
 
-from auxiliary import Auxiliary
+from .auxiliary import Auxiliary
 
 
 class FaceRecognition(object):
@@ -121,7 +121,7 @@ class FaceRecognition(object):
             test_path)
 
         # For each image
-        for index in xrange(0, len(self.test_images)):
+        for index in range(0, len(self.test_images)):
             # Predict
             subject_id, confidence = self.algorithm.predict(
                 self.test_images[index])

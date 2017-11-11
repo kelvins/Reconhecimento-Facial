@@ -5,8 +5,8 @@ import os
 import sys
 import numpy as np
 
-from voting import Voting
-from auxiliary import Auxiliary
+from .voting import Voting
+from .auxiliary import Auxiliary
 
 
 class Ensemble(object):
@@ -92,7 +92,7 @@ class Ensemble(object):
             train_path)
 
         # Train all the algorithms
-        for index in xrange(0, len(self.fr_algorithms)):
+        for index in range(0, len(self.fr_algorithms)):
             self.fr_algorithms[index].train(
                 self.train_images, self.train_labels)
 
@@ -115,12 +115,12 @@ class Ensemble(object):
             test_path)
 
         # For each image
-        for index in xrange(0, len(self.test_images)):
+        for index in range(0, len(self.test_images)):
             subject_id = list()
             confidence = list()
 
             # Predict
-            for i in xrange(0, len(self.fr_algorithms)):
+            for i in range(0, len(self.fr_algorithms)):
                 sub_id, conf = self.fr_algorithms[i].predict(
                     self.test_images[index])
                 subject_id.append(sub_id)
