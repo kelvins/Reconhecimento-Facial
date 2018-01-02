@@ -59,7 +59,7 @@ class Report(object):
                 content += "\nAlgorithm: " + \
                     self.class_object.fr_algorithms[index].algorithm_name
                 # If it is using the WEIGHTED voting scheme
-                if self.class_object.voting.voting_scheme == Voting.weighted:
+                if self.class_object.voting.voting_scheme == Voting().weighted:
                     # If the index is valid for the weights list
                     if index < len(weights):
                         content += " - Weight: " + str(weights[index])

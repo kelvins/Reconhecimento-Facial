@@ -32,6 +32,8 @@ class Voting(object):
             return "Majority Voting"
         elif self.voting_scheme == self.__weighted:
             return "Weighted Voting"
+
+        raise NameError("Invalid voting scheme!")
         return ""
 
     def vote(self, subjects, weights=list()):
@@ -47,6 +49,8 @@ class Voting(object):
             return Voting.weighted_voting(subjects, weights)
         elif self.voting_scheme == self.__majority:
             return Voting.majority_voting(subjects)
+
+        raise NameError("Invalid voting scheme!")
         return -1
 
     @staticmethod

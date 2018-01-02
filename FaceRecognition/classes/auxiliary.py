@@ -57,6 +57,8 @@ class Auxiliary(object):
             return "cv2.INTER_LINEAR"
         if self.interpolation == cv2.INTER_NEAREST:
             return "cv2.INTER_NEAREST"
+
+        raise NameError("Invalid interpolation method name")
         return ""
 
     @staticmethod

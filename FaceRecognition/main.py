@@ -12,7 +12,7 @@ from algorithms.lbph import LBPH
 from algorithms.sift import SIFT
 from algorithms.surf import SURF
 
-dirPath = "/home/kelvins/Desktop/Reconhecimento-Facial/Dataset"
+dirPath = "/home/ubuntu/Desktop/Reconhecimento-Facial/Dataset"
 train_path = dirPath + "/Train/BASE1/"
 test_path = dirPath + "/Test/VIDEO1/"
 results_path = dirPath + "/Results/"
@@ -74,8 +74,7 @@ def ensemble():
     algorithms.append(SURF())
 
     # Create the voting object (Majority or Weighted)
-    # voting = Voting()
-    voting = Voting(Voting.weighted, [10, 20, 30, 30, 40])
+    voting = Voting(Voting().weighted, [10, 10, 10, 10, 10])
 
     # Create the ensemble object
     ensemble = Ensemble(algorithms, auxiliary, voting)
